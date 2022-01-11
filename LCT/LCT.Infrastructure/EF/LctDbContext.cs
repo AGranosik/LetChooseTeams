@@ -10,7 +10,7 @@ namespace LCT.Infrastructure.EF
 {
     public class LctDbContext : DbContext
     {
-        public LctDbContext(DbContextOptions<LctDbContext> options): base(options)
+        public LctDbContext(DbContextOptions<LctDbContext> options) : base(options)
         {
 
         }
