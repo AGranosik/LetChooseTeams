@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LCT.Infrastructure.Migrations
 {
     [DbContext(typeof(LctDbContext))]
-    [Migration("20220112110546_player domain model")]
-    partial class playerdomainmodel
+    [Migration("20220112110701_players init")]
+    partial class playersinit
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
