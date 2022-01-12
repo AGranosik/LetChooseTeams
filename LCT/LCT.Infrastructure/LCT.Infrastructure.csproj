@@ -7,7 +7,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="EF\Configurations\" />
+    <Compile Remove="EF\Configurations\**" />
+    <EmbeddedResource Remove="EF\Configurations\**" />
+    <None Remove="EF\Configurations\**" />
   </ItemGroup>
 
   <ItemGroup>

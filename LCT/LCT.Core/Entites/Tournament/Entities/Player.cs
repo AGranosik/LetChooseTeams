@@ -4,9 +4,12 @@ namespace LCT.Core.Entites.Tournament.Entities
 {
     public class Player : Entity
     {
-        public Player(Guid id, FullName name): base(id){
-        
+        private Player(): base() { }
+        public Player(Guid id, Name name, Name surname): base(id){
+            Name = name;
+            Surname = surname;
         }
-        public FullName Name { get; private set; }
+        public Name Name { get; private set; }
+        public Name Surname { get; private set; }
     }
 }

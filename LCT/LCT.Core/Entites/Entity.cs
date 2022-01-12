@@ -8,6 +8,10 @@ namespace LCT.Core.Entites
 {
     public class Entity
     {
+        protected Entity()
+        {
+
+        }
         public Entity(Guid id)
         {
             Id = id;
