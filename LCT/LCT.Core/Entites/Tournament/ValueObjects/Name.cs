@@ -19,7 +19,25 @@ namespace LCT.Core.Entites.Tournament.ValueObjects
 
         public static implicit operator string(Name name) => name.Value;
 
-        public static implicit operator Name(string name) => new Name(name);
+        public static implicit operator Name(string name) => new (name);
+
+        public static bool operator ==(Name a, Name b)
+        {
+            if (ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            if (a is not null && b is not null)
+            {
+                return a.Value.Equals(b.Value);
+            }
+
+            return false;
+        }
+
+        public static bool operator !=(Name a, Name b) => !(a == b);
+
 
         public override string ToString() => Value;
 
