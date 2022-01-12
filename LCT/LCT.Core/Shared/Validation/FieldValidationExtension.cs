@@ -23,7 +23,6 @@ namespace LCT.Core.Shared.Validation
                 throw new InvalidFieldException(fieldName);
         }
 
-
     }
     
 }

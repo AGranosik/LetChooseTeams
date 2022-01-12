@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" Version="10.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="10.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.2.3" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\LCT.Application\LCT.Application.csproj" />
     <ProjectReference Include="..\LCT.Infrastructure\LCT.Infrastructure.csproj" />
   </ItemGroup>
 

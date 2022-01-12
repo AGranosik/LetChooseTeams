@@ -38,7 +38,6 @@ namespace LCT.Core.Entites.Tournament.ValueObjects
 
         public static bool operator !=(Name a, Name b) => !(a == b);
 
-
         public override string ToString() => Value;
 
     }
