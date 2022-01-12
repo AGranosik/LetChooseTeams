@@ -12,7 +12,7 @@ namespace LCT.Core.Entites.Tournament.ValueObjects
         public string Value { get; private set; }
 
         public static void Validate(string name)
-        {
+        { 
             CheckIfNullOrEmpty(name, nameof(Name));
             CheckFieldLength(name, nameof(Name));
         }
