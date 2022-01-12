@@ -11,6 +11,8 @@ namespace LCT.Core.Entites.Tournament.Entities
         }
         public Name Name { get; private set; }
         public Name Surname { get; private set; }
+        private List<Tournament> _tournamentList = new List<Tournament>();
+        public IReadOnlyCollection<Tournament> Tournaments => _tournamentList.AsReadOnly();
 
         public static Player Register(Guid id, Name name, Name surname)
             => new (id, name, surname);
