@@ -38,4 +38,8 @@
     <ProjectReference Include="..\LCT.Api\LCT.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Builders\Models\" />
+  </ItemGroup>
+
 </Project>

@@ -4,32 +4,28 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using NUnit.DFM.Builders;
+using NUnit.DFM.Interfaces;
 using NUnit.Framework;
 
 namespace NUnit.DFM
 {
     [SetUpFixture]
-    public class Testing<TContext>
+    public class Testing<TContext>: IDfmConfiguraiton
         where TContext: DbContext
     {
-        private IConfigurationRoot _configuration;
-        public IServiceScopeFactory _scopeFactory;
-        /*
-            configurationBuilderSection
-            services section
-            dbSection
-            dbContextExtension
-         
-         */
+        private IConfiguration _configuration;
+        protected IServiceScopeFactory _scopeFactory;
+        private IConfigurationBuilderSetup _environmentConfigurationBuilder;
+
+        public Testing()
+        {
+            
+        }
         [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .AddEnvironmentVariables();
-
-            _configuration = builder.Build();
+            _configuration ??= _environmentConfigurationBuilder.Build();
 
             var services = new ServiceCollection();
 
@@ -39,7 +35,7 @@ namespace NUnit.DFM
                 w.EnvironmentName == "Development" &&
                 w.ApplicationName == "LCT.Api"));
 
-            services.AddSingleton<IConfiguration>(_configuration);
+            services.AddSingleton(_configuration);
 
             startup.ConfigureServices(services);
 
@@ -55,6 +51,18 @@ namespace NUnit.DFM
             var context = scope.ServiceProvider.GetService<TContext>();
 
             context.Database.Migrate();
+        }
+
+        public IConfigurationBuilderSetup Configure()
+        {
+            _environmentConfigurationBuilder ??= new DfmConfigurationBuilder();
+            return _environmentConfigurationBuilder;
+        }
+
+        public IConfigurationBuilderSetup SetConfiguration(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            return _environmentConfigurationBuilder;
         }
     }
 }
