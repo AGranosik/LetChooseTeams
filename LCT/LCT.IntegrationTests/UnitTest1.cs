@@ -3,9 +3,12 @@ using LCT.Application.Tournaments.Commands;
 using LCT.Infrastructure.EF;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using Moq;
 using NUnit.DFM;
 using NUnit.Framework;
+using System;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LCT.IntegrationTests
@@ -15,13 +18,22 @@ namespace LCT.IntegrationTests
     {
         public Tests() : base()
         {
-            var configuration = Configure()
+            var configuration = SetUpConfiguration()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .SetEnvironment("Development")
                 .AddEnvironmentVariables()
-                .Build();
+                .Create();
 
-            SetConfiguration(configuration);
+            var mocked = new Mock<IMediator>();
+            mocked
+            .Setup(m => m.Send(It.IsAny<object>(), It.IsAny<CancellationToken>()))
+            .ThrowsAsync(new Exception());
+
+            var services = SetUpServices()
+                .SwapTransient<IMediator>(mocked.Object).Create();
+
+            SetConfiguration(configuration)
+            .SetServices(services);
         }
         [Test]
         public async Task TournamentCreationSuccess()

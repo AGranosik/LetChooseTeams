@@ -16,7 +16,7 @@ namespace NUnit.DFM
     {
         private IConfiguration _configuration;
         protected IServiceScopeFactory _scopeFactory;
-        private IConfigurationBuilderSetup _environmentConfigurationBuilder;
+        private IServiceCollection _services;
 
         public Testing()
         {
@@ -25,21 +25,19 @@ namespace NUnit.DFM
         [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
-            _configuration ??= _environmentConfigurationBuilder.Build();
-
-            var services = new ServiceCollection();
 
             var startup = new Startup(_configuration);
 
-            services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
+            _services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
                 w.EnvironmentName == "Development" &&
                 w.ApplicationName == "LCT.Api"));
 
-            services.AddSingleton(_configuration);
+            _services.AddSingleton(_configuration);
 
-            startup.ConfigureServices(services);
+            startup.ConfigureServices(_services);
+            //should modify this list of services isntead of creating new one
 
-            _scopeFactory = services.BuildServiceProvider().GetService<IServiceScopeFactory>();
+            _scopeFactory = _services.BuildServiceProvider().GetService<IServiceScopeFactory>();
 
             EnsureDatabase();
         }
@@ -53,16 +51,25 @@ namespace NUnit.DFM
             context.Database.Migrate();
         }
 
-        public IConfigurationBuilderSetup Configure()
+        public IConfigurationBuilderSetup SetUpConfiguration()
         {
-            _environmentConfigurationBuilder ??= new DfmConfigurationBuilder();
-            return _environmentConfigurationBuilder;
+            return new DfmConfigurationBuilder();
         }
 
-        public IConfigurationBuilderSetup SetConfiguration(IConfiguration configuration)
+        public IDfmConfiguraiton SetConfiguration(IConfiguration configuration)
         {
             _configuration = configuration;
-            return _environmentConfigurationBuilder;
+            return this;
+        }
+        public IServiceCollectionSetUp SetUpServices()
+        {
+            return new DfmServiceCollectionBuilder();
+        }
+
+        public IDfmConfiguraiton SetServices(IServiceCollection services)
+        {
+            _services = services;
+            return this;
         }
     }
 }

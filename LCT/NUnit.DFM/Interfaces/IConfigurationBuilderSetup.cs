@@ -7,6 +7,6 @@ namespace NUnit.DFM.Interfaces
         IConfigurationBuilderSetup SetBasePath(string basePath);
         IConfigurationBuilderSetup SetEnvironment(string environment);
         IConfigurationBuilderSetup AddEnvironmentVariables();
-        IConfigurationRoot Build();
+        IConfigurationRoot Create();
     }
 }

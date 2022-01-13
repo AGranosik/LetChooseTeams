@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,9 @@ namespace NUnit.DFM.Interfaces
 {
     public interface IDfmConfiguraiton
     {
-        IConfigurationBuilderSetup Configure();
-        IConfigurationBuilderSetup SetConfiguration(IConfiguration configuration);
+        IConfigurationBuilderSetup SetUpConfiguration();
+        IDfmConfiguraiton SetConfiguration(IConfiguration configuration);
+        IServiceCollectionSetUp SetUpServices();
+        IDfmConfiguraiton SetServices(IServiceCollection services);
     }
 }

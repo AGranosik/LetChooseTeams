@@ -31,7 +31,7 @@ namespace NUnit.DFM.Builders
             return this;
         }
 
-        public virtual IConfigurationRoot Build()
+        public virtual IConfigurationRoot Create()
         {
             string jsonFileName = string.IsNullOrEmpty(_environment) ? "appsettings.json" : $"appsettings.{_environment}.json";
             return new ConfigurationBuilder()
