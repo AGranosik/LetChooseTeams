@@ -9,20 +9,25 @@ using NUnit.Framework;
 namespace NUnit.DFM
 {
     [SetUpFixture]
-    public class Testing<TContext, TProgram>
+    public class Testing<TContext>
         where TContext: DbContext
-        where TProgram: class, new()
     {
-        private static IConfigurationRoot _configuration;
-        private static IServiceScopeFactory _scopeFactory;
-
+        private IConfigurationRoot _configuration;
+        public IServiceScopeFactory _scopeFactory;
+        /*
+            configurationBuilderSection
+            services section
+            dbSection
+            dbContextExtension
+         
+         */
         [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
-            //var builder = new ConfigurationBuilder()
-            //    .SetBasePath(Directory.GetCurrentDirectory())
-            //    .AddJsonFile("appsettings.json", true, true)
-            //    .AddEnvironmentVariables();
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsettings.json", true, true)
+                .AddEnvironmentVariables();
 
             _configuration = builder.Build();
 
@@ -32,7 +37,9 @@ namespace NUnit.DFM
 
             services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
                 w.EnvironmentName == "Development" &&
-                w.ApplicationName == "CleanTesting.WebUI"));
+                w.ApplicationName == "LCT.Api"));
+
+            services.AddSingleton<IConfiguration>(_configuration);
 
             startup.ConfigureServices(services);
 
@@ -47,19 +54,7 @@ namespace NUnit.DFM
 
             var context = scope.ServiceProvider.GetService<TContext>();
 
-            context.Database
-        }
-
-        public static async Task AddAsync<TEntity>(TEntity entity)
-            where TEntity : class
-        {
-            using var scope = _scopeFactory.CreateScope();
-
-            var context = scope.ServiceProvider.GetService<TContext>();
-
-            context.Add(entity);
-
-            await context.SaveChangesAsync();
+            context.Database.Migrate();
         }
     }
 }
