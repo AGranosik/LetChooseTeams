@@ -11,7 +11,7 @@ namespace NUnit.DFM
     [SetUpFixture]
     public class Testing<TContext, TProgram>
         where TContext: DbContext
-        where TProgram: class
+        where TProgram: class, new()
     {
         private static IConfigurationRoot _configuration;
         private static IServiceScopeFactory _scopeFactory;
@@ -19,10 +19,10 @@ namespace NUnit.DFM
         [OneTimeSetUp]
         public void RunBeforeAnyTests()
         {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", true, true)
-                .AddEnvironmentVariables();
+            //var builder = new ConfigurationBuilder()
+            //    .SetBasePath(Directory.GetCurrentDirectory())
+            //    .AddJsonFile("appsettings.json", true, true)
+            //    .AddEnvironmentVariables();
 
             _configuration = builder.Build();
 
@@ -41,23 +41,13 @@ namespace NUnit.DFM
             EnsureDatabase();
         }
 
-        private void EnsureDatabase()
+        private async Task EnsureDatabase()
         {
             using var scope = _scopeFactory.CreateScope();
 
             var context = scope.ServiceProvider.GetService<TContext>();
 
-            //context.Migrate();
-        }
-
-        public static async Task<TEntity> FindAsync<TEntity>(int id)
-            where TEntity : class
-        {
-            using var scope = _scopeFactory.CreateScope();
-
-            var context = scope.ServiceProvider.GetService<TContext>();
-
-            return await context.FindAsync<TEntity>(id);
+            context.Database
         }
 
         public static async Task AddAsync<TEntity>(TEntity entity)
