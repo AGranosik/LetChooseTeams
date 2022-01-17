@@ -1,10 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using NUnit.DFM.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NUnit.DFM.Builders
 {
@@ -13,6 +8,7 @@ namespace NUnit.DFM.Builders
         private string _basePath;
         private string _environment;
         private bool _environmentVariables;
+
         public IConfigurationBuilderSetup SetBasePath(string basePath)
         {
             _basePath = basePath;

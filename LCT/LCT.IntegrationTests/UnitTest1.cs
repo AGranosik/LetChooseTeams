@@ -18,19 +18,16 @@ namespace LCT.IntegrationTests
     {
         public Tests() : base()
         {
-            var configuration = SetUpConfiguration()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .SetEnvironment("Development")
-                .AddEnvironmentVariables()
-                .Create();
 
             var mocked = new Mock<IMediator>();
             mocked
             .Setup(m => m.Send(It.IsAny<object>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception());
+                SetBasePath(Directory.GetCurrentDirectory())
+                    .SetEnvironment("Development")
+                    .AddEnvironmentVariables()
 
-            var services = SetUpServices()
-                .SwapTransient(mocked.Object).Create();
+                .SwapTransient(mocked.Object);
 
             var appSetUp = AppConfiguration()
                 .Environment("Development")
@@ -47,11 +44,13 @@ namespace LCT.IntegrationTests
             var mediator = _scopeFactory.CreateScope().ServiceProvider.GetService<IMediator>();
             var controlelr = new TournamentController(mediator);
 
-            await controlelr.Create(new CreateTournamentCommand()
+            var result = await controlelr.Create(new CreateTournamentCommand()
             {
                 Name = "tournamentName",
                 PlayerLimit = 10
             });
+
+            
         }
     }
 }

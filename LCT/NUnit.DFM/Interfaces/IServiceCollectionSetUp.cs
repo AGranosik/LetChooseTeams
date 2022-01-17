@@ -25,7 +25,5 @@ namespace NUnit.DFM.Interfaces
             where TTransient : class;
         IServiceCollectionSetUp SwapTransient<TTransient>(TTransient transient)
             where TTransient : class;
-
-        IServiceCollection Create();
     }
 }
