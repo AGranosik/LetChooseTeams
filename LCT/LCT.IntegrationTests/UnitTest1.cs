@@ -23,20 +23,16 @@ namespace LCT.IntegrationTests
             mocked
             .Setup(m => m.Send(It.IsAny<object>(), It.IsAny<CancellationToken>()))
             .ThrowsAsync(new Exception());
-                SetBasePath(Directory.GetCurrentDirectory())
-                    .SetEnvironment("Development")
-                    .AddEnvironmentVariables()
+            this.SetBasePath(Directory.GetCurrentDirectory())
+                .SetEnvironment("Development")
+                .AddEnvironmentVariables();
 
-                .SwapTransient(mocked.Object);
+            this.SwapTransient(mocked.Object);
 
-            var appSetUp = AppConfiguration()
-                .Environment("Development")
+            this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();
 
-            SetConfiguration(configuration)
-            .SetServices(services)
-            .ApplyAppConfiguration(appSetUp);
         }
         [Test]
         public async Task TournamentCreationSuccess()

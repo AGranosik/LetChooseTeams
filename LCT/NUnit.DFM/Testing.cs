@@ -11,11 +11,11 @@ using NUnit.Framework;
 namespace NUnit.DFM
 {
     [SetUpFixture]
-    public partial class Testing<TContext>: IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
+    public partial class Testing<TContext>: IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp, ITestsConfiguration
         where TContext: DbContext
     {
         protected IServiceScopeFactory _scopeFactory;
-        private IServiceCollection _services;
+        private readonly IServiceCollection _services = new ServiceCollection();
         private readonly IServiceCollectionSetUp _builder;
         private readonly IAppConfigurationSetUp _appConfiguration;
         private readonly IConfigurationBuilderSetup _configurationSetup;
@@ -32,15 +32,12 @@ namespace NUnit.DFM
             var configuration = _configurationSetup.Create();
             var startup = new Startup(configuration);
 
-            _services.AddSingleton(configuration);
 
-            _services.AddSingleton(configuration);
             _services.AddSingleton(_appConfiguration.Build());
+            _services.AddSingleton(configuration);
 
             startup.ConfigureServices(_services);
 
-
-            //should modify this list of services isntead of creating new one
 
             _scopeFactory = _services.BuildServiceProvider().GetService<IServiceScopeFactory>();
 
