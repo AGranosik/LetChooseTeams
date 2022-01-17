@@ -23,14 +23,9 @@ namespace NUnit.DFM
             
         }
         [OneTimeSetUp]
-        public void RunBeforeAnyTests()
+        public async Task RunBeforeAnyTests()
         {
-
             var startup = new Startup(_configuration);
-
-            _services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
-                w.EnvironmentName == "Development" &&
-                w.ApplicationName == "LCT.Api"));
 
             _services.AddSingleton(_configuration);
 
@@ -69,6 +64,15 @@ namespace NUnit.DFM
         public IDfmConfiguraiton SetServices(IServiceCollection services)
         {
             _services = services;
+            return this;
+        }
+
+        public IAppConfigurationSetUp AppConfiguration()
+            => new DfmAppConigurationBuilder();
+
+        public IDfmConfiguraiton ApplyAppConfiguration(IWebHostEnvironment config)
+        {
+            _services.AddSingleton(config);
             return this;
         }
     }

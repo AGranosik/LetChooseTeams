@@ -30,10 +30,16 @@ namespace LCT.IntegrationTests
             .ThrowsAsync(new Exception());
 
             var services = SetUpServices()
-                .SwapTransient<IMediator>(mocked.Object).Create();
+                .SwapTransient(mocked.Object).Create();
+
+            var appSetUp = AppConfiguration()
+                .Environment("Development")
+                .ProjectName("LCT.Api")
+                .Build();
 
             SetConfiguration(configuration)
-            .SetServices(services);
+            .SetServices(services)
+            .ApplyAppConfiguration(appSetUp);
         }
         [Test]
         public async Task TournamentCreationSuccess()

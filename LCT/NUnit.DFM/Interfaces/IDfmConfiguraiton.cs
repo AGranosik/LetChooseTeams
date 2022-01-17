@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -14,5 +15,7 @@ namespace NUnit.DFM.Interfaces
         IDfmConfiguraiton SetConfiguration(IConfiguration configuration);
         IServiceCollectionSetUp SetUpServices();
         IDfmConfiguraiton SetServices(IServiceCollection services);
+        IAppConfigurationSetUp AppConfiguration();
+        IDfmConfiguraiton ApplyAppConfiguration(IWebHostEnvironment config);
     }
 }
