@@ -35,12 +35,12 @@ namespace NUnit.DFM
             _services.AddSingleton<IConfiguration>(configuration);
             _services.AddSingleton(_appConfiguration.Build());
 
-            _builder.Create(_services);
             startup.ConfigureServices(_services);
+            _builder.Create(_services);
 
             _scopeFactory = _services.BuildServiceProvider().GetService<IServiceScopeFactory>();
 
-            await EnsureDatabase();
+            //await EnsureDatabase();
         }
 
         private async Task EnsureDatabase()

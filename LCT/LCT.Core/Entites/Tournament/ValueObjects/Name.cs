@@ -4,6 +4,10 @@ namespace LCT.Core.Entites.Tournament.ValueObjects
 {
     public class Name
     {
+        public Name()
+        {
+
+        }
         public Name(string name)
         {
             Validate(name);

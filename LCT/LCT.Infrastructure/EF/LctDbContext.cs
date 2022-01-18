@@ -6,12 +6,16 @@ namespace LCT.Infrastructure.EF
 {
     public class LctDbContext : DbContext
     {
+        public LctDbContext()
+        {
+
+        }
         public LctDbContext(DbContextOptions<LctDbContext> options) : base(options)
         {
 
         }
-        public DbSet<Player> Players { get; set; }
-        public DbSet<Tournament> Tournaments { get; set; }
+        public virtual DbSet<Player> Players { get; set; }
+        public virtual DbSet<Tournament> Tournaments { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

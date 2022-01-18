@@ -8,17 +8,17 @@ namespace NUnit.DFM.Builders
     {
         private readonly List<Type> _singletonsToAdd = new List<Type>();
         private readonly List<Type> _transientsToAdd = new List<Type>();
-        private readonly List<Type> _scopedToAdd = new List<Type>();
+        private readonly Dictionary<Type, object> _scopedToAdd = new Dictionary<Type, object>();
         private readonly List<Type> _serviesToRemove = new List<Type>();
 
         public DfmServiceCollectionBuilder()
         {
         }
 
-        public IServiceCollectionSetUp AddScoped<TScoped>(TScoped scoped)
-            where TScoped : class
+        public IServiceCollectionSetUp AddScoped<TType, TObject>(TObject scoped)
+            where TObject : class, TType
         {
-            _scopedToAdd.Add(typeof(TScoped));
+            _scopedToAdd.Add(typeof(TType), scoped);
             return this;
         }
 
@@ -35,6 +35,14 @@ namespace NUnit.DFM.Builders
             return this;
         }
 
+
+        public IServiceCollectionSetUp AddScoped<TScoped>(TScoped scoped)
+            where TScoped : class
+        {
+            _scopedToAdd.Add(typeof(TScoped), scoped);
+            return this;
+        }
+
         public IServiceCollection Create(IServiceCollection services)
         {
             var servicesToRemove = services.Where(s => _serviesToRemove.Any(r => s.ServiceType == r)).ToList();
@@ -46,7 +54,7 @@ namespace NUnit.DFM.Builders
             foreach (var service in _transientsToAdd)
                 services.AddTransient(service);
             foreach (var service in _scopedToAdd)
-                services.AddScoped(service);
+                services.AddScoped(service.Key, service.Value.GetType());
 
             return services;
         }
@@ -58,9 +66,9 @@ namespace NUnit.DFM.Builders
             return this;
         }
 
-        public IServiceCollectionSetUp SwapScoped<TScoped>(TScoped scoped)
-            where TScoped : class
-        => Remove<TScoped>()
+        public IServiceCollectionSetUp SwapScoped<TType, TObject>(TObject scoped)
+                where TObject : class, TType
+        => Remove<TObject>()
             .AddScoped(scoped);
         
 

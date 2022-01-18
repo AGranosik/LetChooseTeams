@@ -1,10 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 namespace NUnit.DFM.Interfaces
 {
     public interface IServiceCollectionSetUp
@@ -18,8 +12,8 @@ namespace NUnit.DFM.Interfaces
 
         IServiceCollectionSetUp AddScoped<TScoped>(TScoped scoped)
             where TScoped: class;
-        IServiceCollectionSetUp SwapScoped<TScoped>(TScoped scoped)
-            where TScoped : class;
+        IServiceCollectionSetUp SwapScoped<TType, TObject>(TObject scoped)
+            where TObject : class, TType;
 
         IServiceCollectionSetUp AddTransient<TTransient>(TTransient transient)
             where TTransient : class;

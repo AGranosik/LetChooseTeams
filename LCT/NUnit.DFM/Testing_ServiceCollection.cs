@@ -29,9 +29,9 @@ namespace NUnit.DFM
             where TScoped : class
             => _builder.AddScoped(scoped);
 
-        public IServiceCollectionSetUp SwapScoped<TScoped>(TScoped scoped)
-            where TScoped : class
-            => _builder.SwapScoped(scoped);
+        public IServiceCollectionSetUp SwapScoped<TType, TObject>(TObject scoped)
+                    where TObject : class, TType
+            => _builder.SwapScoped<TType, TObject>(scoped);
 
         public IServiceCollectionSetUp AddTransient<TTransient>(TTransient transient)
             where TTransient : class
