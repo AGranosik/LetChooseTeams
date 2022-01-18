@@ -1,51 +1,60 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NUnit.DFM.Builders
 {
     public class DfmServiceCollectionBuilder: IServiceCollectionSetUp
     {
-        private IServiceCollection _services;
+        private readonly List<Type> _singletonsToAdd = new List<Type>();
+        private readonly List<Type> _transientsToAdd = new List<Type>();
+        private readonly List<Type> _scopedToAdd = new List<Type>();
+        private readonly List<Type> _serviesToRemove = new List<Type>();
+
         public DfmServiceCollectionBuilder()
         {
-            _services = new ServiceCollection();
         }
 
         public IServiceCollectionSetUp AddScoped<TScoped>(TScoped scoped)
             where TScoped : class
         {
-            _services.AddScoped(typeof(TScoped));
+            _scopedToAdd.Add(typeof(TScoped));
             return this;
         }
 
         public IServiceCollectionSetUp AddSingleton<TSingleton>(TSingleton singleton)
             where TSingleton : class
         {
-            _services.AddSingleton(typeof(TSingleton));
+            _singletonsToAdd.Add(typeof (TSingleton));
             return this;
         }
 
         public IServiceCollectionSetUp AddTransient<TTransient>(TTransient transient) where TTransient : class
         {
-            _services.AddTransient(transient.GetType());
+            _transientsToAdd.Add(typeof (TTransient));
             return this;
         }
 
-        public IServiceCollection Create()
-            => _services;
+        public IServiceCollection Create(IServiceCollection services)
+        {
+            var servicesToRemove = services.Where(s => _serviesToRemove.Any(r => s.ServiceType == r)).ToList();
+            foreach (var service in servicesToRemove)
+                services.Remove(service);
+
+            foreach(var service in _singletonsToAdd)
+                services.AddSingleton(service);
+            foreach (var service in _transientsToAdd)
+                services.AddTransient(service);
+            foreach (var service in _scopedToAdd)
+                services.AddScoped(service);
+
+            return services;
+        }
 
         public IServiceCollectionSetUp Remove<TService>()
             where TService : class
         {
-            var serviceToRemove = _services.SingleOrDefault(s => s.ServiceType == typeof(TService));
-            if (serviceToRemove != null)
-                _services.Remove(serviceToRemove);
-
+            _serviesToRemove.Add(typeof(TService));
             return this;
         }
 

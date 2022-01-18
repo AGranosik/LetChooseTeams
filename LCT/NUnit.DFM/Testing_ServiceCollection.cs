@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM.Builders;
 using NUnit.DFM.Interfaces;
 using System;
@@ -12,7 +13,6 @@ namespace NUnit.DFM
     public partial class Testing<TContext> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
         where TContext : DbContext
     {
-
         public IServiceCollectionSetUp SwapSingleton<TSingleton>(TSingleton singleton)
             where TSingleton : class
             => _builder.SwapSingleton(singleton);
@@ -40,5 +40,9 @@ namespace NUnit.DFM
         public IServiceCollectionSetUp SwapTransient<TTransient>(TTransient transient)
             where TTransient : class
             => _builder.SwapTransient(transient);
+
+        public IServiceCollection Create(IServiceCollection services)
+            => _builder.Create(services);
+
     }
 }

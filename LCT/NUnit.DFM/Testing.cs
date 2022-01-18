@@ -32,12 +32,11 @@ namespace NUnit.DFM
             var configuration = _configurationSetup.Create();
             var startup = new Startup(configuration);
 
-
+            _services.AddSingleton<IConfiguration>(configuration);
             _services.AddSingleton(_appConfiguration.Build());
-            _services.AddSingleton(configuration);
 
+            _builder.Create(_services);
             startup.ConfigureServices(_services);
-
 
             _scopeFactory = _services.BuildServiceProvider().GetService<IServiceScopeFactory>();
 

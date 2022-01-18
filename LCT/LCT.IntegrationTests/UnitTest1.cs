@@ -18,17 +18,9 @@ namespace LCT.IntegrationTests
     {
         public Tests() : base()
         {
-
-            var mocked = new Mock<IMediator>();
-            mocked
-            .Setup(m => m.Send(It.IsAny<object>(), It.IsAny<CancellationToken>()))
-            .ThrowsAsync(new Exception());
             this.SetBasePath(Directory.GetCurrentDirectory())
                 .SetEnvironment("Development")
                 .AddEnvironmentVariables();
-
-            this.SwapTransient(mocked.Object);
-
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();
