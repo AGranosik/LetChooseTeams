@@ -23,13 +23,14 @@ namespace LCT.IntegrationTests
     {
         public Tests() : base()
         {
-            var mockedDB = new Mock<LctDbContext>();
-            var list = new List<Tournament>() { Tournament.Create(new Name("asdasd"), new TournamentLimit(2)) };
-            mockedDB.Setup(d => d.Tournaments)
-                .Returns(ToDbSet<Tournament>(list));
-            mockedDB.Setup(d => d.Tournaments.AddAsync(It.IsAny<Tournament>(), It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new Exception());
-            SwapScoped<LctDbContext, LctDbContext>(mockedDB.Object);
+            //var mockedDB = new Mock<LctDbContext>();
+            //mockedDB.CallBase = true;
+            //var list = new List<Tournament>() { Tournament.Create(new Name("asdasd"), new TournamentLimit(2)) };
+            //mockedDB.Setup(d => d.Tournaments)
+            //    .Returns(ToDbSet<Tournament>(list));
+            //mockedDB.Setup(d => d.Tournaments.AddAsync(It.IsAny<Tournament>(), It.IsAny<CancellationToken>()))
+            //    .ThrowsAsync(new Exception());
+            //SwapScoped<LctDbContext, LctDbContext>(mockedDB.Object);
 
             this.SetBasePath(Directory.GetCurrentDirectory())
                 .SetEnvironment("Development")

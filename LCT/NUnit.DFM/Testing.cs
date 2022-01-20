@@ -40,7 +40,7 @@ namespace NUnit.DFM
 
             _scopeFactory = _services.BuildServiceProvider().GetService<IServiceScopeFactory>();
 
-            //await EnsureDatabase();
+            await EnsureDatabase();
         }
 
         private async Task EnsureDatabase()
@@ -51,5 +51,15 @@ namespace NUnit.DFM
 
             await context.Database.MigrateAsync();
         }
+
+        [OneTimeTearDown]
+        public async Task GlobalTeardown()
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var context = scope.ServiceProvider.GetService<TContext>();
+            await context.Database.EnsureDeletedAsync();
+        }
+
     }
 }

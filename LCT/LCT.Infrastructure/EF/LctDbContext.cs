@@ -1,5 +1,6 @@
 ﻿using LCT.Core.Entites.Tournament;
 using LCT.Core.Entites.Tournament.Entities;
+using LCT.Core.Entites.Tournament.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Infrastructure.EF
