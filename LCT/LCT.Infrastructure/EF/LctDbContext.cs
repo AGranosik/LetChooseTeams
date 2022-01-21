@@ -1,11 +1,9 @@
-﻿using LCT.Core.Entites.Tournament;
-using LCT.Core.Entites.Tournament.Entities;
-using LCT.Core.Entites.Tournament.ValueObjects;
+﻿using LCT.Core.Entites.Tournament.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Infrastructure.EF
 {
-    public class LctDbContext : DbContext
+    public class LctDbContext : DbContext, IDbContext
     {
         public LctDbContext()
         {
@@ -22,5 +20,8 @@ namespace LCT.Infrastructure.EF
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
+
+        public async Task SaveChangesAsync(CancellationToken cancellationToken)
+         => await base.SaveChangesAsync(cancellationToken);
     }
 }

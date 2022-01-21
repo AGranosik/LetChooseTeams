@@ -15,10 +15,10 @@ namespace NUnit.DFM.Builders
         {
         }
 
-        public IServiceCollectionSetUp AddScoped<TType, TObject>(TObject scoped)
-            where TObject : class, TType
+        public IServiceCollectionSetUp AddScoped<TScoped>(TScoped scoped)
+            where TScoped : class
         {
-            _scopedToAdd.Add(typeof(TType), scoped);
+            _scopedToAdd.Add(typeof(TScoped), scoped);
             return this;
         }
 
@@ -32,14 +32,6 @@ namespace NUnit.DFM.Builders
         public IServiceCollectionSetUp AddTransient<TTransient>(TTransient transient) where TTransient : class
         {
             _transientsToAdd.Add(typeof (TTransient));
-            return this;
-        }
-
-
-        public IServiceCollectionSetUp AddScoped<TScoped>(TScoped scoped)
-            where TScoped : class
-        {
-            _scopedToAdd.Add(typeof(TScoped), scoped);
             return this;
         }
 
@@ -66,9 +58,9 @@ namespace NUnit.DFM.Builders
             return this;
         }
 
-        public IServiceCollectionSetUp SwapScoped<TType, TObject>(TObject scoped)
-                where TObject : class, TType
-        => Remove<TObject>()
+        public IServiceCollectionSetUp SwapScoped<TType>(TType scoped)
+                where TType : class
+        => Remove<TType>()
             .AddScoped(scoped);
         
 

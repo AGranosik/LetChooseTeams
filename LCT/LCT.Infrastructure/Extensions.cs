@@ -10,7 +10,7 @@ namespace LCT.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             var options = services.GetOptions<EfOptions>("sql");
-            services.AddDbContext<LctDbContext>(x => x.UseSqlServer(options.ConnectionString));
+            services.AddDbContext<IDbContext, LctDbContext>(x => x.UseSqlServer(options.ConnectionString));
             return services;
         }
 

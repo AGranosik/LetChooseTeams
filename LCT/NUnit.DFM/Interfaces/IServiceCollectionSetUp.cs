@@ -12,8 +12,8 @@ namespace NUnit.DFM.Interfaces
 
         IServiceCollectionSetUp AddScoped<TScoped>(TScoped scoped)
             where TScoped: class;
-        IServiceCollectionSetUp SwapScoped<TType, TObject>(TObject scoped)
-            where TObject : class, TType;
+        IServiceCollectionSetUp SwapScoped<TType>(TType scoped)
+            where TType : class;
 
         IServiceCollectionSetUp AddTransient<TTransient>(TTransient transient)
             where TTransient : class;

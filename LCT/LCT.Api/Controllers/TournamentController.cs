@@ -15,6 +15,16 @@ namespace LCT.Api.Controllers
 
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateTournamentCommand request)
-            => Ok(await _mediator.Send(request));
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+                return Ok(result);
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+        }
     }
 }
