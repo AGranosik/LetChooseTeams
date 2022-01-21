@@ -1,4 +1,5 @@
 ﻿using LCT.Api;
+using LCT.Infrastructure.EF;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,7 +13,7 @@ namespace NUnit.DFM
 {
     [SetUpFixture]
     public partial class Testing<TContext>: IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp, ITestsConfiguration
-        where TContext: DbContext
+        where TContext: IDbContext
     {
         protected IServiceScopeFactory _scopeFactory;
         private readonly IServiceCollection _services = new ServiceCollection();

@@ -1,11 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LCT.Infrastructure.EF;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NUnit.DFM.Interfaces;
 
 namespace NUnit.DFM
 {
     public partial class Testing<TContext> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
-        where TContext : DbContext
+        where TContext : IDbContext
     {
 
         public IConfigurationBuilderSetup SetBasePath(string basePath)

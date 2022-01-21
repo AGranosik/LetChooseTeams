@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Hosting;
+﻿using LCT.Infrastructure.EF;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using NUnit.DFM.Interfaces;
 using System;
@@ -10,7 +11,7 @@ using System.Threading.Tasks;
 namespace NUnit.DFM
 {
     public partial class Testing<TContext> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
-        where TContext : DbContext
+        where TContext : IDbContext
     {
         public IAppConfigurationSetUp Environment(string env)
             => _appConfiguration.Environment(env);

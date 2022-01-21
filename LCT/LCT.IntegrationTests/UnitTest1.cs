@@ -23,12 +23,12 @@ namespace LCT.IntegrationTests
     {
         public Tests() : base()
         {
-            //var db = new Mock<IDbContext>();
+            var db = new Mock<IDbContext>();
 
-            //db.Setup(d => d.SaveChangesAsync(It.IsAny<CancellationToken>()))
-            //    .ThrowsAsync(new Exception());
+            db.Setup(d => d.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception());
 
-            //SwapScoped(db.Object);
+            SwapScoped(db.Object);
 
             this.SetBasePath(Directory.GetCurrentDirectory())
                 .SetEnvironment("Development")
@@ -51,19 +51,6 @@ namespace LCT.IntegrationTests
             });
 
             
-        }
-
-        private DbSet<T> ToDbSet<T>(List<T> sourceList) where T : class
-        {
-            var queryable = sourceList.AsQueryable();
-
-            var dbSet = new Mock<DbSet<T>>();
-            dbSet.As<IQueryable<T>>().Setup(m => m.Provider).Returns(queryable.Provider);
-            dbSet.As<IQueryable<T>>().Setup(m => m.Expression).Returns(queryable.Expression);
-            dbSet.As<IQueryable<T>>().Setup(m => m.ElementType).Returns(queryable.ElementType);
-            dbSet.As<IQueryable<T>>().Setup(m => m.GetEnumerator()).Returns(queryable.GetEnumerator());
-            dbSet.Setup(d => d.Add(It.IsAny<T>())).Callback<T>(sourceList.Add);
-            return dbSet.Object;
         }
 
     }
