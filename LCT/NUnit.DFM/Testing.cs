@@ -16,10 +16,12 @@ namespace NUnit.DFM
         where TContext: DbContext
     {
         protected IServiceScopeFactory _scopeFactory;
+        protected IServiceScope _scope;
         private readonly IServiceCollection _services = new ServiceCollection();
         private readonly IServiceCollectionSetUp _builder;
         private readonly IAppConfigurationSetUp _appConfiguration;
         private readonly IConfigurationBuilderSetup _configurationSetup;
+        private readonly List<string> _tableToTruncate = new List<string>();
 
         public Testing()
         {
@@ -60,6 +62,38 @@ namespace NUnit.DFM
 
             var context = scope.ServiceProvider.GetService<TContext>();
             await context.Database.EnsureDeletedAsync();
+        }
+
+        [SetUp]
+        public virtual async Task OneTimeSetuUpAsync()
+        {
+            _scope = _scopeFactory.CreateScope();
+        }
+
+        [TearDown]
+        public virtual async Task TearDownAsync()
+        {
+            var dbContext = GetDbContext();
+            foreach (var table in _tableToTruncate)
+                await dbContext.Database.ExecuteSqlRawAsync($@"DELETE FROM {table}");
+            _scope.Dispose();
+        }
+
+        protected Testing<TContext> AddTableToTruncate(string name)
+        {
+            _tableToTruncate.Add(name);
+            return this;
+        }
+
+        protected Testing<TContext> AddTablesToTruncate(List<string> tables)
+        {
+            _tableToTruncate.AddRange(tables);
+            return this;
+        }
+
+        protected TContext GetDbContext()
+        {
+            return _scope.ServiceProvider.GetService<TContext>();
         }
 
     }
