@@ -6,7 +6,7 @@ using NUnit.DFM.Interfaces;
 namespace NUnit.DFM
 {
     public partial class Testing<TContext> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
-        where TContext : IDbContext
+        where TContext : DbContext
     {
 
         public IConfigurationBuilderSetup SetBasePath(string basePath)

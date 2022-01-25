@@ -13,8 +13,8 @@ namespace LCT.Application.Tournaments.Commands
 
     public class CreateTournamentCommandHandler : IRequestHandler<CreateTournamentCommand>
     {
-        private readonly IDbContext _dbContext;
-        public CreateTournamentCommandHandler(IDbContext dbContext)
+        private readonly LctDbContext _dbContext;
+        public CreateTournamentCommandHandler(LctDbContext dbContext)
             => _dbContext = dbContext;
 
         public async Task<Unit> Handle(CreateTournamentCommand request, CancellationToken cancellationToken)

@@ -13,7 +13,7 @@ namespace NUnit.DFM
 {
     [SetUpFixture]
     public partial class Testing<TContext>: IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp, ITestsConfiguration
-        where TContext: IDbContext
+        where TContext: DbContext
     {
         protected IServiceScopeFactory _scopeFactory;
         private readonly IServiceCollection _services = new ServiceCollection();

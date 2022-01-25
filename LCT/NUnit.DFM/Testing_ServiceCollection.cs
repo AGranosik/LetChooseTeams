@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 namespace NUnit.DFM
 {
     public partial class Testing<TContext> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
-        where TContext : IDbContext
+        where TContext : DbContext
     {
         public IServiceCollectionSetUp SwapSingleton<TSingleton>(TSingleton singleton)
             where TSingleton : class

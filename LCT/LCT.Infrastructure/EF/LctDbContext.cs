@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Infrastructure.EF
 {
-    public class LctDbContext : DbContext, IDbContext
+    public class LctDbContext : DbContext
     {
         public LctDbContext()
         {
@@ -21,7 +21,5 @@ namespace LCT.Infrastructure.EF
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
 
-        public async Task SaveChangesAsync(CancellationToken cancellationToken)
-         => await base.SaveChangesAsync(cancellationToken);
     }
 }

@@ -23,13 +23,6 @@ namespace LCT.IntegrationTests
     {
         public Tests() : base()
         {
-            var db = new Mock<IDbContext>();
-
-            db.Setup(d => d.SaveChangesAsync(It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new Exception());
-
-            SwapScoped(db.Object);
-
             this.SetBasePath(Directory.GetCurrentDirectory())
                 .SetEnvironment("Development")
                 .AddEnvironmentVariables();

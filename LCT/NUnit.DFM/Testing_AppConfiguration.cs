@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace NUnit.DFM
 {
     public partial class Testing<TContext> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
-        where TContext : IDbContext
+        where TContext : DbContext
     {
         public IAppConfigurationSetUp Environment(string env)
             => _appConfiguration.Environment(env);
