@@ -1,9 +1,15 @@
-﻿using static LCT.Core.Shared.Validation.FieldValidationExtension;
+﻿using Microsoft.EntityFrameworkCore;
+using static LCT.Core.Shared.Validation.FieldValidationExtension;
 
 namespace LCT.Core.Entites.Tournament.ValueObjects
 {
+    [Keyless]
     public class Name
     {
+        public Name()
+        {
+
+        }
         public Name(string name)
         {
             Validate(name);

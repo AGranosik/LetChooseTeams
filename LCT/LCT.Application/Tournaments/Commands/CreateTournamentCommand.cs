@@ -20,8 +20,8 @@ namespace LCT.Application.Tournaments.Commands
         public async Task<Unit> Handle(CreateTournamentCommand request, CancellationToken cancellationToken)
         {
             var tournament = Tournament.Create(new Name(request.Name), new TournamentLimit(request.PlayerLimit));
-            await _dbContext.Tournaments.AddAsync(tournament);
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.Tournaments.AddAsync(tournament, cancellationToken);
+            await _dbContext.SaveChangesAsync(cancellationToken);
 
             return Unit.Value;
         }
