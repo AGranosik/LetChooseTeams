@@ -3,10 +3,6 @@ using LCT.Core.Entites.Tournament.ValueObjects;
 using LCT.Core.Shared.Exceptions;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LCT.IntegrationTests.Core
 {
@@ -22,7 +18,7 @@ namespace LCT.IntegrationTests.Core
         [Test]
         public void Name_CannotBeEmpty()
         {
-            var func = () => new Name(String.Empty);
+            var func = () => new Name(string.Empty);
             func.Should().Throw<InvalidFieldException>();
         }
     }

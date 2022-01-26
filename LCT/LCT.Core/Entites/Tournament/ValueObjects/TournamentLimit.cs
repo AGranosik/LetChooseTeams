@@ -14,7 +14,7 @@ namespace LCT.Core.Entites.Tournament.ValueObjects
 
         private void Validate(int limit)
         {
-            if (limit <= 0)
+            if (limit <= 1)
                 throw new ValueSmallerThanMinimalValueException();
 
         }

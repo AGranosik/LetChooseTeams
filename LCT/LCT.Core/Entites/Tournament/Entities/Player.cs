@@ -5,7 +5,7 @@ namespace LCT.Core.Entites.Tournament.Entities
     public class Player : Entity
     {
         private Player(): base() { }
-        private Player(Guid id, Name name, Name surname): base(id){
+        private Player(Name name, Name surname): base(){
             Name = name;
             Surname = surname;
         }
@@ -14,8 +14,8 @@ namespace LCT.Core.Entites.Tournament.Entities
         private List<Tournament> _tournamentList = new List<Tournament>();
         public IReadOnlyCollection<Tournament> Tournaments => _tournamentList.AsReadOnly();
 
-        public static Player Register(Guid id, Name name, Name surname)
-            => new (id, name, surname);
+        public static Player Register(Name name, Name surname)
+            => new (name, surname);
 
         public static bool operator ==(Player a, Player b)
         {

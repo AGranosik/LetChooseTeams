@@ -18,7 +18,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LCT.IntegrationTests.Tournaments
+namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 {
     [TestFixture]
     public class Tests : Testing<LctDbContext>
