@@ -19,7 +19,7 @@ namespace LCT.Core.Shared.Validation
         public static void CheckFieldLength(string field, string fieldName, int minLength = 0, int maxLength = int.MaxValue)
         {
             var fieldLength = field.Length;
-            if(fieldLength < minLength || fieldLength > maxLength)
+            if(fieldLength <= minLength || fieldLength >= maxLength)
                 throw new InvalidFieldException(fieldName);
         }
 

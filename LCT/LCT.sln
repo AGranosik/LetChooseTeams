@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NUnit.DFM", "NUnit.DFM\NUni
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "IntegrationTests", "IntegrationTests", "{28744B45-05F1-459B-A656-2F4898B1B541}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCT.IntegrationTests", "LCT.IntegrationTests\LCT.IntegrationTests.csproj", "{5D60EDA9-B66E-44A7-9955-96E2D711E9BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCT.IntegrationTests", "LCT.IntegrationTests\LCT.IntegrationTests.csproj", "{5D60EDA9-B66E-44A7-9955-96E2D711E9BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
