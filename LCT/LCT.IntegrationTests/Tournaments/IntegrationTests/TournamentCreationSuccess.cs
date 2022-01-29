@@ -1,21 +1,18 @@
 using FluentAssertions;
 using LCT.Api.Controllers;
 using LCT.Application.Tournaments.Commands;
-using LCT.Core.Entites.Tournament.Entities;
-using LCT.Core.Entites.Tournament.ValueObjects;
+using LCT.Core.Entites.Tournaments.Entities;
+using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Infrastructure.EF;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using NUnit.DFM;
 using NUnit.Framework;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests

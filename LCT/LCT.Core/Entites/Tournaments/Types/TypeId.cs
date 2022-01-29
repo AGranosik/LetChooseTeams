@@ -1,4 +1,4 @@
-﻿namespace LCT.Core.Entites.Tournament.Types
+﻿namespace LCT.Core.Entites.Tournaments.Types
 {
     public abstract class TypeId : IEquatable<TypeId>
     {

@@ -1,4 +1,5 @@
-﻿using LCT.Application.Tournaments;
+﻿using LCT.Application.Players.Commands;
+using LCT.Application.Tournaments;
 using LCT.Application.Tournaments.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
@@ -22,6 +23,20 @@ namespace LCT.Api.Controllers
                 return Ok(result);
             }
             catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPost("assignPlayer")]
+        public async Task<IActionResult> AssignPlayerToTournament(AssignPlayerToTournamentCommand request)
+        {
+            try
+            {
+                var result = await _mediator.Send(request);
+                return Ok(result);
+            }
+            catch(Exception ex)
             {
                 return BadRequest(ex.Message);
             }

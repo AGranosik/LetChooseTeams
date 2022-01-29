@@ -1,6 +1,7 @@
-﻿using LCT.Core.Entites.Tournament.ValueObjects;
+﻿
+using LCT.Core.Entites.Tournaments.ValueObjects;
 
-namespace LCT.Core.Entites.Tournament.Entities
+namespace LCT.Core.Entites.Tournaments.Entities
 {
     public class Player : Entity
     {

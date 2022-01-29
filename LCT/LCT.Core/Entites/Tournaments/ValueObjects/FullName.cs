@@ -1,6 +1,6 @@
 ﻿using static LCT.Core.Shared.Validation.FieldValidationExtension;
 
-namespace LCT.Core.Entites.Tournament.ValueObjects
+namespace LCT.Core.Entites.Tournaments.ValueObjects
 {
     public class FullName : IEquatable<FullName>
     {

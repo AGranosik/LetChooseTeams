@@ -1,8 +1,7 @@
 ﻿using FluentAssertions;
-using LCT.Core.Entites.Tournament.ValueObjects;
+using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Core.Shared.Exceptions;
 using NUnit.Framework;
-using System;
 
 namespace LCT.IntegrationTests.Core
 {

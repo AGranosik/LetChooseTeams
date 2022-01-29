@@ -1,4 +1,4 @@
-﻿using LCT.Core.Entites.Tournament.Entities;
+﻿using LCT.Core.Entites.Tournaments.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Infrastructure.EF

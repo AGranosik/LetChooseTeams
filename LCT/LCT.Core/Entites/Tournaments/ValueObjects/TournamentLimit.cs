@@ -1,7 +1,7 @@
-﻿using LCT.Core.Entites.Tournament.Exceptions;
+﻿using LCT.Core.Entites.Tournaments.Exceptions;
 using LCT.Core.Shared.Exceptions;
 
-namespace LCT.Core.Entites.Tournament.ValueObjects
+namespace LCT.Core.Entites.Tournaments.ValueObjects
 {
     public class TournamentLimit
     {
