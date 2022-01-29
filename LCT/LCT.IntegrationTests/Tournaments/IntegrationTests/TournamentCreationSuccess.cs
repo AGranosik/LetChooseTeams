@@ -42,13 +42,22 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         [Test]
         public async Task TournamentCreationSuccess()
         {
-            var result = await CreateTournamentApi(new CreateTournamentCommand
+            var request = new CreateTournamentCommand
             {
-                Name = "tournamentName",
+                Name = "testName",
                 PlayerLimit = 10
-            });
+            };
+            var result = await CreateTournamentApi(request);
 
             result.Should().BeOfType<OkObjectResult>();
+
+            var tournaments = await GetTournaments();
+            tournaments.Should().NotBeEmpty();
+            tournaments.Count.Should().Be(1);
+
+            var tournament = tournaments.First();
+            tournament.TournamentName.Value.Should().Be(request.Name);
+            tournament.Limit.Limit.Should().Be(request.PlayerLimit);
         }
 
         [Test]
@@ -64,12 +73,21 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             });
 
             result?.Should().BeOfType<BadRequestObjectResult>();
+
+            var tournaments = await GetTournaments();
+            tournaments.Should().BeEmpty();
         }
 
         private Task<IActionResult> CreateTournamentApi(CreateTournamentCommand request)
         {
             var mediator = _scope.ServiceProvider.GetService<IMediator>();
             return new TournamentController(mediator).Create(request);
+        }
+
+        private Task<List<Tournament>> GetTournaments()
+        {
+            var dbContext = GetDbContext();
+            return dbContext.Tournaments.ToListAsync();
         }
 
     }
