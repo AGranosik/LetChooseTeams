@@ -23,7 +23,7 @@ namespace LCT.Api.Controllers
             }
             catch (Exception ex)
             {
-                throw;
+                return BadRequest(ex.Message);
             }
         }
     }

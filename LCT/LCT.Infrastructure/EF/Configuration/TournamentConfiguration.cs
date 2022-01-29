@@ -11,12 +11,14 @@ namespace LCT.Infrastructure.EF.Configuration
         {
             builder.Property(x => x.Limit).IsRequired()
                 .HasConversion(x => x.Limit, x => new TournamentLimit(x));
+            builder.HasIndex(t => t.TournamentName)
+                .IsUnique();
 
-            builder.Property(x => x.TournamentName).IsRequired()
+            builder.Property(x => x.TournamentName)
+                .IsRequired()
                 .HasMaxLength(80)
                 .HasConversion(x => x.Value, x => new Name(x));
 
-            
         }
     }
 }

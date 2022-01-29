@@ -96,5 +96,11 @@ namespace NUnit.DFM
             return _scope.ServiceProvider.GetService<TContext>();
         }
 
+        protected async Task AddAsync<TEntity>(TEntity entity)
+        {
+            var dbContext = GetDbContext();
+            await dbContext.AddAsync(entity);
+        }
+
     }
 }

@@ -42,16 +42,34 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         [Test]
         public async Task TournamentCreationSuccess()
         {
-            var mediator = _scope.ServiceProvider.GetService<IMediator>();
-            var controlelr = new TournamentController(mediator);
-
-            var result = await controlelr.Create(new CreateTournamentCommand()
+            var result = await CreateTournamentApi(new CreateTournamentCommand
             {
                 Name = "tournamentName",
                 PlayerLimit = 10
             });
 
             result.Should().BeOfType<OkObjectResult>();
+        }
+
+        [Test]
+        public async Task Tournament_NameUniqnessChecked_ThrowsAsync()
+        {
+            var tournament = Tournament.Create(new Name("unique"), new TournamentLimit(2));
+            await AddAsync(tournament);
+
+            var result = await CreateTournamentApi(new CreateTournamentCommand
+            {
+                Name = "unique",
+                PlayerLimit = 10
+            });
+
+            result?.Should().BeOfType<BadRequestObjectResult>();
+        }
+
+        private Task<IActionResult> CreateTournamentApi(CreateTournamentCommand request)
+        {
+            var mediator = _scope.ServiceProvider.GetService<IMediator>();
+            return new TournamentController(mediator).Create(request);
         }
 
     }
