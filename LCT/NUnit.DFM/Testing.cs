@@ -100,6 +100,7 @@ namespace NUnit.DFM
         {
             var dbContext = GetDbContext();
             await dbContext.AddAsync(entity);
+            await dbContext.SaveChangesAsync();
         }
 
     }

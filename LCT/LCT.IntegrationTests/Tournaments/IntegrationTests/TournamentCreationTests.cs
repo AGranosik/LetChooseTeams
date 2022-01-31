@@ -18,9 +18,9 @@ using System.Threading.Tasks;
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 {
     [TestFixture]
-    public class Tests : Testing<LctDbContext>
+    public class TournamentCreationTests : Testing<LctDbContext>
     {
-        public Tests() : base()
+        public TournamentCreationTests() : base()
         {
             AddTablesToTruncate(new List<string>
             {
@@ -70,9 +70,6 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             });
 
             result?.Should().BeOfType<BadRequestObjectResult>();
-
-            var tournaments = await GetTournaments();
-            tournaments.Should().BeEmpty();
         }
 
         private Task<IActionResult> CreateTournamentApi(CreateTournamentCommand request)

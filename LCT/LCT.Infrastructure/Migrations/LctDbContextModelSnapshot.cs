@@ -43,7 +43,7 @@ namespace LCT.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Players");
+                    b.ToTable("Players", (string)null);
                 });
 
             modelBuilder.Entity("LCT.Core.Entites.Tournament.Entities.Tournament", b =>
@@ -68,7 +68,7 @@ namespace LCT.Infrastructure.Migrations
                     b.HasIndex("TournamentName")
                         .IsUnique();
 
-                    b.ToTable("Tournaments");
+                    b.ToTable("Tournaments", (string)null);
                 });
 
             modelBuilder.Entity("PlayerTournament", b =>
@@ -83,7 +83,7 @@ namespace LCT.Infrastructure.Migrations
 
                     b.HasIndex("TournamentsId");
 
-                    b.ToTable("PlayerTournament");
+                    b.ToTable("PlayerTournament", (string)null);
                 });
 
             modelBuilder.Entity("PlayerTournament", b =>

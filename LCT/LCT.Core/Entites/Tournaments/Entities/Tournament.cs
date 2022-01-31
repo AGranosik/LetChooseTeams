@@ -12,9 +12,9 @@ namespace LCT.Core.Entites.Tournaments.Entities
             Limit = limit;
             TournamentName = tournamentName;
         }
-        private List<Player> _players = new List<Player>();
         public Name TournamentName { get; private set; }
-        public IReadOnlyCollection<Player> Players => _players.AsReadOnly();
+        private List<Player> _players = new List<Player>();
+        public virtual IReadOnlyCollection<Player> Players => _players;
         public TournamentLimit Limit { get; private set; }
         public int NumberOfPlayers => _players.Count;
 

@@ -19,6 +19,7 @@ namespace LCT.Infrastructure.EF.Configuration
                 .HasMaxLength(80)
                 .HasConversion(x => x.Value, x => new Name(x));
 
+            //builder.UsePropertyAccessMode(PropertyAccessMode.Field);
         }
     }
 }

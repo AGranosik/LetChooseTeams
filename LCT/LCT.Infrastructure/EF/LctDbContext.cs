@@ -18,6 +18,7 @@ namespace LCT.Infrastructure.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //modelBuilder.UsePropertyAccessMode(PropertyAccessMode.Field);
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
         }
 

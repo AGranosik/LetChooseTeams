@@ -12,7 +12,7 @@ namespace LCT.Infrastructure.EF.Repositories
             _context = context;
         }
         public Task<Tournament> GetTournament(Guid Id)
-            => _context.Tournaments.SingleOrDefaultAsync(t => t.Id == Id);
+            => _context.Tournaments.Include(t => t.Players).SingleOrDefaultAsync(t => t.Id == Id);
 
         public Task SaveChangesAsync(CancellationToken cancellationToken)
         => _context.SaveChangesAsync(cancellationToken);
