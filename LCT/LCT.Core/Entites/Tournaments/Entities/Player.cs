@@ -27,8 +27,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
 
             if (a is not null && b is not null)
             {
-                return a.Id.Equals(b.Id) 
-                    && a.Name == b.Name
+                return a.Name == b.Name
                     && b.Name == a.Name;
             }
 

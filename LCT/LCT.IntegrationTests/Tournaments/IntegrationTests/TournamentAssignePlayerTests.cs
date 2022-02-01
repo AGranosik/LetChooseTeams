@@ -49,6 +49,19 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             tournament.Players.Count.Should().Be(1);
         }
 
+        [Test]
+        public async Task AssignPlayer_playerAlreadyExists_ThrowsExceptionAsync()
+        {
+            var tournament = await CreateTournament();
+            var player = Player.Register(new Name("name"), new Name("surname"));
+            tournament.AddPlayer(player);
+            await GetDbContext().SaveChangesAsync();
+
+            var result = await AssignPlayerApiAsync(player.Name, player.Surname, tournament.Id);
+            
+            result.Should().BeOfType<BadRequestObjectResult>();
+        }
+
         private async Task<IActionResult> AssignPlayerApiAsync(string name, string surname, Guid tournamentId)
         {
             var mediator = _scope.ServiceProvider.GetService<IMediator>();
