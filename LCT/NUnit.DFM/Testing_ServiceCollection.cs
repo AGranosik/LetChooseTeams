@@ -1,13 +1,6 @@
-﻿using LCT.Infrastructure.EF;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using NUnit.DFM.Builders;
 using NUnit.DFM.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NUnit.DFM
 {
