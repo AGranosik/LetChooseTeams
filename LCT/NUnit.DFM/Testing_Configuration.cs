@@ -11,8 +11,6 @@ namespace NUnit.DFM
 
         public IConfigurationBuilderSetup SetBasePath(string basePath)
             => _configurationSetup.SetBasePath(basePath);
-        public IConfigurationBuilderSetup SetEnvironment(string environment)
-            => _configurationSetup.SetEnvironment(environment);
         public IConfigurationBuilderSetup AddEnvironmentVariables()
             => _configurationSetup.AddEnvironmentVariables();
         public IConfigurationRoot Create()
