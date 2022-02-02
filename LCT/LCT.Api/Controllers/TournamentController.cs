@@ -3,6 +3,7 @@ using LCT.Application.Tournaments;
 using LCT.Application.Tournaments.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Nest;
 
 namespace LCT.Api.Controllers
 {
@@ -10,8 +11,11 @@ namespace LCT.Api.Controllers
     [ApiController]
     public class TournamentController : BaseApiController
     {
-        public TournamentController(IMediator mediator) : base(mediator)
+        private readonly IElasticClient _client
+        public TournamentController(IMediator mediator, IElasticClient client) : base(mediator)
         {
+            _client = client;
+            _client
         }
 
         [HttpPost("create")]

@@ -18,6 +18,7 @@ namespace LCT.Api
             services.AddSwaggerGen();
             services.AddInfrastructure()
                 .AddApplication();
+            
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
