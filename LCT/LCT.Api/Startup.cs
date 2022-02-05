@@ -1,5 +1,6 @@
 ﻿using LCT.Application;
 using LCT.Infrastructure;
+using Serilog;
 
 namespace LCT.Api
 {
@@ -29,7 +30,7 @@ namespace LCT.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            Log
             app.UseHttpsRedirection();
 
             app.UseRouting();

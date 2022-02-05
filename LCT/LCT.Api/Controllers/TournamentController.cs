@@ -11,11 +11,8 @@ namespace LCT.Api.Controllers
     [ApiController]
     public class TournamentController : BaseApiController
     {
-        private readonly IElasticClient _client
-        public TournamentController(IMediator mediator, IElasticClient client) : base(mediator)
+        public TournamentController(IMediator mediator) : base(mediator)
         {
-            _client = client;
-            _client
         }
 
         [HttpPost("create")]
