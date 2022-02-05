@@ -28,8 +28,6 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
                 nameof(LctDbContext.Tournaments)
             });
 
-            this.SetBasePath(Directory.GetCurrentDirectory())
-                .AddEnvironmentVariables();
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();

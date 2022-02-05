@@ -11,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -28,8 +27,6 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
                 nameof(LctDbContext.Tournaments)
             });
 
-            this.SetBasePath(Directory.GetCurrentDirectory())
-                .AddEnvironmentVariables();
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();

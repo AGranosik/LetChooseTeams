@@ -1,6 +1,8 @@
 ﻿using LCT.Application;
 using LCT.Infrastructure;
 using Serilog;
+using Serilog.Sinks.Elasticsearch;
+using System.Reflection;
 
 namespace LCT.Api
 {
@@ -30,7 +32,19 @@ namespace LCT.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-            Log
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .Enrich.WithMachineName()
+                .WriteTo.Debug()
+                .WriteTo.Console()
+                .WriteTo.Elasticsearch(ConfigureElasticSink(environment))
+                .Enrich.WithProperty("Environment", environment)
+                .ReadFrom.Configuration(_configuration)
+                .CreateLogger();
+
+            Log.Information("hehe");
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
@@ -40,6 +54,15 @@ namespace LCT.Api
             {
                 endpoints.MapControllers();
             });
+        }
+
+        private ElasticsearchSinkOptions ConfigureElasticSink(string environment)
+        {
+            return new ElasticsearchSinkOptions(new Uri(_configuration["ElasticConfiguration:Uri"]))
+            {
+                AutoRegisterTemplate = true,
+                IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower().Replace(".", "-")}-{environment?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"
+            };
         }
     }
 }

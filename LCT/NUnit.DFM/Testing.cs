@@ -12,7 +12,7 @@ using NUnit.Framework;
 namespace NUnit.DFM
 {
     [SetUpFixture]
-    public partial class Testing<TContext>: IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp, ITestsConfiguration
+    public partial class Testing<TContext>: IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
         where TContext: DbContext
     {
         protected IServiceScopeFactory _scopeFactory;
