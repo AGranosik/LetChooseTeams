@@ -1,4 +1,5 @@
-﻿using LCT.Application;
+﻿using LCT.Api.Configuration;
+using LCT.Application;
 using LCT.Infrastructure;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
@@ -32,6 +33,8 @@ namespace LCT.Api
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UserErrorLogging();
+
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
@@ -42,8 +45,6 @@ namespace LCT.Api
                 .Enrich.WithProperty("Environment", environment)
                 .ReadFrom.Configuration(_configuration)
                 .CreateLogger();
-
-            Log.Information("hehe");
 
             app.UseHttpsRedirection();
 
