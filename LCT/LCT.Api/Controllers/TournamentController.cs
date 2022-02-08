@@ -4,6 +4,7 @@ using LCT.Application.Tournaments.Commands;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Nest;
+using Serilog;
 
 namespace LCT.Api.Controllers
 {
@@ -17,7 +18,10 @@ namespace LCT.Api.Controllers
 
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateTournamentCommand request)
-            => Ok(await _mediator.Send(request));
+        {
+            Log.Information("hehe");
+            return Ok(await _mediator.Send(request));
+        }
 
         [HttpPost("assignPlayer")]
         public async Task<IActionResult> AssignPlayerToTournament(AssignPlayerToTournamentCommand request)

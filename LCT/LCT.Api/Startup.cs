@@ -47,7 +47,7 @@ namespace LCT.Api
                 .CreateLogger();
 
             app.UseHttpsRedirection();
-
+            app.UseSerilogRequestLogging();
             app.UseRouting();
 
             app.UseAuthorization();
