@@ -7,6 +7,17 @@ export const options = {
 
 
 export default function () {
-    http.get('https://test.k6.io');
+    const payload = JSON.stringify({
+        name: 'performance test',
+        playerLimit: 2
+    });
+
+    const params = {
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    };
+
+    http.post('https://localhost:7008/api/Tournament/create', payload, params);
     sleep(1);
 }

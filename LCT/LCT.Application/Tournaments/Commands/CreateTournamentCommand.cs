@@ -17,7 +17,6 @@ namespace LCT.Application.Tournaments.Commands
         public CreateTournamentCommandHandler(LctDbContext dbContext)
             => _dbContext = dbContext;
 
-        
         public async Task<Unit> Handle(CreateTournamentCommand request, CancellationToken cancellationToken)
         {
             var tournament = Tournament.Create(new Name(request.Name), new TournamentLimit(request.PlayerLimit));
