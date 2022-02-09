@@ -64,8 +64,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
         private async Task<Unit> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId)
         {
-            var repo = _scope.ServiceProvider.GetRequiredService<ITournamentRepository>();
-            return await new AssignPlayerToTournamentCommandHandler(repo).Handle(new AssignPlayerToTournamentCommand
+            return await new AssignPlayerToTournamentCommandHandler(GetDbContext()).Handle(new AssignPlayerToTournamentCommand
             {
                 Name = name,
                 Surname = surname,
