@@ -43,7 +43,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             };
             var action = () => CreateTournamenCommandHander(request);
 
-            action.Should().NotThrowAsync();
+            await action.Should().NotThrowAsync();
 
             var tournaments = await GetTournaments();
             tournaments.Should().NotBeEmpty();

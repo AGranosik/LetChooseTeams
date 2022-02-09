@@ -1,6 +1,4 @@
-﻿using LCT.Core.Entites.Tournaments.Repositories;
-using LCT.Infrastructure.EF;
-using LCT.Infrastructure.EF.Repositories;
+﻿using LCT.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,7 +12,6 @@ namespace LCT.Infrastructure
             var options = services.GetOptions<EfOptions>("sql");
             services.AddDbContext<LctDbContext>(x => x.UseSqlServer(options.ConnectionString));
 
-            services.RegisterRepositories();
             return services;
         }
 
@@ -30,12 +27,6 @@ namespace LCT.Infrastructure
             var options = new T();
             configuration.GetSection(sectionName).Bind(options);
             return options;
-        }
-
-        private static IServiceCollection RegisterRepositories(this IServiceCollection services)
-        {
-            services.AddTransient<ITournamentRepository, TournamentRepository>();
-            return services;
         }
     }
 }
