@@ -12,6 +12,7 @@ using NUnit.DFM;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests
@@ -40,9 +41,9 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
                 Name = "testName",
                 PlayerLimit = 10
             };
-            var result = await CreateTournamentApi(request);
+            var action = () => CreateTournamenCommandHander(request);
 
-            result.Should().BeOfType<OkObjectResult>();
+            action.Should().NotThrowAsync();
 
             var tournaments = await GetTournaments();
             tournaments.Should().NotBeEmpty();
@@ -59,19 +60,18 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             var tournament = Tournament.Create(new Name("unique"), new TournamentLimit(2));
             await AddAsync(tournament);
 
-            var result = await CreateTournamentApi(new CreateTournamentCommand
+            var action = () => CreateTournamenCommandHander(new CreateTournamentCommand
             {
                 Name = "unique",
                 PlayerLimit = 10
             });
 
-            result?.Should().BeOfType<BadRequestObjectResult>();
+            await action.Should().ThrowAsync<DbUpdateException>();
         }
 
-        private Task<IActionResult> CreateTournamentApi(CreateTournamentCommand request)
+        private async Task<Unit> CreateTournamenCommandHander(CreateTournamentCommand request)
         {
-            var mediator = _scope.ServiceProvider.GetService<IMediator>();
-            return new TournamentController(mediator).Create(request);
+            return await new CreateTournamentCommandHandler(GetDbContext()).Handle(request, new CancellationToken());
         }
 
         private Task<List<Tournament>> GetTournaments()

@@ -2,6 +2,8 @@
 using LCT.Api.Controllers;
 using LCT.Application.Players.Commands;
 using LCT.Core.Entites.Tournaments.Entities;
+using LCT.Core.Entites.Tournaments.Exceptions;
+using LCT.Core.Entites.Tournaments.Repositories;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Infrastructure.EF;
 using MediatR;
@@ -13,6 +15,7 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests
@@ -37,9 +40,9 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         public async Task AssignPlayer_Success()
         {
             var tournament = await CreateTournament();
-            var result = await AssignPlayerApiAsync("name", "surname", tournament.Id);
+            var action = () => AssignPlayerCommandHandleAsync("name", "surname", tournament.Id);
             
-            result.Should().BeOfType<OkObjectResult>();
+            await action.Should().NotThrowAsync();
 
             var tournamentFromDb = await GetTournamentById(tournament.Id);
             tournamentFromDb.Should().NotBeNull();
@@ -54,20 +57,20 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             tournament.AddPlayer(player);
             await GetDbContext().SaveChangesAsync();
 
-            var result = await AssignPlayerApiAsync(player.Name, player.Surname, tournament.Id);
-            
-            result.Should().BeOfType<BadRequestObjectResult>();
+            var action = () => AssignPlayerCommandHandleAsync(player.Name, player.Surname, tournament.Id);
+
+            await action.Should().ThrowAsync<PlayerAlreadyAssignedToTournamentException>();
         }
 
-        private async Task<IActionResult> AssignPlayerApiAsync(string name, string surname, Guid tournamentId)
+        private async Task<Unit> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId)
         {
-            var mediator = _scope.ServiceProvider.GetService<IMediator>();
-            return await new TournamentController(mediator).AssignPlayerToTournament(new AssignPlayerToTournamentCommand
+            var repo = _scope.ServiceProvider.GetRequiredService<ITournamentRepository>();
+            return await new AssignPlayerToTournamentCommandHandler(repo).Handle(new AssignPlayerToTournamentCommand
             {
                 Name = name,
                 Surname = surname,
                 TournamentId = tournamentId
-            });
+            }, new CancellationToken());
         }
 
         private Task<Tournament> GetTournamentById(Guid id)

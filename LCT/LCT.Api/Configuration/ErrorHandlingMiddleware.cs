@@ -20,7 +20,6 @@ namespace LCT.Api.Configuration
             catch (Exception ex)
             {
                 Log.Error(ex, ex.Message);
-                throw;
             }
         }
     }
