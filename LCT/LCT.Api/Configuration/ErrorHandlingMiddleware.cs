@@ -19,7 +19,7 @@ namespace LCT.Api.Configuration
             }
             catch (Exception ex)
             {
-                Log.Error(ex, ex.Message, context.Connection.Id);
+                Log.Error(ex, ex.Message);
                 throw;
             }
         }
