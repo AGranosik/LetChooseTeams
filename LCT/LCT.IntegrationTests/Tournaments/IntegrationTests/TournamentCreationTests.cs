@@ -1,13 +1,9 @@
 using FluentAssertions;
-using LCT.Api.Controllers;
 using LCT.Application.Tournaments.Commands;
 using LCT.Core.Entites.Tournaments.Entities;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Infrastructure.EF;
-using MediatR;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;

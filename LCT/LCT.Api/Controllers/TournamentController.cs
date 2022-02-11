@@ -1,10 +1,8 @@
 ﻿using LCT.Application.Players.Commands;
-using LCT.Application.Tournaments;
 using LCT.Application.Tournaments.Commands;
+using LCT.Application.Tournaments.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Nest;
-using Serilog;
 
 namespace LCT.Api.Controllers
 {
@@ -16,7 +14,9 @@ namespace LCT.Api.Controllers
         {
         }
 
-
+        [HttpGet]
+        public async Task<IActionResult> Get(GetTournamentQuery query)
+            => Ok(await _mediator.Send(query));
 
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateTournamentCommand request)
