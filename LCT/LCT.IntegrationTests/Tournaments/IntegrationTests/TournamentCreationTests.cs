@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
@@ -69,7 +70,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             await action.Should().ThrowAsync<DbUpdateException>();
         }
 
-        private async Task<Unit> CreateTournamenCommandHander(CreateTournamentCommand request)
+        private async Task<Guid> CreateTournamenCommandHander(CreateTournamentCommand request)
         {
             return await new CreateTournamentCommandHandler(GetDbContext()).Handle(request, new CancellationToken());
         }
