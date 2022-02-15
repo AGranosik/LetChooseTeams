@@ -8,6 +8,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Players\**" />
+    <EmbeddedResource Remove="Players\**" />
+    <None Remove="Players\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="appsettings.Development.json" />
     <None Remove="appsettings.json" />
   </ItemGroup>
@@ -35,10 +41,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\NUnit.DFM\NUnit.DFM.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Players\IntegrationTests\" />
   </ItemGroup>
 
 </Project>
