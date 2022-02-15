@@ -15,13 +15,7 @@ export default function () {
         playerLimit: 2
     });
 
-    const params = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
-
-    const result = http.post('https://localhost:7008/api/Tournament/create', payload, params);
+    const result = http.post(_baseApiUrl + '/create', payload, _basePostParams);
     check(result, {
         'is status 200:': (r) => r.status == 200
     });

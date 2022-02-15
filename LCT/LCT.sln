@@ -25,6 +25,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LCT.IntegrationTests", "LCT
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "PerfomanceTests", "PerfomanceTests", "{F0AB554F-FD95-4AB8-A496-309D6AD08164}"
 	ProjectSection(SolutionItems) = preProject
+		variables.js = variables.js
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tournament", "Tournament", "{EF2386E7-0BE8-4781-9548-D693BEACF91B}"
+	ProjectSection(SolutionItems) = preProject
+		getTournament_loadTests.js = getTournament_loadTests.js
 		tests.js = tests.js
 	EndProjectSection
 EndProject
@@ -72,6 +78,7 @@ Global
 		{28744B45-05F1-459B-A656-2F4898B1B541} = {F185048B-F1C0-4D83-AB92-5AFFF781FA54}
 		{5D60EDA9-B66E-44A7-9955-96E2D711E9BC} = {28744B45-05F1-459B-A656-2F4898B1B541}
 		{F0AB554F-FD95-4AB8-A496-309D6AD08164} = {F185048B-F1C0-4D83-AB92-5AFFF781FA54}
+		{EF2386E7-0BE8-4781-9548-D693BEACF91B} = {F0AB554F-FD95-4AB8-A496-309D6AD08164}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {32D220D3-D5AC-4418-A17F-C46EE48BB643}
