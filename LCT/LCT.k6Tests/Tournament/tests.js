@@ -1,5 +1,6 @@
 import http from 'k6/http';
 import { check, sleep } from 'k6';
+import { _basePostParams, _baseTournamentApiUrl } from './variables';
 export const options = {
     vus: 10,
     duration: '10s',
@@ -15,7 +16,7 @@ export default function () {
         playerLimit: 2
     });
 
-    const result = http.post(_baseApiUrl + '/create', payload, _basePostParams);
+    const result = http.post(_baseTournamentApiUrl, payload, _basePostParams);
     check(result, {
         'is status 200:': (r) => r.status == 200
     });
