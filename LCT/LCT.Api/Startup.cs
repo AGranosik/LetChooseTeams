@@ -38,8 +38,6 @@ namespace LCT.Api
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
-                .WriteTo.Debug()
-                .WriteTo.Console()
                 .WriteTo.Elasticsearch(ConfigureElasticSink(environment))
                 .Enrich.WithProperty("Environment", environment)
                 .ReadFrom.Configuration(_configuration)

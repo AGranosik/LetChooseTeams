@@ -39,7 +39,7 @@ namespace LCT.Application.Tournaments.Queries
                         {
                             Name = p.Name
                         }).ToList()
-                    })
+                })
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (tournament == null)
