@@ -20,7 +20,7 @@ export const options = {
 };
 
   export default function () {
-    const id = addTournamentToGet();
+    const id = addTournamentToGet().split('"').join("");
     console.log(id);
     const url = new URL(_baseTournamentApiUrl);
     url.searchParams.append('Id', id);
