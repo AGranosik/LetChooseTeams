@@ -1,24 +1,45 @@
-import http from 'k6/http';
-import { check, sleep } from 'k6';
+import { check, } from 'k6';
 import { _basePostParams, _baseTournamentApiUrl } from '../variables.js';
+import { postTournament } from './common.js';
 export const options = {
-    vus: 10,
-    duration: '10s',
-    thresholds: {
-        http_req_duration: ['p(99)<400'], // 99% of requests should be below 400ms
-    },
+    scenarios: {
+        shared_scenario:{
+            executor: 'shared-iterations',
+            startTime: 0,
+            vus: 10,
+            iterations: 200,
+            maxDuration: '10s'
+        },
+        per_vu_iter_scernario:{
+            executor: 'per-vu-iterations',
+            startTime: '31s',
+            vus: 100,
+            iterations: 200,
+            maxDuration: '10s'
+        },
+        cosntant_vu_scenario:{
+            executor: 'constant-vus',
+            startTime: '42s',
+            vus: 100,
+            duration: '20s',
+        },
+        ramping_vus_scenario:{
+            executor: 'ramping-vus',
+            startVUs: 0,
+            stages: [
+                { duration: '10s', target: 100 }, // simulate ramp-up of traffic from 1 to 100 users over 5 minutes.
+                { duration: '20s', target: 200 }, // stay at 100 users for 10 minutes
+                { duration: '30s', target: 0 }, // ramp-down to 0 users
+            ],
+            gracefulRampDown: '2s',
+        }
+    }
 };
 
 
 export default function () {
-    const payload = JSON.stringify({
-        name: 'performance test',
-        playerLimit: 2
-    });
-
-    const result = http.post(_baseTournamentApiUrl, payload, _basePostParams);
+    const result = postTournament();
     check(result, {
         'is status 200:': (r) => r.status == 200
     });
-    sleep(1);
 }

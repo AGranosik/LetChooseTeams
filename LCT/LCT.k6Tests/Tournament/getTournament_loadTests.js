@@ -2,6 +2,7 @@ import { check, group, sleep } from "k6";
 import http from "k6/http";
 import { _basePostParams, _baseTournamentApiUrl } from "../variables.js";
 import { URL } from 'https://jslib.k6.io/url/1.0.0/index.js';
+import { postTournament } from "./common.js";
 
 export const options = {
     stages: [
@@ -10,14 +11,14 @@ export const options = {
         { duration: '30s', target: 0 }, // ramp-down to 0 users
     ],
     thresholds: {
-        http_req_duration: ['p(95)<700'],
+        http_req_duration: ['p(95)<1500'],
     },
 }
 
   export default function () {
     var id;
     group('post is success', function(){
-        const postResult = addTournamentToGet();
+        const postResult = postTournament();
         id = postResult.body.split('"').join("");
         check(postResult, {
             'is status 200:': (r) => r.status == 200
@@ -33,14 +34,4 @@ export const options = {
         });
     })
 
-}
-export function addTournamentToGet() {
-    const rand = Date.now() * Math.random()
-    const payload = JSON.stringify({
-        name: 'performance test' + rand.toString(),
-        playerLimit: 2
-    });
-
-    const result = http.post(_baseTournamentApiUrl + '/create', payload, _basePostParams);
-    return result;
 }
