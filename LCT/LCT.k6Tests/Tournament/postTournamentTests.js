@@ -6,32 +6,33 @@ export const options = {
         shared_scenario:{
             executor: 'shared-iterations',
             startTime: 0,
-            vus: 10,
-            iterations: 200,
-            maxDuration: '10s'
+            vus: 100,
+            iterations: 2000,
+            maxDuration: '20s'
         },
         per_vu_iter_scernario:{
             executor: 'per-vu-iterations',
-            startTime: '31s',
-            vus: 100,
-            iterations: 200,
-            maxDuration: '10s'
+            startTime: '40s',
+            vus: 50,
+            iterations: 100,
+            maxDuration: '25s'
         },
         cosntant_vu_scenario:{
             executor: 'constant-vus',
-            startTime: '42s',
+            startTime: '65s',
             vus: 100,
             duration: '20s',
         },
         ramping_vus_scenario:{
             executor: 'ramping-vus',
             startVUs: 0,
+            startTime: '90s',
             stages: [
                 { duration: '10s', target: 100 }, // simulate ramp-up of traffic from 1 to 100 users over 5 minutes.
                 { duration: '20s', target: 200 }, // stay at 100 users for 10 minutes
                 { duration: '30s', target: 0 }, // ramp-down to 0 users
             ],
-            gracefulRampDown: '2s',
+            gracefulRampDown: '10s',
         }
     }
 };
