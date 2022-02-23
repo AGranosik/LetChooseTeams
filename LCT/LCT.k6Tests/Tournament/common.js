@@ -15,7 +15,7 @@ export function postTournament(limit = 2) {
 export function assignPlayers(id){
     const rand = Date.now() * Math.random()
     const payload = JSON.stringify({
-        name: 'test',
+        name: 'test' + rand,
         surname: 'performance' + rand,
         tournamentId: id
     });
