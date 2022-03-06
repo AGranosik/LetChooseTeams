@@ -22,6 +22,8 @@ namespace LCT.Api
             services.AddSwaggerGen();
             services.AddInfrastructure()
                 .AddApplication();
+
+            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -33,7 +35,10 @@ namespace LCT.Api
                 app.UseSwaggerUI();
             }
             app.UserErrorLogging();
-
+            app.UseCors(builder => builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
