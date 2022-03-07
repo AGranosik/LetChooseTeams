@@ -3,10 +3,17 @@ using System.Drawing;
 
 namespace LCT.Application.Common
 {
-    internal static class QRCodeCreator
+    public interface IQRCodeCreator
     {
-        public static string Generate(string url)
+        string Generate(string url);
+    }
+    public class QRCodeCreator: IQRCodeCreator
+    {
+        public string Generate(string url)
         {
+            if(string.IsNullOrEmpty(url))
+                throw new ArgumentNullException("qrcode url");
+
             QRCodeGenerator QrGenerator = new QRCodeGenerator();
             QRCodeData QrCodeInfo = QrGenerator.CreateQrCode("hehe", QRCodeGenerator.ECCLevel.Q);
             var QrCode = new QRCode(QrCodeInfo);

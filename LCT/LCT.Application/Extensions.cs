@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using LCT.Application.Common;
+using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LCT.Application
@@ -8,6 +9,7 @@ namespace LCT.Application
         public static IServiceCollection AddApplication(this IServiceCollection collection)
         {
             collection.AddMediatR(typeof(Extensions));
+            collection.AddSingleton<IQRCodeCreator, QRCodeCreator>();
             return collection;
         }
     }

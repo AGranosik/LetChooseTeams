@@ -27,9 +27,11 @@ namespace LCT.Application.Tournaments.Queries
     public class GetTournamentQueryHandler : IRequestHandler<GetTournamentQuery, TournamentDto>
     {
         private readonly LctDbContext _dbContext;
-        public GetTournamentQueryHandler(LctDbContext dbContext)
+        private readonly IQRCodeCreator _qrCodeCreator;
+        public GetTournamentQueryHandler(LctDbContext dbContext, IQRCodeCreator qRCodeCreator)
         {
             _dbContext = dbContext;
+            _qrCodeCreator = qRCodeCreator;
         }
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
@@ -48,7 +50,7 @@ namespace LCT.Application.Tournaments.Queries
             if (tournament == null)
                 throw new EntityDoesNotExist(nameof(Tournament));
 
-            tournament.QRCode = QRCodeCreator.Generate("heeh");
+            tournament.QRCode = _qrCodeCreator.Generate("heeh");
 
             return tournament;
         }
