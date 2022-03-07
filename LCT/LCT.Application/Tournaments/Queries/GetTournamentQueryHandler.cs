@@ -1,8 +1,11 @@
-﻿using LCT.Core.Entites.Tournaments.Entities;
+﻿using LCT.Application.Common;
+using LCT.Core.Entites.Tournaments.Entities;
 using LCT.Core.Shared.Exceptions;
 using LCT.Infrastructure.EF;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using QRCoder;
+using System.Drawing;
 
 namespace LCT.Application.Tournaments.Queries
 {
@@ -10,7 +13,7 @@ namespace LCT.Application.Tournaments.Queries
     {
         public string TournamentName { get; set; }
         public List<PlayerDto> Players { get; set; }
-
+        public string QRCode { get; set; }
     }
 
     public class PlayerDto
@@ -44,6 +47,8 @@ namespace LCT.Application.Tournaments.Queries
 
             if (tournament == null)
                 throw new EntityDoesNotExist(nameof(Tournament));
+
+            tournament.QRCode = QRCodeCreator.Generate("heeh");
 
             return tournament;
         }
