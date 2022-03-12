@@ -1,6 +1,6 @@
 ﻿namespace LCT.Application.Teams
 {
-    public static class Teams
+    public static class TournamentTeamNames
     {
         public static readonly List<string> _teams = new List<string>() {
             "Bayern",

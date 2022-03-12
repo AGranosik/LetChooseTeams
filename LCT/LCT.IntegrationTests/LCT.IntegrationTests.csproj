@@ -43,4 +43,8 @@
     <ProjectReference Include="..\NUnit.DFM\NUnit.DFM.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Teams\DomainTests\" />
+  </ItemGroup>
+
 </Project>
