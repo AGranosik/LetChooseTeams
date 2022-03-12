@@ -57,7 +57,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             await action.Should().ThrowAsync<PlayerAlreadyAssignedToTournamentException>();
         }
 
-        private async Task<Unit> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId)
+        private async Task<Guid> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId)
         {
             return await new AssignPlayerToTournamentCommandHandler(GetDbContext()).Handle(new AssignPlayerToTournamentCommand
             {
