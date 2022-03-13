@@ -7,10 +7,10 @@ namespace LCT.Core.Entites.Tournaments.ValueObjects
         public TeamName(string name)
         {
             Validate(name);
-            Name = name;
+            Value = name;
         }
 
-        public string Name { get; private set; }
+        public string Value { get; private set; }
         private void Validate(string name)
         {
             if(string.IsNullOrEmpty(name))
@@ -19,5 +19,30 @@ namespace LCT.Core.Entites.Tournaments.ValueObjects
             if (TournamentTeamNames.TeamExists(name))
                 throw new ArgumentNullException("Niepoprawna nazwa druzyny.");
         }
+
+
+        public static implicit operator string(TeamName name) => name.Value;
+
+        public static implicit operator TeamName(string name) => new(name);
+
+
+        public static bool operator ==(TeamName a, TeamName b)
+        {
+            if (ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            if (a is not null && b is not null)
+            {
+                return a.Value.Equals(b.Value);
+            }
+
+            return false;
+        }
+
+        public static bool operator !=(TeamName a, TeamName b) => !(a == b);
+
+        public override string ToString() => Value;
     }
 }

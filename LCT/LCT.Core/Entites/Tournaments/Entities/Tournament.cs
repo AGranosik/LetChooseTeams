@@ -15,6 +15,8 @@ namespace LCT.Core.Entites.Tournaments.Entities
         public Name TournamentName { get; private set; }
         private List<Player> _players = new List<Player>();
         public virtual IReadOnlyCollection<Player> Players => _players;
+        private List<SelectedTeam> _selectedTeams = new List<SelectedTeam>();
+        public virtual IReadOnlyCollection<SelectedTeam> SelectedTeams => _selectedTeams;
         public TournamentLimit Limit { get; private set; }
         public int NumberOfPlayers => _players.Count;
 
@@ -30,7 +32,18 @@ namespace LCT.Core.Entites.Tournaments.Entities
         {
             if(_players.Any(p => p == player))
                 throw new PlayerAlreadyAssignedToTournamentException();
+        }
 
+        public void SelectTeam(SelectedTeam selectedTeam)
+        {
+            CheckIfTeamAlreadySelected(selectedTeam);
+            _selectedTeams.Add(selectedTeam);
+        }
+
+        private void CheckIfTeamAlreadySelected(SelectedTeam team)
+        {
+            if(!_selectedTeams.Any(p => p == team))
+                throw new TeamAlreadySelectedException();
         }
 
         public static Tournament Create(Name tournamentName, TournamentLimit limit)

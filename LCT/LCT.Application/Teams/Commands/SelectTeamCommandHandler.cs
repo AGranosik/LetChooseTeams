@@ -31,6 +31,7 @@ namespace LCT.Application.Teams.Commands
 
             var tournament = await _dbContext.Tournaments
                 .Include(t => t.Players)
+                .incl
                 .SingleOrDefaultAsync(t => t.Id == request.TournamentId, cancellationToken);
 
             if (tournament == null)
@@ -38,6 +39,10 @@ namespace LCT.Application.Teams.Commands
 
             if (tournament.Players is null && !tournament.Players.Any(p => p.Id == request.PlayerId))
                 throw new ArgumentException("Gracz nie jest przypisywany do turnieju.");
+
+
+
+
 
             return Unit.Value;
         }
