@@ -1,4 +1,4 @@
-﻿namespace LCT.Application.Teams
+﻿namespace LCT.Core.Entities.Tournaments.Types
 {
     public static class TournamentTeamNames
     {
@@ -15,5 +15,7 @@
             "Barcelona"
         };
 
+        public static bool TeamExists(string team)
+            => _teams.Any(t => t == team);
     }
 }

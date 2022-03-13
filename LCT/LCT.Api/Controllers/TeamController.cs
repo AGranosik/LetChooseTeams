@@ -15,5 +15,7 @@ namespace LCT.Api.Controllers
         [HttpGet]
         public async Task<IActionResult> Get()
             => Ok(await _mediator.Send(new GetTeamsQuery()));
+
+        //[HttpPost]
     }
 }
