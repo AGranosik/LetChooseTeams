@@ -1,4 +1,5 @@
-﻿using LCT.Core.Entities.Tournaments.Types;
+﻿using LCT.Core.Entites.Tournaments.Entities;
+using LCT.Core.Entities.Tournaments.Types;
 using LCT.Infrastructure.EF;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -31,7 +32,7 @@ namespace LCT.Application.Teams.Commands
 
             var tournament = await _dbContext.Tournaments
                 .Include(t => t.Players)
-                .incl
+                .Include(t => t.SelectedTeams)
                 .SingleOrDefaultAsync(t => t.Id == request.TournamentId, cancellationToken);
 
             if (tournament == null)
@@ -40,9 +41,8 @@ namespace LCT.Application.Teams.Commands
             if (tournament.Players is null && !tournament.Players.Any(p => p.Id == request.PlayerId))
                 throw new ArgumentException("Gracz nie jest przypisywany do turnieju.");
 
-
-
-
+            foreach (var team in request.Teams)
+                tournament.SelectTeam(SelectedTeam.Create(request.TournamentId, request.PlayerId, team));
 
             return Unit.Value;
         }
