@@ -38,11 +38,8 @@ namespace LCT.Application.Teams.Commands
             if (tournament == null)
                 throw new ArgumentException("Turniej nie istnieje.");
 
-            if (tournament.Players is null && !tournament.Players.Any(p => p.Id == request.PlayerId))
-                throw new ArgumentException("Gracz nie jest przypisywany do turnieju.");
-
             foreach (var team in request.Teams)
-                tournament.SelectTeam(SelectedTeam.Create(request.TournamentId, request.PlayerId, team));
+                tournament.SelectTeam(SelectedTeam.Create(request.PlayerId, team));
 
             return Unit.Value;
         }

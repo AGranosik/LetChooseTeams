@@ -1,7 +1,9 @@
 ﻿using LCT.Core.Entities.Tournaments.Types;
+using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Core.Entites.Tournaments.ValueObjects
 {
+    [Keyless]
     public class TeamName
     {
         public TeamName(string name)
