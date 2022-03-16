@@ -18,7 +18,7 @@ namespace LCT.Core.Entites.Tournaments.ValueObjects
             if(string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("Nazwa druzyny nie moze byc pusta.");
 
-            if (TournamentTeamNames.TeamExists(name))
+            if (!TournamentTeamNames.TeamExists(name))
                 throw new ArgumentNullException("Niepoprawna nazwa druzyny.");
         }
 

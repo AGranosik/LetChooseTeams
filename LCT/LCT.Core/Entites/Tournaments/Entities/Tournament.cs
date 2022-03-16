@@ -50,13 +50,13 @@ namespace LCT.Core.Entites.Tournaments.Entities
 
         private void CheckIfTeamAlreadySelected(SelectedTeam team)
         {
-            if(!_selectedTeams.Any(p => p == team))
+            if(_selectedTeams.Any(p => p == team))
                 throw new TeamAlreadySelectedException();
         }
 
         private void CheckIfPlayerNotSelectedTeamBefore(SelectedTeam team)
         {
-            if (_selectedTeams.Any(p => p.Player == team.Player))
+            if (_selectedTeams.Any(p => p.PlayerId == team.PlayerId))
                 throw new PlayerSelectedTeamBeforeException();
         }
 

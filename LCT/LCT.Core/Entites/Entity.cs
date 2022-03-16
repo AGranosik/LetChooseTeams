@@ -4,11 +4,7 @@
     {
         protected Entity()
         {
-
-        }
-        public Entity(Guid id)
-        {
-            Id = id;
+            Id = Guid.NewGuid();
         }
         public Guid Id { get; private set; }
         public DateTime CreatedAt { get; private set; }

@@ -58,9 +58,36 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
             tournament.AddPlayer(player);
             tournament.AddPlayer(Player.Register(new Name("t2est"), new Name("heh2e")));
 
-            tournament.SelectTeam(SelectedTeam.Create(player.Id, "test"));
-            var func = () => tournament.SelectTeam(SelectedTeam.Create(player.Id, "test"));
+            tournament.SelectTeam(SelectedTeam.Create(player.Id, TournamentTeamNames._teams.Last()));
+            var func = () => tournament.SelectTeam(SelectedTeam.Create(player.Id, TournamentTeamNames._teams.First()));
             func.Should().Throw<PlayerSelectedTeamBeforeException>();
         }
+
+        [Test]
+        public void Tournament_SlectTeam_Success()
+        {
+            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(2));
+            var player = Player.Register(new Name("test"), new Name("hehe"));
+            tournament.AddPlayer(player);
+
+            tournament.SelectTeam(SelectedTeam.Create(player.Id, TournamentTeamNames._teams.First()));
+
+            tournament.SelectedTeams.Should().HaveCount(1);
+        }
+
+        [Test]
+        public void Tournament_CannotSelectSameTeamTwice()
+        {
+            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(2));
+            var player = Player.Register(new Name("test"), new Name("hehe"));
+            tournament.AddPlayer(player);
+            var player2 = Player.Register(new Name("t2est"), new Name("heh2e"));
+            tournament.AddPlayer(player2);
+
+            tournament.SelectTeam(SelectedTeam.Create(player.Id, TournamentTeamNames._teams.First()));
+            var func = () => tournament.SelectTeam(SelectedTeam.Create(player2.Id, TournamentTeamNames._teams.First()));
+            func.Should().Throw<TeamAlreadySelectedException>();
+        }
+
     }
 }

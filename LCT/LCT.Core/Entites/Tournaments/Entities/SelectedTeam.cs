@@ -19,5 +19,24 @@ namespace LCT.Core.Entites.Tournaments.Entities
         public Guid PlayerId { get; private set; }
         public Player Player { get; private set; }
         public TeamName TeamName { get; private set; }
+
+        public static bool operator ==(SelectedTeam a, SelectedTeam b)
+        {
+            if (ReferenceEquals(a, b))
+            {
+                return true;
+            }
+
+            if (a is not null && b is not null)
+            {
+                return a.TournamentId == b.TournamentId
+                    && b.Player == a.Player
+                    && a.TeamName == b.TeamName;
+            }
+
+            return false;
+        }
+
+        public static bool operator !=(SelectedTeam a, SelectedTeam b) => !(a == b);
     }
 }
