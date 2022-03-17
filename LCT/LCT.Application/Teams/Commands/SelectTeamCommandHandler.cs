@@ -38,8 +38,12 @@ namespace LCT.Application.Teams.Commands
             if (tournament == null)
                 throw new ArgumentException("Turniej nie istnieje.");
 
+            var player = await _dbContext.Players.SingleOrDefaultAsync(p => p.Id == request.PlayerId, cancellationToken);
+            if (player is null)
+                throw new ArgumentException("Gracz nie istnieje.");
+
             foreach (var team in request.Teams)
-                tournament.SelectTeam(SelectedTeam.Create(request.PlayerId, team));
+                tournament.SelectTeam(SelectedTeam.Create(player, team));
 
             return Unit.Value;
         }

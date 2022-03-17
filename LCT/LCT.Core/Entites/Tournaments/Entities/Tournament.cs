@@ -36,27 +36,27 @@ namespace LCT.Core.Entites.Tournaments.Entities
 
         public void SelectTeam(SelectedTeam selectedTeam)
         {
-            CheckIfPlayerInTournament(selectedTeam.PlayerId);
+            CheckIfPlayerInTournament(selectedTeam.Player);
             CheckIfPlayerNotSelectedTeamBefore(selectedTeam);
             CheckIfTeamAlreadySelected(selectedTeam);
             _selectedTeams.Add(selectedTeam);
         }
 
-        private void CheckIfPlayerInTournament(Guid playerId)
+        private void CheckIfPlayerInTournament(Player player)
         {
-            if (!_players.Select(p => p.Id).Any(id => id == playerId))
+            if (!_players.Any(p => p == player))
                 throw new PlayerNotInTournamentException();
         }
 
         private void CheckIfTeamAlreadySelected(SelectedTeam team)
         {
-            if(_selectedTeams.Any(p => p == team))
+            if(_selectedTeams.Any(p => p.IsAlreadyPicked(team)))
                 throw new TeamAlreadySelectedException();
         }
 
         private void CheckIfPlayerNotSelectedTeamBefore(SelectedTeam team)
         {
-            if (_selectedTeams.Any(p => p.PlayerId == team.PlayerId))
+            if (_selectedTeams.Any(p => p.Player == team.Player))
                 throw new PlayerSelectedTeamBeforeException();
         }
 
