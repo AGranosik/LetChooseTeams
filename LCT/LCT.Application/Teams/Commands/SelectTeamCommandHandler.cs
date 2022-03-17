@@ -10,7 +10,7 @@ namespace LCT.Application.Teams.Commands
     {
         public Guid PlayerId { get; set; }
         public Guid TournamentId { get; set; }
-        public List<string> Teams { get; set; }
+        public string Team { get; set; }
     }
     public class SelectTeamCommandHandler : IRequestHandler<SelectTeamCommand>
     {
@@ -21,15 +21,6 @@ namespace LCT.Application.Teams.Commands
         }
         public async Task<Unit> Handle(SelectTeamCommand request, CancellationToken cancellationToken)
         {
-            if (request.Teams.Count != 2)
-                throw new ArgumentException("Nie poprawna liczba wybranych druzyn.");
-
-            foreach(var team in request.Teams)
-            {
-                if (!TournamentTeamNames.TeamExists(team))
-                    throw new ArgumentException("Wybrana druzyna jest niepoprawna.");
-            }
-
             var tournament = await _dbContext.Tournaments
                 .Include(t => t.Players)
                 .Include(t => t.SelectedTeams)
@@ -42,8 +33,7 @@ namespace LCT.Application.Teams.Commands
             if (player is null)
                 throw new ArgumentException("Gracz nie istnieje.");
 
-            foreach (var team in request.Teams)
-                tournament.SelectTeam(SelectedTeam.Create(player, team));
+            tournament.SelectTeam(SelectedTeam.Create(player, request.Team));
 
             return Unit.Value;
         }
