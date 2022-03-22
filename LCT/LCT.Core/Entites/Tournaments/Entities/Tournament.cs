@@ -34,9 +34,11 @@ namespace LCT.Core.Entites.Tournaments.Entities
                 throw new PlayerAlreadyAssignedToTournamentException();
         }
 
-        public void SelectTeam(SelectedTeam selectedTeam)
+        public void SelectTeam(Guid playerId, string team)
         {
-            CheckIfPlayerInTournament(selectedTeam.Player);
+            var player = _players.FirstOrDefault(p => p.Id == playerId);
+            CheckIfPlayerInTournament(player);
+            var selectedTeam = SelectedTeam.Create(player, team);
             CheckIfPlayerNotSelectedTeamBefore(selectedTeam);
             CheckIfTeamAlreadySelected(selectedTeam);
             _selectedTeams.Add(selectedTeam);

@@ -67,8 +67,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             }, new CancellationToken());
         }
 
-        private Task<Tournament> GetTournamentById(Guid id)
-            => GetDbContext().Tournaments
+        private async Task<Tournament> GetTournamentById(Guid id)
+            => await GetDbContext().Tournaments
             .Include(t => t.Players)
             .SingleOrDefaultAsync(t => t.Id == id);
         private async Task<Tournament> CreateTournament()

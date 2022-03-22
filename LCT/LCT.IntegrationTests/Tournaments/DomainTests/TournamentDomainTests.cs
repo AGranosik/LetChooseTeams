@@ -43,12 +43,17 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
         public void Tournament_CannotAssignWhilePlayerNotInTournament()
         {
             var tournament = Tournament.Create(new Name("test"), new TournamentLimit(2));
-            tournament.AddPlayer(Player.Register(new Name("test"), new Name("hehe")));
-            tournament.AddPlayer(Player.Register(new Name("t2est"), new Name("heh2e")));
+            var player1 = Player.Register(new Name("test"), new Name("hehe"));
+            player1.Id = Guid.NewGuid();
+            tournament.AddPlayer(player1);
+
+            var player2 = Player.Register(new Name("t2est"), new Name("heh2e"));
+            player2.Id = Guid.NewGuid();
+            tournament.AddPlayer(player2);
 
             var notExistingPLayer = Player.Register(new Name("hehe"), new Name("fiu"));
 
-            var func = () => tournament.SelectTeam(SelectedTeam.Create(notExistingPLayer, TournamentTeamNames._teams.First()));
+            var func = () => tournament.SelectTeam(notExistingPLayer.Id, TournamentTeamNames._teams.First());
             func.Should().Throw<PlayerNotInTournamentException>();
         }
 
@@ -60,8 +65,8 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
             tournament.AddPlayer(player);
             tournament.AddPlayer(Player.Register(new Name("t2est"), new Name("heh2e")));
 
-            tournament.SelectTeam(SelectedTeam.Create(player, TournamentTeamNames._teams.Last()));
-            var func = () => tournament.SelectTeam(SelectedTeam.Create(player, TournamentTeamNames._teams.First()));
+            tournament.SelectTeam(player.Id, TournamentTeamNames._teams.Last());
+            var func = () => tournament.SelectTeam(player.Id, TournamentTeamNames._teams.First());
             func.Should().Throw<PlayerSelectedTeamBeforeException>();
         }
 
@@ -72,7 +77,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
             var player = Player.Register(new Name("test"), new Name("hehe"));
             tournament.AddPlayer(player);
 
-            tournament.SelectTeam(SelectedTeam.Create(player, TournamentTeamNames._teams.First()));
+            tournament.SelectTeam(player.Id, TournamentTeamNames._teams.First());
 
             tournament.SelectedTeams.Should().HaveCount(1);
         }
@@ -82,12 +87,14 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
         {
             var tournament = Tournament.Create(new Name("test"), new TournamentLimit(2));
             var player = Player.Register(new Name("test"), new Name("hehe"));
+            player.Id = Guid.NewGuid();
             tournament.AddPlayer(player);
             var player2 = Player.Register(new Name("t2est"), new Name("heh2e"));
+            player2.Id = Guid.NewGuid();
             tournament.AddPlayer(player2);
 
-            tournament.SelectTeam(SelectedTeam.Create(player, TournamentTeamNames._teams.First()));
-            var func = () => tournament.SelectTeam(SelectedTeam.Create(player2, TournamentTeamNames._teams.First()));
+            tournament.SelectTeam(player.Id, TournamentTeamNames._teams.First());
+            var func = () => tournament.SelectTeam(player2.Id, TournamentTeamNames._teams.First());
             func.Should().Throw<TeamAlreadySelectedException>();
         }
 
