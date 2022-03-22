@@ -3,7 +3,7 @@ using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Core.Shared.Exceptions;
 using NUnit.Framework;
 
-namespace LCT.IntegrationTests.Core
+namespace LCT.IntegrationTests.Domain.Core
 {
     public class NameValidation
     {

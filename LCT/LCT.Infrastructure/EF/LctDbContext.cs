@@ -1,4 +1,5 @@
-﻿using LCT.Core.Entites.Tournaments.Entities;
+﻿using LCT.Core.Entites;
+using LCT.Core.Entites.Tournaments.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Infrastructure.EF
@@ -19,8 +20,22 @@ namespace LCT.Infrastructure.EF
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.UsePropertyAccessMode(PropertyAccessMode.Field);
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            var entries = ChangeTracker
+                .Entries()
+                .Where(e => e.Entity is Entity && (
+                        e.State == EntityState.Added));
+
+            foreach(var entry in entries)
+            {
+                ((Entity)entry.Entity).CreatedAt = DateTime.UtcNow;
+            }
+
+            return await base.SaveChangesAsync(cancellationToken);
         }
 
     }
