@@ -24,8 +24,17 @@ namespace LCT.Api
             services.AddInfrastructure()
                 .AddApplication();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("ClientPermission", policy =>
+                {
+                    policy.AllowAnyHeader()
+                        .AllowAnyMethod()
+                        .WithOrigins("http://localhost:3000")
+                        .AllowCredentials();
+                });
+            });
             services.AddSignalR();
-            services.AddCors();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -37,10 +46,7 @@ namespace LCT.Api
                 app.UseSwaggerUI();
             }
             app.UserErrorLogging();
-            app.UseCors(builder => builder
-                    .AllowAnyOrigin()
-                    .AllowAnyMethod()
-                    .AllowAnyHeader());
+            app.UseCors("ClientPermission");
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
