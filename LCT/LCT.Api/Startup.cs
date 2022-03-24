@@ -1,5 +1,6 @@
 ﻿using LCT.Api.Configuration;
 using LCT.Application;
+using LCT.Application.Tournaments.Hubs;
 using LCT.Infrastructure;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
@@ -23,6 +24,7 @@ namespace LCT.Api
             services.AddInfrastructure()
                 .AddApplication();
 
+            services.AddSignalR();
             services.AddCors();
         }
 
@@ -56,6 +58,7 @@ namespace LCT.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<PlayerAssignedHub>("/hubs/player");
             });
         }
 
