@@ -4,6 +4,7 @@ using LCT.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LCT.Infrastructure.Migrations
 {
     [DbContext(typeof(LctDbContext))]
-    partial class LctDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220324143351_player name uniqness in tournament")]
+    partial class playernameuniqnessintournament
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

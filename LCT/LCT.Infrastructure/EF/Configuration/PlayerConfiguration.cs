@@ -16,6 +16,10 @@ namespace LCT.Infrastructure.EF.Configuration
             builder.Property(x => x.Surname).IsRequired()
                 .HasMaxLength(80)
                 .HasConversion(x => x.Value, x => new Name(x));
+
+            //builder.HasKey(new string[] { "Id", "TournamentId" });
+            builder.HasIndex(new string[] { nameof(Player.Name), nameof(Player.Surname), "TournamentId" })
+                .IsUnique();
         }
     }
 }

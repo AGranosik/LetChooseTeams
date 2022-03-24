@@ -18,6 +18,7 @@ namespace LCT.Infrastructure.EF.Configuration
                 .IsRequired()
                 .HasMaxLength(80)
                 .HasConversion(x => x.Value, x => new Name(x));
+
         }
     }
 }

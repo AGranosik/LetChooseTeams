@@ -14,7 +14,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
         }
         public Name TournamentName { get; private set; }
         private List<Player> _players = new List<Player>();
-        public virtual IReadOnlyCollection<Player> Players => _players;
+        public IReadOnlyCollection<Player> Players => _players;
         private List<SelectedTeam> _selectedTeams = new List<SelectedTeam>();
         public virtual IReadOnlyCollection<SelectedTeam> SelectedTeams => _selectedTeams;
         public TournamentLimit Limit { get; private set; }
