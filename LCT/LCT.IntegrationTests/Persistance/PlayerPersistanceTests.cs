@@ -2,6 +2,7 @@
 using LCT.Core.Entites.Tournaments.Entities;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Infrastructure.EF;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using NUnit.DFM;
 using NUnit.Framework;
@@ -17,6 +18,7 @@ namespace LCT.IntegrationTests.Persistance
         public PlayerPersistanceTests()
         {
             AddTableToTruncate(nameof(LctDbContext.Players));
+            AddTableToTruncate(nameof(LctDbContext.Tournaments));
 
             this.Environment("Development")
             .ProjectName("LCT.Api")
@@ -38,21 +40,59 @@ namespace LCT.IntegrationTests.Persistance
         {
             var player = Player.Register(new Name("test"), new Name("hehe"));
             var dbContext = GetDbContext();
-            dbContext.Players.Add(player);
-            await dbContext.SaveChangesAsync();
-
             var tournament = Tournament.Create(new Name("hehe"), new TournamentLimit(3));
             tournament.AddPlayer(player);
             dbContext.Tournaments.Add(tournament);
             await dbContext.SaveChangesAsync();
+
+            dbContext.ChangeTracker.Clear();
             var duplicatePlayer = Player.Register(new Name("test"), new Name("hehe"));
             var id = tournament.Id;
-            tournament = null;
-            var tournamentFromDb = await dbContext.Tournaments.FirstOrDefaultAsync(t => t.Id == id); // avoid eager loading
-            tournamentFromDb.AddPlayer(player);
+            var tournamentFromDb = await dbContext.Tournaments.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+            tournamentFromDb.AddPlayer(duplicatePlayer);
+            dbContext.Tournaments.Update(tournamentFromDb);
+            var func = () => dbContext.SaveChangesAsync();
+            await func.Should().ThrowAsync<DbUpdateException>();
+        }
+
+        [Test]
+        public async Task CanAssignPlayerWithDiffrentNameToASingleTournament()
+        {
+            var player = Player.Register(new Name("test"), new Name("hehe"));
+            var dbContext = GetDbContext();
+            var tournament = Tournament.Create(new Name("hehe"), new TournamentLimit(3));
+            tournament.AddPlayer(player);
+            dbContext.Tournaments.Add(tournament);
+            await dbContext.SaveChangesAsync();
+
+            dbContext.ChangeTracker.Clear();
+            var duplicatePlayer = Player.Register(new Name("test2"), new Name("hehe"));
+            var id = tournament.Id;
+            var tournamentFromDb = await dbContext.Tournaments.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+            tournamentFromDb.AddPlayer(duplicatePlayer);
+            dbContext.Tournaments.Update(tournamentFromDb);
             var func = () => dbContext.SaveChangesAsync();
             await func.Should().NotThrowAsync();
+        }
 
+        [Test]
+        public async Task CanAssignPlayerWithDiffrentSurnameToASingleTournament()
+        {
+            var player = Player.Register(new Name("test"), new Name("hehe"));
+            var dbContext = GetDbContext();
+            var tournament = Tournament.Create(new Name("hehe"), new TournamentLimit(3));
+            tournament.AddPlayer(player);
+            dbContext.Tournaments.Add(tournament);
+            await dbContext.SaveChangesAsync();
+
+            dbContext.ChangeTracker.Clear();
+            var duplicatePlayer = Player.Register(new Name("test"), new Name("hehe2"));
+            var id = tournament.Id;
+            var tournamentFromDb = await dbContext.Tournaments.AsNoTracking().FirstOrDefaultAsync(t => t.Id == id);
+            tournamentFromDb.AddPlayer(duplicatePlayer);
+            dbContext.Tournaments.Update(tournamentFromDb);
+            var func = () => dbContext.SaveChangesAsync();
+            await func.Should().NotThrowAsync();
         }
     }
 }
