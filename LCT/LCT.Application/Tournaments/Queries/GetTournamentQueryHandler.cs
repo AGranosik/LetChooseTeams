@@ -11,6 +11,7 @@ namespace LCT.Application.Tournaments.Queries
 {
     public class TournamentDto
     {
+        public Guid Id { get; set; }
         public string TournamentName { get; set; }
         public List<PlayerDto> Players { get; set; }
         public string QRCode { get; set; }
@@ -39,6 +40,7 @@ namespace LCT.Application.Tournaments.Queries
                 .Where(t => t.Id == request.TournamentId)
                 .Select(t => new TournamentDto
                     {
+                        Id = t.Id,
                         TournamentName = t.TournamentName.ToString(),
                         Players = t.Players.Select(p => new PlayerDto
                         {

@@ -32,7 +32,7 @@ namespace LCT.Application.Players.Commands
 
             tournament.AddPlayer(player);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            await _hubContext.Clients.All.SendAsync("Test", "fiu fiu");
+            await _hubContext.Clients.All.SendAsync(tournament.Id.ToString(), player);
             return player.Id;
         }
     }
