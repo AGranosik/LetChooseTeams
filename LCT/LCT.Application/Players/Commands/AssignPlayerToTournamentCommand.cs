@@ -1,7 +1,9 @@
-﻿using LCT.Core.Entites.Tournaments.Entities;
+﻿using LCT.Application.Tournaments.Hubs;
+using LCT.Core.Entites.Tournaments.Entities;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Infrastructure.EF;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Application.Players.Commands
@@ -17,9 +19,11 @@ namespace LCT.Application.Players.Commands
     public class AssignPlayerToTournamentCommandHandler : IRequestHandler<AssignPlayerToTournamentCommand, Guid>
     {
         private readonly LctDbContext _dbContext;
-        public AssignPlayerToTournamentCommandHandler(LctDbContext dbContext)
+        private readonly IHubContext<PlayerAssignedHub> _hubContext;
+        public AssignPlayerToTournamentCommandHandler(LctDbContext dbContext, IHubContext<PlayerAssignedHub> hubContext)
         {
             _dbContext = dbContext;
+            _hubContext = hubContext;
         }
         public async Task<Guid> Handle(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)
         {
@@ -28,6 +32,7 @@ namespace LCT.Application.Players.Commands
 
             tournament.AddPlayer(player);
             await _dbContext.SaveChangesAsync(cancellationToken);
+            await _hubContext.Clients.All.SendAsync("Test", "fiu fiu");
             return player.Id;
         }
     }
