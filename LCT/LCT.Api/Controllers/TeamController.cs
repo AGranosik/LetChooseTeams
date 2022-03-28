@@ -1,4 +1,5 @@
-﻿using LCT.Application.Teams.Queries;
+﻿using LCT.Application.Teams.Commands;
+using LCT.Application.Teams.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,8 @@ namespace LCT.Api.Controllers
         public async Task<IActionResult> Get()
             => Ok(await _mediator.Send(new GetTeamsQuery()));
 
-        //[HttpPost]
+        [HttpPost("select")]
+        public async Task<IActionResult> SelectTeam(SelectTeamCommand request)
+            => Ok(await _mediator.Send(request));
     }
 }
