@@ -5,6 +5,7 @@ using LCT.Infrastructure.EF;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace LCT.Application.Players.Commands
 {
@@ -32,7 +33,14 @@ namespace LCT.Application.Players.Commands
 
             tournament.AddPlayer(player);
             await _dbContext.SaveChangesAsync(cancellationToken);
-            await _hubContext.Clients.All.SendAsync(tournament.Id.ToString(), player);
+            try
+            {
+                await _hubContext.Clients.All.SendCoreAsync(tournament.Id.ToString(), new[] { player }, cancellationToken);
+            }
+            catch (Exception ex)
+            {
+                Log.Error(ex, "Exception during signalr conntection");
+            }
             return player.Id;
         }
     }

@@ -60,23 +60,44 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             await action.Should().ThrowAsync<PlayerAlreadyAssignedToTournamentException>();
         }
 
-        private async Task<Guid> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId)
+        [Test]
+        public async Task AssignPlayer_ReturnsPlayerIdDespiteHubException()
+        {
+            var clientProxy = new Mock<IClientProxy>();
+            clientProxy.Setup(cp => cp.SendCoreAsync(It.IsAny<string>(), It.IsAny<object[]>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new ArgumentNullException());
+
+            var mockedHub = GetMockedHubContext(clientProxy: clientProxy);
+            var tournament = await CreateTournament();
+            var result = await AssignPlayerCommandHandleAsync("name", "surname", tournament.Id, mockedHub);
+
+            result.Should().NotBeEmpty();
+            result.Should().NotBe(default(Guid));
+            
+        }
+
+        private async Task<Guid> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId, IHubContext<PlayerAssignedHub> hub = null)
+        {
+            return await new AssignPlayerToTournamentCommandHandler(GetDbContext(), hub ?? GetMockedHubContext()).Handle(new AssignPlayerToTournamentCommand
+            {
+                Name = name,
+                Surname = surname,
+                TournamentId = tournamentId
+            }, new CancellationToken());
+        }
+
+        private IHubContext<PlayerAssignedHub> GetMockedHubContext(Mock<IHubClients> hubClients = null, Mock<IClientProxy> clientProxy = null)
         {
             var hubContext = new Mock<IHubContext<PlayerAssignedHub>>();
-            var hubClients = new Mock<IHubClients>();
-            var clientProxy = new Mock<IClientProxy>();
+            hubClients = hubClients ?? new Mock<IHubClients>();
+            clientProxy = clientProxy ?? new Mock<IClientProxy>();
             hubClients.Setup(hc => hc.All)
                 .Returns(clientProxy.Object);
 
             hubContext.Setup(hc => hc.Clients)
                 .Returns(hubClients.Object);
 
-            return await new AssignPlayerToTournamentCommandHandler(GetDbContext(), hubContext.Object).Handle(new AssignPlayerToTournamentCommand
-            {
-                Name = name,
-                Surname = surname,
-                TournamentId = tournamentId
-            }, new CancellationToken());
+            return hubContext.Object;
         }
 
         private async Task<Tournament> GetTournamentById(Guid id)
