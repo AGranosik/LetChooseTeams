@@ -1,11 +1,14 @@
 ﻿using FluentAssertions;
 using LCT.Application.Players.Commands;
+using LCT.Application.Tournaments.Hubs;
 using LCT.Core.Entites.Tournaments.Entities;
 using LCT.Core.Entites.Tournaments.Exceptions;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Infrastructure.EF;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
+using Moq;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;
@@ -59,7 +62,16 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
         private async Task<Guid> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId)
         {
-            return await new AssignPlayerToTournamentCommandHandler(GetDbContext()).Handle(new AssignPlayerToTournamentCommand
+            var hubContext = new Mock<IHubContext<PlayerAssignedHub>>();
+            var hubClients = new Mock<IHubClients>();
+            var clientProxy = new Mock<IClientProxy>();
+            hubClients.Setup(hc => hc.All)
+                .Returns(clientProxy.Object);
+
+            hubContext.Setup(hc => hc.Clients)
+                .Returns(hubClients.Object);
+
+            return await new AssignPlayerToTournamentCommandHandler(GetDbContext(), hubContext.Object).Handle(new AssignPlayerToTournamentCommand
             {
                 Name = name,
                 Surname = surname,
