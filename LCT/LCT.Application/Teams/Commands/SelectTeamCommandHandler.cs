@@ -15,6 +15,8 @@ namespace LCT.Application.Teams.Commands
         public Guid TournamentId { get; set; }
         public string Team { get; set; }
     }
+
+    public record SelectTeamMessageDto(Guid playerId, string team);
     public class SelectTeamCommandHandler : IRequestHandler<SelectTeamCommand>
     {
         private readonly LctDbContext _dbContext;
@@ -39,7 +41,7 @@ namespace LCT.Application.Teams.Commands
             await _dbContext.SaveChangesAsync();
             try
             {
-                await _hubContext.Clients.All.SendCoreAsync(request.TournamentId.ToString() + "/select", new[] { request.Team }); // finish tests
+                await _hubContext.Clients.All.SendCoreAsync(request.TournamentId.ToString() + "/select", new[] { new SelectTeamMessageDto(request.PlayerId, request.Team) }); // finish tests
             }
             catch (Exception ex)
             {

@@ -16,7 +16,7 @@ namespace LCT.Application.Players.Commands
         public Guid TournamentId { get; set; }
     }
 
-
+    public record PlayerAssignedMessageDto(string Name, string Surname);
     public class AssignPlayerToTournamentCommandHandler : IRequestHandler<AssignPlayerToTournamentCommand, Guid>
     {
         private readonly LctDbContext _dbContext;
@@ -35,7 +35,7 @@ namespace LCT.Application.Players.Commands
             await _dbContext.SaveChangesAsync(cancellationToken);
             try
             {
-                await _hubContext.Clients.All.SendCoreAsync(tournament.Id.ToString(), new[] { player }, cancellationToken);
+                await _hubContext.Clients.All.SendCoreAsync(tournament.Id.ToString(), new[] { new PlayerAssignedMessageDto(player.Name.Value, player.Surname.Value) }, cancellationToken);
             }
             catch (Exception ex)
             {
