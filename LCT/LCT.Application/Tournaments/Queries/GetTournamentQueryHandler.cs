@@ -4,6 +4,7 @@ using LCT.Core.Shared.Exceptions;
 using LCT.Infrastructure.EF;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using QRCoder;
 using System.Drawing;
 
@@ -29,10 +30,12 @@ namespace LCT.Application.Tournaments.Queries
     {
         private readonly LctDbContext _dbContext;
         private readonly IQRCodeCreator _qrCodeCreator;
-        public GetTournamentQueryHandler(LctDbContext dbContext, IQRCodeCreator qRCodeCreator)
+        private readonly IConfiguration _configuration;
+        public GetTournamentQueryHandler(LctDbContext dbContext, IQRCodeCreator qRCodeCreator, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _qrCodeCreator = qRCodeCreator;
+            _configuration = configuration;
         }
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
@@ -51,8 +54,8 @@ namespace LCT.Application.Tournaments.Queries
 
             if (tournament == null)
                 throw new EntityDoesNotExist(nameof(Tournament));
-
-            tournament.QRCode = _qrCodeCreator.Generate("heeh");
+            var feLink = _configuration.GetSection("fe").Value + "player/register/" + request.TournamentId;
+            tournament.QRCode = _qrCodeCreator.Generate(feLink);
 
             return tournament;
         }

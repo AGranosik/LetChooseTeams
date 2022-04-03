@@ -15,7 +15,7 @@ namespace LCT.Application.Common
                 throw new ArgumentNullException("qrcode url");
 
             QRCodeGenerator QrGenerator = new QRCodeGenerator();
-            QRCodeData QrCodeInfo = QrGenerator.CreateQrCode("hehe", QRCodeGenerator.ECCLevel.Q);
+            QRCodeData QrCodeInfo = QrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
             var QrCode = new QRCode(QrCodeInfo);
             Bitmap QrBitmap = QrCode.GetGraphic(60);
             byte[] BitmapArray = QrBitmap.BitmapToByteArray();
