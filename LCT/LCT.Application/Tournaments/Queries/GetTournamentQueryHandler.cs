@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using QRCoder;
 using System.Drawing;
+using System.Net;
 
 namespace LCT.Application.Tournaments.Queries
 {
@@ -30,12 +31,10 @@ namespace LCT.Application.Tournaments.Queries
     {
         private readonly LctDbContext _dbContext;
         private readonly IQRCodeCreator _qrCodeCreator;
-        private readonly IConfiguration _configuration;
-        public GetTournamentQueryHandler(LctDbContext dbContext, IQRCodeCreator qRCodeCreator, IConfiguration configuration)
+        public GetTournamentQueryHandler(LctDbContext dbContext, IQRCodeCreator qRCodeCreator)
         {
             _dbContext = dbContext;
             _qrCodeCreator = qRCodeCreator;
-            _configuration = configuration;
         }
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
@@ -54,7 +53,8 @@ namespace LCT.Application.Tournaments.Queries
 
             if (tournament == null)
                 throw new EntityDoesNotExist(nameof(Tournament));
-            var feLink = _configuration.GetSection("fe").Value + "player/register/" + request.TournamentId;
+            
+            var feLink = "http://" + IpAdressProvider.GetHostAdress() + ":3000/player/register/" + request.TournamentId;
             tournament.QRCode = _qrCodeCreator.Generate(feLink);
 
             return tournament;
