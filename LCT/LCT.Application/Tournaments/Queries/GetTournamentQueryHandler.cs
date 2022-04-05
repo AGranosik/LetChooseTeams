@@ -22,6 +22,7 @@ namespace LCT.Application.Tournaments.Queries
     public class PlayerDto
     {
         public string Name { get; set; }
+        public string Surname { get; set; }
     }
     public class GetTournamentQuery : IRequest<TournamentDto>
     {
@@ -46,7 +47,8 @@ namespace LCT.Application.Tournaments.Queries
                         TournamentName = t.TournamentName.ToString(),
                         Players = t.Players.Select(p => new PlayerDto
                         {
-                            Name = p.Name
+                            Name = p.Name,
+                            Surname = p.Surname
                         }).ToList()
                 })
                 .FirstOrDefaultAsync(cancellationToken);
