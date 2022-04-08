@@ -4,6 +4,7 @@ using LCT.Infrastructure.EF;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LCT.Infrastructure.Migrations
 {
     [DbContext(typeof(LctDbContext))]
-    partial class LctDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220408103735_select team uniqness2")]
+    partial class selectteamuniqness2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,10 +80,6 @@ namespace LCT.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("PlayerId");
-
-                    b.HasIndex("TeamName", "TournamentId")
-                        .IsUnique()
-                        .HasFilter("[TournamentId] IS NOT NULL");
 
                     b.HasIndex("TournamentId", "PlayerId")
                         .IsUnique()
