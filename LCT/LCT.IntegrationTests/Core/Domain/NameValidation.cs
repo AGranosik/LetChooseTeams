@@ -5,6 +5,7 @@ using NUnit.Framework;
 
 namespace LCT.IntegrationTests.Domain.Core
 {
+    [TestFixture]
     public class NameValidation
     {
         [Test]
