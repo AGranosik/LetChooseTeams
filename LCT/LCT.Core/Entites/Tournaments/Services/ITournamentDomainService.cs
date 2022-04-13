@@ -2,6 +2,6 @@
 {
     public interface ITournamentDomainService: IDomainService
     {
-        public 
+        //public 
     }
 }

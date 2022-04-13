@@ -17,6 +17,8 @@ namespace LCT.Core.Entites.Tournaments.Entities
         public IReadOnlyCollection<Player> Players => _players;
         private List<SelectedTeam> _selectedTeams = new List<SelectedTeam>();
         public virtual IReadOnlyCollection<SelectedTeam> SelectedTeams => _selectedTeams;
+        private List<DrawTeam> _drawTeams = new List<DrawTeam>();
+        public virtual IReadOnlyCollection<DrawTeam> DrawTeams => _drawTeams;
         public TournamentLimit Limit { get; private set; }
         public int NumberOfPlayers => _players.Count;
 
