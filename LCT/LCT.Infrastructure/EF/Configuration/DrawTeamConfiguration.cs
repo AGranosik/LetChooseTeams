@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace LCT.Infrastructure.EF.Configuration
 {
-    public class DrawTeamConfiguration : IEntityTypeConfiguration<DrawTeam>
+    public class DrawTeamConfiguration : IEntityTypeConfiguration<DrawnTeam>
     {
-        public void Configure(EntityTypeBuilder<DrawTeam> builder)
+        public void Configure(EntityTypeBuilder<DrawnTeam> builder)
         {
             builder.Property(x => x.TeamName)
                 .IsRequired()

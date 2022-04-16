@@ -2,20 +2,20 @@
 
 namespace LCT.Core.Entites.Tournaments.Entities
 {
-    public class DrawTeam : Entity
+    public class DrawnTeam : Entity
     {
-        private DrawTeam() { }
-        private DrawTeam(Player player, string teamName)
+        private DrawnTeam() { }
+        private DrawnTeam(Player player, string teamName)
         {
             Player = player;
             TeamName = new TeamName(teamName);
         }
 
-        public static DrawTeam Create(Player player, string teamName)
+        public static DrawnTeam Create(Player player, string teamName)
         {
             if (player is null)
                 throw new ArgumentNullException(nameof(player));
-            return new DrawTeam(player, teamName);
+            return new DrawnTeam(player, teamName);
         }
 
         public Tournament Tournament { get; private set; }

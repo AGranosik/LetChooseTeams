@@ -17,7 +17,7 @@ namespace LCT.Infrastructure.EF
         public virtual DbSet<Player> Players { get; set; }
         public virtual DbSet<Tournament> Tournaments { get; set; }
         public virtual DbSet<SelectedTeam> SelectedTeams { get; set; }
-        public virtual DbSet<DrawTeam> DrawnTeams { get; set; }
+        public virtual DbSet<DrawnTeam> DrawnTeams { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
