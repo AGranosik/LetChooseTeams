@@ -1,7 +1,9 @@
-﻿namespace LCT.Core.Entites.Tournaments.Services
+﻿using LCT.Core.Entites.Tournaments.Entities;
+
+namespace LCT.Core.Entites.Tournaments.Services
 {
     public interface ITournamentDomainService: IDomainService
     {
-        //public 
+        List<DrawnTeam> DrawTeamForPlayers(List<SelectedTeam> selectedTeams);
     }
 }
