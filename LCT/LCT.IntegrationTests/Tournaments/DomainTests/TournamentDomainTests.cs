@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using LCT.Core.Entites.Tournaments.Entities;
 using LCT.Core.Entites.Tournaments.Exceptions;
+using LCT.Core.Entites.Tournaments.Services;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Core.Entities.Tournaments.Types;
 using NUnit.Framework;
@@ -96,6 +97,117 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
             tournament.SelectTeam(player.Id, TournamentTeamNames._teams.First());
             var func = () => tournament.SelectTeam(player2.Id, TournamentTeamNames._teams.First());
             func.Should().Throw<TeamAlreadySelectedException>();
+        }
+
+
+        [Test]
+        public void TournamentDomainServiceCannotBeNull()
+        {
+            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(2));
+            var func = () => tournament.DrawnTeamForPLayers(null);
+            func.Should().Throw<ArgumentNullException>();
+        }
+
+        [Test]
+        public void TournamentNotAllPlayersRegistered_ThrowEsception()
+        {
+            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(2));
+            var func = () => tournament.DrawnTeamForPLayers(new TournamentDomainService());
+
+            func.Should().Throw<NotAllPlayersRegisteredException>();
+        }
+
+        [Test]
+        public void TournamentNotAllPlayersRegistered2_ThrowEsception()
+        {
+            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(2));
+            var func = () => tournament.DrawnTeamForPLayers(new TournamentDomainService());
+            var player = Player.Register(new Name("test"), new Name("hehe"));
+            player.Id = Guid.NewGuid();
+            tournament.AddPlayer(player);
+            func.Should().Throw<NotAllPlayersRegisteredException>();
+        }
+
+        [Test]
+        public void TournamentCannotDrawTeamsWhenAnySelected()
+        {
+            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(2));
+            var func = () => tournament.DrawnTeamForPLayers(new TournamentDomainService());
+            var player = Player.Register(new Name("test"), new Name("hehe"));
+            player.Id = Guid.NewGuid();
+            tournament.AddPlayer(player);
+            var player2 = Player.Register(new Name("t2est"), new Name("heh2e"));
+            player2.Id = Guid.NewGuid();
+            tournament.AddPlayer(player2);
+
+            func.Should().Throw<NotAllPlayersSelectedTeamException>();
+        }
+
+        [Test]
+        public void TournamentCannotDrawTeamsWhenNotAllPlayersSelected_ThrowsException()
+        {
+            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(2));
+            var func = () => tournament.DrawnTeamForPLayers(new TournamentDomainService());
+            var player = Player.Register(new Name("test"), new Name("hehe"));
+            player.Id = Guid.NewGuid();
+            tournament.AddPlayer(player);
+            var player2 = Player.Register(new Name("t2est"), new Name("heh2e"));
+            player2.Id = Guid.NewGuid();
+            tournament.AddPlayer(player2);
+            tournament.SelectTeam(player2.Id, TournamentTeamNames._teams.First());
+            func.Should().Throw<NotAllPlayersSelectedTeamException>();
+        }
+
+        [Test]
+        [Repeat(20)]
+        public void TournamentCannotDrawTeamsWhenAllPlayersSelected_Success()
+        {
+            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(2));
+            var func = () => tournament.DrawnTeamForPLayers(new TournamentDomainService());
+            var player = Player.Register(new Name("test"), new Name("hehe"));
+            player.Id = Guid.NewGuid();
+            tournament.AddPlayer(player);
+            var player2 = Player.Register(new Name("t2est"), new Name("heh2e"));
+            tournament.AddPlayer(player2);
+            player2.Id = Guid.NewGuid();
+
+            tournament.SelectTeam(player2.Id, TournamentTeamNames._teams.First());
+            tournament.SelectTeam(player.Id, TournamentTeamNames._teams.Last());
+
+
+            tournament.DrawnTeamForPLayers(new TournamentDomainService());
+
+            tournament.DrawTeams.Count.Should().Be(2);
+            var drawnTeam = tournament.DrawTeams.First(dt => dt.Player == player);
+            drawnTeam.TeamName.Value.Should().Be(TournamentTeamNames._teams.First());
+
+        }
+
+        [Test]
+        [Repeat(20)]
+        public void TournamentCannotDrawTeamsWhenAllPlayersSelected_Success2()
+        {
+            var count = TournamentTeamNames._teams.Count;
+            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(count));
+
+            foreach(var team in TournamentTeamNames._teams)
+            {
+                var player = Player.Register(new Name("test" + team), new Name("hehe"));
+                player.Id = Guid.NewGuid();
+                tournament.AddPlayer(player);
+                tournament.SelectTeam(player.Id, team);
+            }
+
+            tournament.DrawnTeamForPLayers(new TournamentDomainService());
+
+            tournament.DrawTeams.Count.Should().Be(count);
+
+            foreach(var selectedTeam in tournament.SelectedTeams)
+            {
+                var drawTeam = tournament.DrawTeams.First(dt => dt.Player == selectedTeam.Player);
+                drawTeam.TeamName.Value.Should().NotBe(selectedTeam.TeamName.Value);
+            }
+
         }
 
     }

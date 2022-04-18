@@ -1,4 +1,5 @@
 ﻿using LCT.Core.Entites.Tournaments.Exceptions;
+using LCT.Core.Entites.Tournaments.Services;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 
 namespace LCT.Core.Entites.Tournaments.Entities
@@ -44,6 +45,24 @@ namespace LCT.Core.Entites.Tournaments.Entities
             CheckIfPlayerNotSelectedTeamBefore(selectedTeam);
             CheckIfTeamAlreadySelected(selectedTeam);
             _selectedTeams.Add(selectedTeam);
+        }
+
+        public void DrawnTeamForPLayers(ITournamentDomainService service)
+        {
+            if(service is null)
+                throw new ArgumentNullException(nameof(service));
+
+            if (SelectedTeams is null)
+                throw new ArgumentNullException("Any team selected.");
+
+            if (NumberOfPlayers != Limit.Limit)
+                throw new NotAllPlayersRegisteredException();
+
+            if (SelectedTeams.Count() == 0 || SelectedTeams.Count() != Limit.Limit)
+                throw new NotAllPlayersSelectedTeamException();
+
+            if (_drawTeams is null || _drawTeams.Count() == 0)
+                _drawTeams = service.DrawTeamForPlayers(_selectedTeams);
         }
 
         private void CheckIfPlayerInTournament(Player player)
