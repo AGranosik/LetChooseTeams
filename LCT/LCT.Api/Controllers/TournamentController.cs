@@ -25,5 +25,9 @@ namespace LCT.Api.Controllers
         [HttpPost("assignPlayer")]
         public async Task<IActionResult> AssignPlayerToTournament(AssignPlayerToTournamentCommand request)
             => Ok(await _mediator.Send(request));
+
+        [HttpGet("draw")]
+        public async Task<IActionResult> DrawTeams(Guid tournamentId)
+            => Ok(await _mediator.Send(new DrawTeamForPlayersQuery { TournamentId = tournamentId }));
     }
 }
