@@ -21,8 +21,10 @@ namespace LCT.Application.Tournaments.Queries
 
     public class PlayerDto
     {
+        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string SelectedTeam { get; set; }
     }
     public class GetTournamentQuery : IRequest<TournamentDto>
     {
@@ -47,8 +49,10 @@ namespace LCT.Application.Tournaments.Queries
                         TournamentName = t.TournamentName.ToString(),
                         Players = t.Players.Select(p => new PlayerDto
                         {
+                            Id = p.Id,
                             Name = p.Name,
-                            Surname = p.Surname
+                            Surname = p.Surname,
+                            SelectedTeam = t.SelectedTeams.Where(st => st.Player.Id == p.Id).Select(st => st.TeamName).FirstOrDefault()
                         }).ToList()
                 })
                 .FirstOrDefaultAsync(cancellationToken);

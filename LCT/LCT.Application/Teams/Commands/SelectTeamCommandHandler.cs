@@ -41,7 +41,7 @@ namespace LCT.Application.Teams.Commands
             await _dbContext.SaveChangesAsync();
             try
             {
-                await _hubContext.Clients.All.SendCoreAsync(request.TournamentId.ToString() + "/select", new[] { new SelectTeamMessageDto(request.PlayerId, request.Team) }); // finish tests
+                await _hubContext.Clients.All.SendCoreAsync(request.TournamentId.ToString() + "/select", new[] { new SelectTeamMessageDto(request.PlayerId, request.Team) });
             }
             catch (Exception ex)
             {
