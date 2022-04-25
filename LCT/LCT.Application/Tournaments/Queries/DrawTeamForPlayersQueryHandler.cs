@@ -6,11 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Application.Tournaments.Queries
 {
-    public class DrawTeamForPlayersQuery : IRequest<List<DrawnTeam>>
+    public class DrawTeamForPlayersQuery : IRequest<List<DrawTeamDto>>
     {
         public Guid TournamentId { get; set; }
     }
-    public class DrawTeamForPlayersQueryHandler : IRequestHandler<DrawTeamForPlayersQuery, List<DrawnTeam>>
+
+    public record DrawTeamDto(Guid playerId, string teamName);
+    public class DrawTeamForPlayersQueryHandler : IRequestHandler<DrawTeamForPlayersQuery, List<DrawTeamDto>>
     {
         private readonly LctDbContext _dbContext;
         private readonly ITournamentDomainService _tournamentDomainService;
@@ -19,7 +21,7 @@ namespace LCT.Application.Tournaments.Queries
             _dbContext = dbContext;
             _tournamentDomainService = tournamentDomainService;
         }
-        public async Task<List<DrawnTeam>> Handle(DrawTeamForPlayersQuery request, CancellationToken cancellationToken)
+        public async Task<List<DrawTeamDto>> Handle(DrawTeamForPlayersQuery request, CancellationToken cancellationToken)
         {
             var tournament = await _dbContext.Tournaments
                     .Include(t => t.DrawTeams)
@@ -33,7 +35,7 @@ namespace LCT.Application.Tournaments.Queries
             tournament.DrawnTeamForPLayers(_tournamentDomainService);
 
             await _dbContext.SaveChangesAsync();
-            return tournament.DrawTeams.ToList();
+            return tournament.DrawTeams.Select(dt => new DrawTeamDto(dt.Player.Id, dt.TeamName.Value)).ToList();
         }
     }
 }

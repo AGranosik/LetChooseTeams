@@ -4,10 +4,6 @@ using LCT.Core.Shared.Exceptions;
 using LCT.Infrastructure.EF;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using QRCoder;
-using System.Drawing;
-using System.Net;
 
 namespace LCT.Application.Tournaments.Queries
 {
@@ -17,6 +13,7 @@ namespace LCT.Application.Tournaments.Queries
         public string TournamentName { get; set; }
         public List<PlayerDto> Players { get; set; }
         public string QRCode { get; set; }
+        public int PlayerLimit { get; set; }
     }
 
     public class PlayerDto
@@ -25,6 +22,7 @@ namespace LCT.Application.Tournaments.Queries
         public string Name { get; set; }
         public string Surname { get; set; }
         public string SelectedTeam { get; set; }
+        public string DrawnTeam { get; set; }
     }
     public class GetTournamentQuery : IRequest<TournamentDto>
     {
@@ -47,12 +45,14 @@ namespace LCT.Application.Tournaments.Queries
                     {
                         Id = t.Id,
                         TournamentName = t.TournamentName.ToString(),
+                        PlayerLimit = t.Limit.Limit,
                         Players = t.Players.Select(p => new PlayerDto
                         {
                             Id = p.Id,
                             Name = p.Name,
                             Surname = p.Surname,
-                            SelectedTeam = t.SelectedTeams.Where(st => st.Player.Id == p.Id).Select(st => st.TeamName).FirstOrDefault()
+                            SelectedTeam = t.SelectedTeams.Where(st => st.Player.Id == p.Id).Select(st => st.TeamName).FirstOrDefault(),
+                            DrawnTeam = t.DrawTeams.Where(dt => dt.Player.Id == p.Id).Select(dt => dt.TeamName).FirstOrDefault()
                         }).ToList()
                 })
                 .FirstOrDefaultAsync(cancellationToken);

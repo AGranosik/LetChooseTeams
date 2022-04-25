@@ -24,17 +24,16 @@ namespace LCT.Api
             services.AddInfrastructure()
                 .AddApplication();
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("ClientPermission", policy =>
-                {
-                    policy.AllowAnyHeader()
-                        .AllowAnyMethod()
-                        .WithOrigins("http://localhost:3000")
-                        .AllowCredentials();
-                });
-            });
             services.AddSignalR();
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("ClientPermission", policy =>
+            //    {
+            //        policy.AllowAnyHeader()
+            //            .AllowAnyMethod()
+            //            .AllowAnyOrigin();
+            //    });
+            //});
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -46,7 +45,13 @@ namespace LCT.Api
                 app.UseSwaggerUI();
             }
             app.UserErrorLogging();
-            app.UseCors("ClientPermission");
+            app.UseCors(builder => builder
+                    .AllowAnyHeader()
+                    .AllowAnyMethod()
+                    .SetIsOriginAllowed((host) => true)
+                    .AllowCredentials());
+
+
             var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
@@ -56,10 +61,9 @@ namespace LCT.Api
                 .ReadFrom.Configuration(_configuration)
                 .CreateLogger();
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
             app.UseRouting();
-
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

@@ -117,7 +117,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             return tournament;
         }
 
-        private async Task<List<DrawnTeam>> DrawTeamQueryHandlerResult(DrawTeamForPlayersQuery query)
+        private async Task<List<DrawTeamDto>> DrawTeamQueryHandlerResult(DrawTeamForPlayersQuery query)
             => await new DrawTeamForPlayersQueryHandler(GetDbContext(), new TournamentDomainService()).Handle(query, CancellationToken.None);
         
     }
