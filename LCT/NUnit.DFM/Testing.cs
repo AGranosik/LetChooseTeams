@@ -1,10 +1,7 @@
 ﻿using LCT.Api;
-using LCT.Infrastructure.EF;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using NUnit.DFM.Builders;
 using NUnit.DFM.Interfaces;
 using NUnit.Framework;
@@ -42,15 +39,13 @@ namespace NUnit.DFM
             _builder.Create(_services);
 
             _scopeFactory = _services.BuildServiceProvider().GetService<IServiceScopeFactory>();
-
+            _scope = _scopeFactory.CreateScope();
             await EnsureDatabase();
         }
 
         private async Task EnsureDatabase()
         {
-            using var scope = _scopeFactory.CreateScope();
-
-            var context = scope.ServiceProvider.GetService<TContext>();
+            var context = _scope.ServiceProvider.GetService<TContext>();
 
             await context.Database.MigrateAsync();
         }
@@ -58,9 +53,7 @@ namespace NUnit.DFM
         [OneTimeTearDown]
         public async Task GlobalTeardown()
         {
-            using var scope = _scopeFactory.CreateScope();
-
-            var context = scope.ServiceProvider.GetService<TContext>();
+            var context = _scope.ServiceProvider.GetService<TContext>();
             await context.Database.EnsureDeletedAsync();
         }
 
