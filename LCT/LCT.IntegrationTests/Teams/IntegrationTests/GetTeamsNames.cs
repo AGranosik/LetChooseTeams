@@ -30,8 +30,8 @@ namespace LCT.IntegrationTests.Teams.IntegrationTests
 
             result.Should().NotBeEmpty();
 
-            result.Count.Should().Be(TournamentTeamNames._teams.Count);
-            result.SequenceEqual(TournamentTeamNames._teams);
+            result.Count.Should().Be(TournamentTeamNames.Teams.Count);
+            result.SequenceEqual(TournamentTeamNames.Teams);
         }
 
         private async Task<List<string>> GetTeamsNamesQueryHandler()

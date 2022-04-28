@@ -46,11 +46,11 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         public async Task SelectTeam_FirstTeamSelect()
         {
             var tournament = await CreateTournamentWithPlayers(_players);
-            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames._teams.First(), tournament.Players.First().Id);
+            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.First(), tournament.Players.First().Id);
 
             firstPlayerAssign.Should().NotBeNull();
 
-            var secondPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames._teams.Last(), tournament.Players.Last().Id);
+            var secondPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.Last(), tournament.Players.Last().Id);
 
             secondPlayerAssign.Should().NotBeNull();
 
@@ -64,11 +64,11 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             selectedTeams.Count.Should().Be(2);
             var firstSelectedTeam = selectedTeams.First();
             firstSelectedTeam.Player.Should().Be(_players[0]);
-            firstSelectedTeam.TeamName.Value.Should().Be(TournamentTeamNames._teams.First());
+            firstSelectedTeam.TeamName.Value.Should().Be(TournamentTeamNames.Teams.First());
 
             var secondSelectedPlayer = selectedTeams.Last();
             secondSelectedPlayer.Player.Should().Be(_players[1]);
-            secondSelectedPlayer.TeamName.Value.Should().Be(TournamentTeamNames._teams.Last());
+            secondSelectedPlayer.TeamName.Value.Should().Be(TournamentTeamNames.Teams.Last());
         }
 
         [Test]
@@ -81,7 +81,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             var mockedHub = IHubContextMock.GetMockedHubContext<PlayerAssignedHub>(clientProxy: clientProxy);
 
             var tournament = await CreateTournamentWithPlayers(_players);
-            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames._teams.First(), tournament.Players.First().Id, mockedHub);
+            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.First(), tournament.Players.First().Id, mockedHub);
 
             firstPlayerAssign.Should().NotBeNull();
 
@@ -94,7 +94,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             selectedTeams.Count.Should().Be(1);
             var firstSelectedTeam = selectedTeams.First();
             firstSelectedTeam.Player.Should().Be(_players[0]);
-            firstSelectedTeam.TeamName.Value.Should().Be(TournamentTeamNames._teams.First());
+            firstSelectedTeam.TeamName.Value.Should().Be(TournamentTeamNames.Teams.First());
         }
 
 

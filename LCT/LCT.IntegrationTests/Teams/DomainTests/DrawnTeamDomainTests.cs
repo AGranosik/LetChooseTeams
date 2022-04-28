@@ -29,7 +29,7 @@ namespace LCT.IntegrationTests.Teams.DomainTests
         [Test]
         public void TeamNameSuccess()
         {
-            var func = () => DrawnTeam.Create(_player, TournamentTeamNames._teams.First());
+            var func = () => DrawnTeam.Create(_player, TournamentTeamNames.Teams.First());
             func.Should().NotThrow();
         }
     }

@@ -6,13 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Application.Tournaments.Queries
 {
-    public class DrawTeamForPlayersQuery : IRequest<List<DrawTeamDto>>
+    public class DrawTeamForPlayersQuery : IRequest<List<DrawnTeamDto>>
     {
         public Guid TournamentId { get; set; }
     }
 
-    public record DrawTeamDto(Guid playerId, string teamName);
-    public class DrawTeamForPlayersQueryHandler : IRequestHandler<DrawTeamForPlayersQuery, List<DrawTeamDto>>
+    public record DrawnTeamDto(Guid playerId, string teamName);
+    public class DrawTeamForPlayersQueryHandler : IRequestHandler<DrawTeamForPlayersQuery, List<DrawnTeamDto>>
     {
         private readonly LctDbContext _dbContext;
         private readonly ITournamentDomainService _tournamentDomainService;
@@ -21,7 +21,7 @@ namespace LCT.Application.Tournaments.Queries
             _dbContext = dbContext;
             _tournamentDomainService = tournamentDomainService;
         }
-        public async Task<List<DrawTeamDto>> Handle(DrawTeamForPlayersQuery request, CancellationToken cancellationToken)
+        public async Task<List<DrawnTeamDto>> Handle(DrawTeamForPlayersQuery request, CancellationToken cancellationToken)
         {
             var tournament = await _dbContext.Tournaments
                     .Include(t => t.DrawTeams)
@@ -35,7 +35,7 @@ namespace LCT.Application.Tournaments.Queries
             tournament.DrawnTeamForPLayers(_tournamentDomainService);
 
             await _dbContext.SaveChangesAsync();
-            return tournament.DrawTeams.Select(dt => new DrawTeamDto(dt.Player.Id, dt.TeamName.Value)).ToList();
+            return tournament.DrawTeams.Select(dt => new DrawnTeamDto(dt.Player.Id, dt.TeamName.Value)).ToList();
         }
     }
 }

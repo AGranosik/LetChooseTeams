@@ -30,7 +30,7 @@ namespace LCT.IntegrationTests.Teams.DomainTests
         [Test]
         public void TeamNameSuccess()
         {
-            var func = () => SelectedTeam.Create(_player, TournamentTeamNames._teams.First());
+            var func = () => SelectedTeam.Create(_player, TournamentTeamNames.Teams.First());
             func.Should().NotThrow();
         }
     }

@@ -57,7 +57,7 @@ namespace LCT.IntegrationTests.Teams.IntegrationTests
         public async Task PlayerCannotSelectTwice_ThrowsException()
         {
             var tournament = await CreateTournament();
-            var func = () => SelectTeamCommandHandlerAsync(tournament.Players.First().Id, tournament.Id, TournamentTeamNames._teams.Last());
+            var func = () => SelectTeamCommandHandlerAsync(tournament.Players.First().Id, tournament.Id, TournamentTeamNames.Teams.Last());
             await func.Should().ThrowAsync<PlayerSelectedTeamBeforeException>();
         }
 
@@ -65,7 +65,7 @@ namespace LCT.IntegrationTests.Teams.IntegrationTests
         public async Task TeamCannotBeSelectTwice_ThrowsException()
         {
             var tournament = await CreateTournament();
-            var func = () => SelectTeamCommandHandlerAsync(tournament.Players.Last().Id, tournament.Id, TournamentTeamNames._teams.Last());
+            var func = () => SelectTeamCommandHandlerAsync(tournament.Players.Last().Id, tournament.Id, TournamentTeamNames.Teams.Last());
             await func.Should().ThrowAsync<TeamAlreadySelectedException>();
         }
 
@@ -73,13 +73,13 @@ namespace LCT.IntegrationTests.Teams.IntegrationTests
         public async Task TeamSelected_Success()
         {
             var tournament = await CreateTournament();
-            var result = await SelectTeamCommandHandlerAsync(tournament.Players.Last().Id, tournament.Id, TournamentTeamNames._teams.First());
+            var result = await SelectTeamCommandHandlerAsync(tournament.Players.Last().Id, tournament.Id, TournamentTeamNames.Teams.First());
             result.Should().NotBeNull();
             var tournamentFromDb = await GetTournamentById(tournament.Id);
             tournamentFromDb.Should().NotBeNull();
             tournamentFromDb.Players.Count().Should().Be(2);
             tournamentFromDb.SelectedTeams.Count().Should().Be(2);
-            tournamentFromDb.SelectedTeams.Any(t => t.TeamName == TournamentTeamNames._teams.First()).Should().BeTrue();
+            tournamentFromDb.SelectedTeams.Any(t => t.TeamName == TournamentTeamNames.Teams.First()).Should().BeTrue();
         }
 
         private async Task<Tournament> GetTournamentById(Guid id)
@@ -98,7 +98,7 @@ namespace LCT.IntegrationTests.Teams.IntegrationTests
             };
             tournament.AddPlayer(players[0]);
             tournament.AddPlayer(players[1]);
-            tournament.SelectTeam(players[0].Id, TournamentTeamNames._teams.Last());
+            tournament.SelectTeam(players[0].Id, TournamentTeamNames.Teams.Last());
             await AddAsync(tournament);
             return tournament;
         }

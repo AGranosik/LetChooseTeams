@@ -39,7 +39,7 @@ namespace LCT.IntegrationTests.Persistance
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == tournament.Id);
 
-            tournamentFromDb.SelectTeam(tournament.Players.First().Id, TournamentTeamNames._teams.First());
+            tournamentFromDb.SelectTeam(tournament.Players.First().Id, TournamentTeamNames.Teams.First());
             dbContext.Update(tournamentFromDb);
             var func = () => dbContext.SaveChangesAsync();
             await func.Should().ThrowAsync<DbUpdateException>();
@@ -58,7 +58,7 @@ namespace LCT.IntegrationTests.Persistance
                 .AsNoTracking()
                 .FirstOrDefaultAsync(t => t.Id == tournament.Id);
 
-            tournamentFromDb.SelectTeam(tournament.Players.Last().Id, TournamentTeamNames._teams.Last());
+            tournamentFromDb.SelectTeam(tournament.Players.Last().Id, TournamentTeamNames.Teams.Last());
             dbContext.Update(tournamentFromDb);
             var func = () => dbContext.SaveChangesAsync();
             await func.Should().ThrowAsync<DbUpdateException>();
@@ -74,7 +74,7 @@ namespace LCT.IntegrationTests.Persistance
             };
             tournament.AddPlayer(players[0]);
             tournament.AddPlayer(players[1]);
-            tournament.SelectTeam(players[0].Id, TournamentTeamNames._teams.Last());
+            tournament.SelectTeam(players[0].Id, TournamentTeamNames.Teams.Last());
             return tournament;
         }
     }

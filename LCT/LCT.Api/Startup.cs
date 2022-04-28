@@ -25,15 +25,6 @@ namespace LCT.Api
                 .AddApplication();
 
             services.AddSignalR();
-            //services.AddCors(options =>
-            //{
-            //    options.AddPolicy("ClientPermission", policy =>
-            //    {
-            //        policy.AllowAnyHeader()
-            //            .AllowAnyMethod()
-            //            .AllowAnyOrigin();
-            //    });
-            //});
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

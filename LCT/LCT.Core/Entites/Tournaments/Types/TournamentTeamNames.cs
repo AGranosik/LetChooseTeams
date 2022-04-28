@@ -2,7 +2,7 @@
 {
     public static class TournamentTeamNames
     {
-        public static readonly List<string> _teams = new List<string>() {
+        public static readonly List<string> Teams = new List<string>() {
             "Bayern",
             "PSG",
             "Manchaster City",
@@ -16,6 +16,6 @@
         };
 
         public static bool TeamExists(string team)
-            => _teams.Any(t => t == team);
+            => Teams.Any(t => t == team);
     }
 }

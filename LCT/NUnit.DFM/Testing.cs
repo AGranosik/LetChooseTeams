@@ -65,7 +65,7 @@ namespace NUnit.DFM
         }
 
         [SetUp]
-        public virtual async Task OneTimeSetuUpAsync()
+        public virtual void OneTimeSetuUp()
         {
             _scope = _scopeFactory.CreateScope();
         }

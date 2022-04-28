@@ -38,10 +38,10 @@ namespace LCT.Application.Teams.Commands
 
             tournament.SelectTeam(request.PlayerId, request.Team);
 
-            await _dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync(cancellationToken);
             try
             {
-                await _hubContext.Clients.All.SendCoreAsync(request.TournamentId.ToString() + "/select", new[] { new SelectTeamMessageDto(request.PlayerId, request.Team) });
+                await _hubContext.Clients.All.SendCoreAsync(request.TournamentId.ToString() + "/select", new[] { new SelectTeamMessageDto(request.PlayerId, request.Team) }, cancellationToken);
             }
             catch (Exception ex)
             {

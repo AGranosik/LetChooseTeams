@@ -107,7 +107,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             {
                 var player = tournament.Players.ElementAt(i);
 
-                tournament.SelectTeam(player.Id, TournamentTeamNames._teams[i]);
+                tournament.SelectTeam(player.Id, TournamentTeamNames.Teams[i]);
             }
 
             var dbContext = GetDbContext();
@@ -117,7 +117,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             return tournament;
         }
 
-        private async Task<List<DrawTeamDto>> DrawTeamQueryHandlerResult(DrawTeamForPlayersQuery query)
+        private async Task<List<DrawnTeamDto>> DrawTeamQueryHandlerResult(DrawTeamForPlayersQuery query)
             => await new DrawTeamForPlayersQueryHandler(GetDbContext(), new TournamentDomainService()).Handle(query, CancellationToken.None);
         
     }

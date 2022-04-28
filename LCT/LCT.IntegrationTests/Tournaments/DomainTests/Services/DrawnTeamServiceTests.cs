@@ -22,7 +22,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.Services
             var players = CreatePlayer(numberOfPlayers);
             for(int i = 0; i < numberOfPlayers; i++)
             {
-                teams.Add(SelectedTeam.Create(players[i], TournamentTeamNames._teams[i]));
+                teams.Add(SelectedTeam.Create(players[i], TournamentTeamNames.Teams[i]));
             }
 
             var result = new TournamentDomainService().DrawTeamForPlayers(teams);
@@ -38,7 +38,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.Services
             var players = CreatePlayer(numberOfPlayers);
             for (int i = 0; i < numberOfPlayers; i++)
             {
-                teams.Add(SelectedTeam.Create(players[i], TournamentTeamNames._teams[i]));
+                teams.Add(SelectedTeam.Create(players[i], TournamentTeamNames.Teams[i]));
             }
 
             var result = new TournamentDomainService().DrawTeamForPlayers(teams);
@@ -54,7 +54,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.Services
             var players = CreatePlayer(numberOfPlayers);
             for (int i = 0; i < numberOfPlayers; i++)
             {
-                teams.Add(SelectedTeam.Create(players[i], TournamentTeamNames._teams[i]));
+                teams.Add(SelectedTeam.Create(players[i], TournamentTeamNames.Teams[i]));
             }
 
             var result = new TournamentDomainService().DrawTeamForPlayers(teams);
@@ -73,7 +73,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.Services
             var players = CreatePlayer(numberOfPlayers);
             for (int i = 0; i < numberOfPlayers; i++)
             {
-                teams.Add(SelectedTeam.Create(players[i], TournamentTeamNames._teams[i]));
+                teams.Add(SelectedTeam.Create(players[i], TournamentTeamNames.Teams[i]));
             }
 
             var result = new TournamentDomainService().DrawTeamForPlayers(teams);
@@ -91,7 +91,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.Services
             var players = CreatePlayer(numberOfPlayers);
             for (int i = 0; i < numberOfPlayers; i++)
             {
-                teams.Add(SelectedTeam.Create(players[i], TournamentTeamNames._teams[i]));
+                teams.Add(SelectedTeam.Create(players[i], TournamentTeamNames.Teams[i]));
             }
 
             var result = new TournamentDomainService().DrawTeamForPlayers(teams);

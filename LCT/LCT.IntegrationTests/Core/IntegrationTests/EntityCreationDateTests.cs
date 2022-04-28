@@ -48,7 +48,7 @@ namespace LCT.IntegrationTests.Core.IntegrationTests
         }
 
         [Test]
-        public async Task PlayerIsEntityType()
+        public void PlayerIsEntityType()
         {
             var player = Player.Register(new Name("sss"), new Name("hehe"));
             (player is Entity).Should().BeTrue();

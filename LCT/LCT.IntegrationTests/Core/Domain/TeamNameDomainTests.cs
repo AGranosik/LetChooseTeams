@@ -27,30 +27,30 @@ namespace LCT.IntegrationTests.Core.Domain
         [Test]
         public void SelectedFromAvailableTeams()
         {
-            var func = () => new TeamName(TournamentTeamNames._teams.First());
+            var func = () => new TeamName(TournamentTeamNames.Teams.First());
             func.Should().NotThrow<ArgumentNullException>();
         }
 
         [Test]
         public void SameEntityComparision_True()
         {
-            var name = new TeamName(TournamentTeamNames._teams.First());
+            var name = new TeamName(TournamentTeamNames.Teams.First());
             (name == name).Should().BeTrue();
         }
 
         [Test]
         public void SameNameComparision_True()
         {
-            var name = new TeamName(TournamentTeamNames._teams.First());
-            var name2 = new TeamName(TournamentTeamNames._teams.First());
+            var name = new TeamName(TournamentTeamNames.Teams.First());
+            var name2 = new TeamName(TournamentTeamNames.Teams.First());
             (name == name2).Should().BeTrue();
         }
 
         [Test]
         public void DiffrentNameComparision_False()
         {
-            var name = new TeamName(TournamentTeamNames._teams.First());
-            var name2 = new TeamName(TournamentTeamNames._teams.Last());
+            var name = new TeamName(TournamentTeamNames.Teams.First());
+            var name2 = new TeamName(TournamentTeamNames.Teams.Last());
             (name == name2).Should().BeFalse();
         }
     }

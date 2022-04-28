@@ -54,7 +54,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
 
             var notExistingPLayer = Player.Register(new Name("hehe"), new Name("fiu"));
 
-            var func = () => tournament.SelectTeam(notExistingPLayer.Id, TournamentTeamNames._teams.First());
+            var func = () => tournament.SelectTeam(notExistingPLayer.Id, TournamentTeamNames.Teams.First());
             func.Should().Throw<PlayerNotInTournamentException>();
         }
 
@@ -66,8 +66,8 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
             tournament.AddPlayer(player);
             tournament.AddPlayer(Player.Register(new Name("t2est"), new Name("heh2e")));
 
-            tournament.SelectTeam(player.Id, TournamentTeamNames._teams.Last());
-            var func = () => tournament.SelectTeam(player.Id, TournamentTeamNames._teams.First());
+            tournament.SelectTeam(player.Id, TournamentTeamNames.Teams.Last());
+            var func = () => tournament.SelectTeam(player.Id, TournamentTeamNames.Teams.First());
             func.Should().Throw<PlayerSelectedTeamBeforeException>();
         }
 
@@ -78,7 +78,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
             var player = Player.Register(new Name("test"), new Name("hehe"));
             tournament.AddPlayer(player);
 
-            tournament.SelectTeam(player.Id, TournamentTeamNames._teams.First());
+            tournament.SelectTeam(player.Id, TournamentTeamNames.Teams.First());
 
             tournament.SelectedTeams.Should().HaveCount(1);
         }
@@ -94,8 +94,8 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
             player2.Id = Guid.NewGuid();
             tournament.AddPlayer(player2);
 
-            tournament.SelectTeam(player.Id, TournamentTeamNames._teams.First());
-            var func = () => tournament.SelectTeam(player2.Id, TournamentTeamNames._teams.First());
+            tournament.SelectTeam(player.Id, TournamentTeamNames.Teams.First());
+            var func = () => tournament.SelectTeam(player2.Id, TournamentTeamNames.Teams.First());
             func.Should().Throw<TeamAlreadySelectedException>();
         }
 
@@ -154,7 +154,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
             var player2 = Player.Register(new Name("t2est"), new Name("heh2e"));
             player2.Id = Guid.NewGuid();
             tournament.AddPlayer(player2);
-            tournament.SelectTeam(player2.Id, TournamentTeamNames._teams.First());
+            tournament.SelectTeam(player2.Id, TournamentTeamNames.Teams.First());
             func.Should().Throw<NotAllPlayersSelectedTeamException>();
         }
 
@@ -171,15 +171,15 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
             tournament.AddPlayer(player2);
             player2.Id = Guid.NewGuid();
 
-            tournament.SelectTeam(player2.Id, TournamentTeamNames._teams.First());
-            tournament.SelectTeam(player.Id, TournamentTeamNames._teams.Last());
+            tournament.SelectTeam(player2.Id, TournamentTeamNames.Teams.First());
+            tournament.SelectTeam(player.Id, TournamentTeamNames.Teams.Last());
 
 
             tournament.DrawnTeamForPLayers(new TournamentDomainService());
 
             tournament.DrawTeams.Count.Should().Be(2);
             var drawnTeam = tournament.DrawTeams.First(dt => dt.Player == player);
-            drawnTeam.TeamName.Value.Should().Be(TournamentTeamNames._teams.First());
+            drawnTeam.TeamName.Value.Should().Be(TournamentTeamNames.Teams.First());
 
         }
 
@@ -187,10 +187,10 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
         [Repeat(20)]
         public void TournamentCannotDrawTeamsWhenAllPlayersSelected_Success2()
         {
-            var count = TournamentTeamNames._teams.Count;
+            var count = TournamentTeamNames.Teams.Count;
             var tournament = Tournament.Create(new Name("test"), new TournamentLimit(count));
 
-            foreach(var team in TournamentTeamNames._teams)
+            foreach(var team in TournamentTeamNames.Teams)
             {
                 var player = Player.Register(new Name("test" + team), new Name("hehe"));
                 player.Id = Guid.NewGuid();

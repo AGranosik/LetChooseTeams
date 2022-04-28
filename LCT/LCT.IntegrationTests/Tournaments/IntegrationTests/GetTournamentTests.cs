@@ -3,6 +3,7 @@ using LCT.Application.Common;
 using LCT.Application.Tournaments.Queries;
 using LCT.Core.Entites.Tournaments.Entities;
 using LCT.Core.Entites.Tournaments.ValueObjects;
+using LCT.Core.Entities.Tournaments.Types;
 using LCT.Core.Shared.Exceptions;
 using LCT.Infrastructure.EF;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,8 +24,10 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         {
             AddTablesToTruncate(new List<string>
             {
+                nameof(LctDbContext.DrawnTeams),
+                nameof(LctDbContext.SelectedTeams),
+                nameof(LctDbContext.Players),
                 nameof(LctDbContext.Tournaments),
-                nameof(LctDbContext.Players)
             });
 
             this.Environment("Development")
@@ -59,14 +62,14 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         [Test]
         public async Task GetTournament_SuccessAsync()
         {
-            var tournaments = await CreateTournament(10000);
+            var tournaments = await CreateTournament(9);
             var tournament = await GetTournamentQueryHandler(new GetTournamentQuery
             {
                 TournamentId = tournaments[tournaments.Count - 1].Id
             });
 
             tournament.Should().NotBeNull();
-            tournament.TournamentName.Should().Be("name9999");
+            tournament.TournamentName.Should().Be("name8");
             tournament.Players.Should().BeEmpty();
             tournament.QRCode.Should().NotBeNullOrEmpty();
         }
@@ -87,13 +90,47 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             await func.Should().ThrowAsync<ArgumentNullException>();
         }
 
+        [Test]
+        public async Task GetTournament_NoDrawnTeam_NoException()
+        {
+            var tournaments = await CreateTournamentWitPlayers(9);
+            var tournament = await GetTournamentQueryHandler(new GetTournamentQuery
+            {
+                TournamentId = tournaments[tournaments.Count - 1].Id
+            });
+
+            tournament.Should().NotBeNull();
+            tournament.TournamentName.Should().Be("name8");
+            tournament.Players.Should().NotBeEmpty();
+            tournament.Players.TrueForAll(p => p.DrawnTeam == null);
+        }
 
         private async Task<List<Tournament>> CreateTournament(int number)
         {
             var list = new List<Tournament>();
             for(int i =0; i < number; i++)
             {
-                list.Add(Tournament.Create(new Name("name" + i), new TournamentLimit(2)));
+                var tournament = Tournament.Create(new Name("name" + i), new TournamentLimit(2));
+                list.Add(tournament);
+            }
+
+            var dbContext = GetDbContext();
+            await dbContext.Tournaments.AddRangeAsync(list);
+            await dbContext.SaveChangesAsync();
+            return list;
+        }
+
+
+        private async Task<List<Tournament>> CreateTournamentWitPlayers(int number)
+        {
+            var list = new List<Tournament>();
+            for (int i = 0; i < number; i++)
+            {
+                var player = Player.Register(new Name(i.ToString()), new Name(i.ToString()));
+                var tournament = Tournament.Create(new Name("name" + i), new TournamentLimit(2));
+                tournament.AddPlayer(player);
+                tournament.SelectTeam(player.Id, TournamentTeamNames.Teams[i]);
+                list.Add(tournament);
             }
 
             var dbContext = GetDbContext();
