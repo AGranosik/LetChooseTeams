@@ -1,11 +1,9 @@
-﻿using LCT.Application.Tournaments.Hubs;
+﻿using LCT.Application.Players.Events;
 using LCT.Core.Entites.Tournaments.Entities;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Infrastructure.EF;
 using MediatR;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 namespace LCT.Application.Players.Commands
 {
@@ -20,11 +18,11 @@ namespace LCT.Application.Players.Commands
     public class AssignPlayerToTournamentCommandHandler : IRequestHandler<AssignPlayerToTournamentCommand, Guid>
     {
         private readonly LctDbContext _dbContext;
-        private readonly IHubContext<PlayerAssignedHub> _hubContext;
-        public AssignPlayerToTournamentCommandHandler(LctDbContext dbContext, IHubContext<PlayerAssignedHub> hubContext)
+        private readonly IMediator _mediator;
+        public AssignPlayerToTournamentCommandHandler(LctDbContext dbContext, IMediator mediator)
         {
             _dbContext = dbContext;
-            _hubContext = hubContext;
+            _mediator = mediator;
         }
         public async Task<Guid> Handle(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)
         {
@@ -32,15 +30,14 @@ namespace LCT.Application.Players.Commands
             var player = Player.Register(new Name(request.Name), new Name(request.Surname));
 
             tournament.AddPlayer(player);
+
             await _dbContext.SaveChangesAsync(cancellationToken);
-            try
+            await _mediator.Publish(new PlayerAssignedEvent
             {
-                await _hubContext.Clients.All.SendCoreAsync(tournament.Id.ToString(), new[] { new PlayerAssignedMessageDto(player.Id, player.Name.Value, player.Surname.Value) }, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Exception during signalr conntection");
-            }
+                TournamentId = request.TournamentId,
+                Name = request.Name,
+                Surname = request.Surname
+            });
             return player.Id;
         }
     }

@@ -1,10 +1,7 @@
 ﻿using LCT.Application.Teams.Events;
-using LCT.Application.Tournaments.Hubs;
 using LCT.Infrastructure.EF;
 using MediatR;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
-using Serilog;
 
 namespace LCT.Application.Teams.Commands
 {
