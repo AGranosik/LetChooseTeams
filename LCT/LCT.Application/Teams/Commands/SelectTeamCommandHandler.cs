@@ -1,6 +1,5 @@
-﻿using LCT.Application.Tournaments.Hubs;
-using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entities.Tournaments.Types;
+﻿using LCT.Application.Teams.Events;
+using LCT.Application.Tournaments.Hubs;
 using LCT.Infrastructure.EF;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -20,11 +19,11 @@ namespace LCT.Application.Teams.Commands
     public class SelectTeamCommandHandler : IRequestHandler<SelectTeamCommand>
     {
         private readonly LctDbContext _dbContext;
-        private readonly IHubContext<PlayerAssignedHub> _hubContext;
-        public SelectTeamCommandHandler(LctDbContext dbContext, IHubContext<PlayerAssignedHub> hubContext)
+        private readonly IMediator _mediator;
+        public SelectTeamCommandHandler(LctDbContext dbContext, IMediator mediator)
         {
             _dbContext = dbContext;
-            _hubContext = hubContext;
+            _mediator = mediator;
         }
         public async Task<Unit> Handle(SelectTeamCommand request, CancellationToken cancellationToken)
         {
@@ -39,14 +38,14 @@ namespace LCT.Application.Teams.Commands
             tournament.SelectTeam(request.PlayerId, request.Team);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
-            try
+
+            await _mediator.Publish(new TeamSelectedMessageEvent
             {
-                await _hubContext.Clients.All.SendCoreAsync(request.TournamentId.ToString() + "/select", new[] { new SelectTeamMessageDto(request.PlayerId, request.Team) }, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex.Message);
-            }
+                PlayerId = request.PlayerId,
+                Team = request.Team,
+                TournamentId = request.TournamentId,
+            });
+
             return Unit.Value;
         }
     }
