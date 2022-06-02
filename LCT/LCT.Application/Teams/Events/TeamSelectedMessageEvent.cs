@@ -25,7 +25,7 @@ namespace LCT.Application.Teams.Events
         {
             try
             {
-                await _hubContext.Clients.All.SendCoreAsync(notification.TournamentId.ToString() + "/select", new[] { notification }, cancellationToken);
+                await _hubContext.Clients.All.SendCoreAsync(notification.TournamentId.ToString(), new[] { notification }, cancellationToken);
             }
             catch (Exception ex)
             {
