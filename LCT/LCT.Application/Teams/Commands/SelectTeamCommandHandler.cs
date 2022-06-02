@@ -36,12 +36,18 @@ namespace LCT.Application.Teams.Commands
 
             await _dbContext.SaveChangesAsync(cancellationToken);
 
-            await _mediator.Publish(new TeamSelectedMessageEvent
+            try
             {
-                PlayerId = request.PlayerId,
-                Team = request.Team,
-                TournamentId = request.TournamentId,
-            });
+                await _mediator.Publish(new TeamSelectedMessageEvent
+                {
+                    PlayerId = request.PlayerId,
+                    Team = request.Team,
+                    TournamentId = request.TournamentId,
+                });
+            }
+            catch (Exception ex)
+            {
+            }
 
             return Unit.Value;
         }

@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using LCT.IntegrationTests.Mocks;
+using LCT.Application.Players.Events;
 
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 {
@@ -39,7 +40,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         public async Task AssignPlayer_Success()
         {
             var tournament = await CreateTournament();
-            var action = () => AssignPlayerCommandHandleAsync("name", "surname", tournament.Id);
+            var action = () => AssignPlayerCommandHandleAsync("name", "surname", tournament.Id, IMediatorMock.GetMock());
             
             await action.Should().NotThrowAsync();
 
@@ -56,7 +57,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             tournament.AddPlayer(player);
             await GetDbContext().SaveChangesAsync();
 
-            var action = () => AssignPlayerCommandHandleAsync(player.Name, player.Surname, tournament.Id);
+            var action = () => AssignPlayerCommandHandleAsync(player.Name, player.Surname, tournament.Id, IMediatorMock.GetMock());
 
             await action.Should().ThrowAsync<PlayerAlreadyAssignedToTournamentException>();
         }
@@ -64,22 +65,17 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         [Test]
         public async Task AssignPlayer_ReturnsPlayerIdDespiteHubException()
         {
-            var clientProxy = new Mock<IClientProxy>();
-            clientProxy.Setup(cp => cp.SendCoreAsync(It.IsAny<string>(), It.IsAny<object[]>(), It.IsAny<CancellationToken>()))
-                .ThrowsAsync(new ArgumentNullException());
-
-            var mockedHub = IHubContextMock.GetMockedHubContext<PlayerAssignedHub>(clientProxy: clientProxy);
             var tournament = await CreateTournament();
-            var result = await AssignPlayerCommandHandleAsync("name", "surname", tournament.Id, mockedHub);
+            var result = await AssignPlayerCommandHandleAsync("name", "surname", tournament.Id, IMediatorMock.GetMockWithException<PlayerAssignedEvent>());
 
             result.Should().NotBeEmpty();
             result.Should().NotBe(default(Guid));
             
         }
 
-        private async Task<Guid> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId, IHubContext<PlayerAssignedHub> hub = null)
+        private async Task<Guid> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId, IMediator mediator)
         {
-            return await new AssignPlayerToTournamentCommandHandler(GetDbContext(), hub ?? IHubContextMock.GetMockedHubContext<PlayerAssignedHub>()).Handle(new AssignPlayerToTournamentCommand
+            return await new AssignPlayerToTournamentCommandHandler(GetDbContext(), mediator).Handle(new AssignPlayerToTournamentCommand
             {
                 Name = name,
                 Surname = surname,

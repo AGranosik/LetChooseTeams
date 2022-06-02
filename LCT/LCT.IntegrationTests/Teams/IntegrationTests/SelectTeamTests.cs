@@ -105,7 +105,7 @@ namespace LCT.IntegrationTests.Teams.IntegrationTests
 
         private async Task<Unit> SelectTeamCommandHandlerAsync(Guid playerId, Guid TournamentId, string Team, IHubContext<PlayerAssignedHub> hub = null)
         {
-            return await new SelectTeamCommandHandler(GetDbContext(), hub ?? IHubContextMock.GetMockedHubContext<PlayerAssignedHub>()).Handle(new SelectTeamCommand
+            return await new SelectTeamCommandHandler(GetDbContext(), IMediatorMock.GetMock()).Handle(new SelectTeamCommand
             {
                 PlayerId = playerId,
                 Team = Team,

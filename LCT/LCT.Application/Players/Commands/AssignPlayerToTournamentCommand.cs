@@ -32,12 +32,21 @@ namespace LCT.Application.Players.Commands
             tournament.AddPlayer(player);
 
             await _dbContext.SaveChangesAsync(cancellationToken);
-            await _mediator.Publish(new PlayerAssignedEvent
+
+            try
             {
-                TournamentId = request.TournamentId,
-                Name = request.Name,
-                Surname = request.Surname
-            });
+                await _mediator.Publish(new PlayerAssignedEvent
+                {
+                    TournamentId = request.TournamentId,
+                    Name = request.Name,
+                    Surname = request.Surname
+                });
+
+            }
+            catch (Exception ex)
+            {
+
+            }
             return player.Id;
         }
     }
