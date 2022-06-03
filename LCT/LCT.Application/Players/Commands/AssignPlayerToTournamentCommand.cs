@@ -39,7 +39,8 @@ namespace LCT.Application.Players.Commands
                 {
                     TournamentId = request.TournamentId,
                     Name = request.Name,
-                    Surname = request.Surname
+                    Surname = request.Surname,
+                    PlayerId = player.Id
                 });
 
             }
