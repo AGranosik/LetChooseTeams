@@ -10,6 +10,7 @@ namespace LCT.Application.Players.Events
     {
         public override string Type => "PlayerAssigned";
         public Guid TournamentId { get; set; }
+        public Guid PlayerId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
     }
