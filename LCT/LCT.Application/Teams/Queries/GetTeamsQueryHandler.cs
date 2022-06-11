@@ -24,9 +24,6 @@ namespace LCT.Application.Teams.Queries
             var alreadySelected = await _dbContext.Tournaments.Where(t => t.Id == request.TournamentId)
                 .SelectMany(t => t.SelectedTeams).Select(st => st.TeamName).ToListAsync();
 
-            if (alreadySelected.Count == 0)
-                throw new EntityDoesNotExist(nameof(Tournament));
-
             return TournamentTeamNames.Teams.Select(t => new TeamToSelectDto(t, alreadySelected.Any(selected => selected.Value == t))).ToList();
         }
         
