@@ -1,15 +1,34 @@
-﻿using LCT.Core.Entities.Tournaments.Types;
+﻿using LCT.Core.Entites.Tournaments.Entities;
+using LCT.Core.Entities.Tournaments.Types;
+using LCT.Core.Shared.Exceptions;
+using LCT.Infrastructure.EF;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Application.Teams.Queries
 {
-    public class GetTeamsQuery : IRequest<List<string>>
+    public record TeamToSelectDto(string Name, bool Selected);
+    public class GetTeamsQuery : IRequest<List<TeamToSelectDto>>
     {
-
+        public Guid TournamentId { get; set; }
     }
-    public class GetTeamsQueryHandler : IRequestHandler<GetTeamsQuery, List<string>>
+    public class GetTeamsQueryHandler : IRequestHandler<GetTeamsQuery, List<TeamToSelectDto>>
     {
-        public async Task<List<string>> Handle(GetTeamsQuery request, CancellationToken cancellationToken)
-            => TournamentTeamNames.Teams;
+        private readonly LctDbContext _dbContext;
+        public GetTeamsQueryHandler(LctDbContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+        public async Task<List<TeamToSelectDto>> Handle(GetTeamsQuery request, CancellationToken cancellationToken)
+        {
+            var alreadySelected = await _dbContext.Tournaments.Where(t => t.Id == request.TournamentId)
+                .SelectMany(t => t.SelectedTeams).Select(st => st.TeamName).ToListAsync();
+
+            if (alreadySelected.Count == 0)
+                throw new EntityDoesNotExist(nameof(Tournament));
+
+            return TournamentTeamNames.Teams.Select(t => new TeamToSelectDto(t, alreadySelected.Any(selected => selected.Value == t))).ToList();
+        }
+        
     }
 }
