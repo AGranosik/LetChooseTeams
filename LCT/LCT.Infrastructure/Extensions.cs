@@ -1,4 +1,6 @@
-﻿using LCT.Infrastructure.EF;
+﻿using EventStore.ClientAPI;
+using LCT.Infrastructure.EF;
+using LCT.Infrastructure.EventSourcing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +13,16 @@ namespace LCT.Infrastructure
         {
             var options = services.GetOptions<EfOptions>("sql");
             services.AddDbContext<LctDbContext>(x => x.UseSqlServer(options.ConnectionString));
+
+            var esOptions = services.GetOptions<EsOptions>("EventStore");
+            var eventStoreConnection = EventStoreConnection.Create(
+                    connectionString: esOptions.ConnectionString,
+                    builder: ConnectionSettings.Create().KeepReconnecting(),
+                    connectionName: esOptions.ConnectionName);
+
+            eventStoreConnection.ConnectAsync().GetAwaiter().GetResult();
+
+            services.AddSingleton(eventStoreConnection);
 
             return services;
         }
