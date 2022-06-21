@@ -4,7 +4,7 @@ using LCT.Core.Entites.Tournaments.ValueObjects;
 
 namespace LCT.Core.Entites.Tournaments.Entities
 {
-    public class Tournament : Entity
+    public class Tournament : Aggregate
     {
         private Tournament() { }
 
@@ -85,5 +85,10 @@ namespace LCT.Core.Entites.Tournaments.Entities
 
         public static Tournament Create(Name tournamentName, TournamentLimit limit)
             => new (tournamentName, limit);
+
+        protected override void When(object @event)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

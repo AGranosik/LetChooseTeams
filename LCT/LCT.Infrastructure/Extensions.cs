@@ -1,6 +1,7 @@
 ﻿using EventStore.ClientAPI;
 using LCT.Infrastructure.EF;
 using LCT.Infrastructure.EventSourcing;
+using LCT.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,6 +24,7 @@ namespace LCT.Infrastructure
             eventStoreConnection.ConnectAsync().GetAwaiter().GetResult();
 
             services.AddSingleton(eventStoreConnection);
+            services.AddTransient<AggregateRepository>();
 
             return services;
         }
