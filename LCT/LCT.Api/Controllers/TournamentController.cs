@@ -1,6 +1,8 @@
 ﻿using LCT.Application.Players.Commands;
 using LCT.Application.Tournaments.Commands;
 using LCT.Application.Tournaments.Queries;
+using LCT.Core.Entites.Tournaments.Entities;
+using LCT.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,8 +12,10 @@ namespace LCT.Api.Controllers
     [ApiController]
     public class TournamentController : BaseApiController
     {
-        public TournamentController(IMediator mediator) : base(mediator)
+        private readonly AggregateRepository _repo;
+        public TournamentController(IMediator mediator, AggregateRepository repo) : base(mediator)
         {
+            _repo = repo;
         }
 
         [HttpGet]
@@ -20,7 +24,10 @@ namespace LCT.Api.Controllers
 
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateTournamentCommand request)
-            => Ok(await _mediator.Send(request));
+        {
+            var aggregate = await _repo.LoadAsync<Tournament>(Guid.NewGuid());
+            return Ok(await _mediator.Send(request));
+        }
 
         [HttpPost("assignPlayer")]
         public async Task<IActionResult> AssignPlayerToTournament(AssignPlayerToTournamentCommand request)

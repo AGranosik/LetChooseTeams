@@ -1,4 +1,5 @@
-﻿using LCT.Core.Entites.Tournaments.Exceptions;
+﻿using LCT.Core.Entites.Tournaments.Events;
+using LCT.Core.Entites.Tournaments.Exceptions;
 using LCT.Core.Entites.Tournaments.Services;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 
@@ -6,7 +7,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
 {
     public class Tournament : Aggregate
     {
-        private Tournament() { }
+        public Tournament() { }
 
         private Tournament(Name tournamentName, TournamentLimit limit)
         {
@@ -88,7 +89,18 @@ namespace LCT.Core.Entites.Tournaments.Entities
 
         protected override void When(object @event)
         {
-            throw new NotImplementedException();
+            switch (@event)
+            {
+                case TournamentCreated tc:
+                    OnCreated(tc);
+                    break;
+            }
+        }
+
+        private void OnCreated(TournamentCreated tc)
+        {
+            TournamentName = tc.TournamentName;
+            Limit = tc.Limit;
         }
     }
 }

@@ -58,25 +58,32 @@ namespace LCT.Infrastructure.Repositories
             var streamName = GetStreamName(aggregate, aggregateId);
 
             var nextPageStart = 0L;
-
-            do
+            try
             {
-                // Pobieranie kolejnych zdarzeń z Event Stora w kolejności zgodnej z iteracją
-                var page = await _eventStore.ReadStreamEventsForwardAsync(
-                    streamName, nextPageStart, 4096, false);
 
-                if (page.Events.Length > 0)
+                do
                 {
-                    // Wywołanie metody Load aggregatu, która pozwoli nam otrzymać ostateczną postać agregatu, tj.
-                    // zebranie wszystkich eventów, które wystąpiły dla danego agregatu
-                    aggregate.Load(
-                        page.Events.Last().Event.EventNumber,
-                        page.Events.Select(@event => JsonSerializer.Deserialize(Encoding.UTF8.GetString(@event.OriginalEvent.Data), Type.GetType(Encoding.UTF8.GetString(@event.OriginalEvent.Metadata)))
-                        ).ToArray());
-                }
+                    // Pobieranie kolejnych zdarzeń z Event Stora w kolejności zgodnej z iteracją
+                    var page = await _eventStore.ReadStreamEventsForwardAsync(
+                        streamName, nextPageStart, 4096, false);
 
-                nextPageStart = !page.IsEndOfStream ? page.NextEventNumber : -1;
-            } while (nextPageStart != -1);
+                    if (page.Events.Length > 0)
+                    {
+                        // Wywołanie metody Load aggregatu, która pozwoli nam otrzymać ostateczną postać agregatu, tj.
+                        // zebranie wszystkich eventów, które wystąpiły dla danego agregatu
+                        aggregate.Load(
+                            page.Events.Last().Event.EventNumber,
+                            page.Events.Select(@event => JsonSerializer.Deserialize(Encoding.UTF8.GetString(@event.OriginalEvent.Data), Type.GetType(Encoding.UTF8.GetString(@event.OriginalEvent.Metadata)))
+                            ).ToArray());
+                    }
+
+                    nextPageStart = !page.IsEndOfStream ? page.NextEventNumber : -1;
+                } while (nextPageStart != -1);
+            }
+            catch(Exception ex)
+            {
+
+            }
 
             return aggregate;
         }
