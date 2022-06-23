@@ -74,7 +74,7 @@ namespace LCT.Infrastructure.Repositories
                         aggregate.Load(
                             page.Events.Last().Event.EventNumber,
                             page.Events.Select(@event => JsonSerializer.Deserialize(Encoding.UTF8.GetString(@event.OriginalEvent.Data), Type.GetType(Encoding.UTF8.GetString(@event.OriginalEvent.Metadata)))
-                            ).ToArray());
+                            ).ToArray()); 
                     }
 
                     nextPageStart = !page.IsEndOfStream ? page.NextEventNumber : -1;
