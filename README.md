@@ -1,5 +1,6 @@
 # LetChooseTeams
 
+
 ##To run project:
 `docker-compose up -d`
 Set api project as startup project
@@ -10,3 +11,9 @@ Set api project as startup project
 
 # Run tests
 > docker run -i loadimpact/k6 run - <script.js
+
+
+
+#V1
+
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/event-sourcing/images/img.jpg)
