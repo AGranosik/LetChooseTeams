@@ -15,5 +15,9 @@ Set api project as startup project
 
 
 #V1
+Core architecture of system.
 
-![alt text](https://github.com/AGranosik/LetChooseTeams/blob/event-sourcing/images/img.jpg)
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/event-sourcing/images/v1_architecture.png)
+
+Frontent communicate with Backend via http requests.
+WebSockets added for better responsivness & User experience
