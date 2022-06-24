@@ -17,7 +17,7 @@ Set api project as startup project
 #V1
 Core architecture of system.
 
-![alt text](https://github.com/AGranosik/LetChooseTeams/blob/event-sourcing/images/v1_architecture.png)
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/event-sourcing/images/v1_architecture.svg)
 
 Frontent communicate with Backend via http requests.
 WebSockets added for better responsivness & User experience
