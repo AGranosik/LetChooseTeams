@@ -62,19 +62,20 @@ namespace LCT.IntegrationTests.Teams.IntegrationTests
 
         private async Task<Tournament> CreateTournamentWithPlayers(int numberOfPLayers)
         {
-            var tournament = Tournament.Create(new Name("hehe"), new TournamentLimit(numberOfPLayers < 2 ? 3 : numberOfPLayers));
-            for(int i = 0; i< numberOfPLayers; i++)
-            {
-                var player = Player.Register(new Name(i.ToString()), new Name(i.ToString()));
-                player.Id = Guid.NewGuid();
-                tournament.AddPlayer(player);
-                tournament.SelectTeam(player.Id, TournamentTeamNames.Teams[i]);
-            }
-            var dbContext = GetDbContext();
-            await dbContext.Tournaments.AddAsync(tournament);
-            await dbContext.SaveChangesAsync();
+            return null;
+            //var tournament = Tournament.Create(new Name("hehe"), new TournamentLimit(numberOfPLayers < 2 ? 3 : numberOfPLayers));
+            //for(int i = 0; i< numberOfPLayers; i++)
+            //{
+            //    var player = Player.Register(new Name(i.ToString()), new Name(i.ToString()));
+            //    player.Id = Guid.NewGuid();
+            //    tournament.AddPlayer(player);
+            //    tournament.SelectTeam(player.Id, TournamentTeamNames.Teams[i]);
+            //}
+            //var dbContext = GetDbContext();
+            //await dbContext.Tournaments.AddAsync(tournament);
+            //await dbContext.SaveChangesAsync();
 
-            return tournament;
+            //return tournament;
         }
 
         private async Task<List<TeamToSelectDto>> GetTeamsNamesQueryHandler(Guid tournamentId)

@@ -95,26 +95,27 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
         private async Task<Tournament> CreateCompleteTournament(int limit, int players, int selectedTeams)
         {
-            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(limit));
-            for(int i = 0; i < players; i++)
-            {
-                var player = Player.Register(new Name(i.ToString()), new Name(i.ToString()));
-                player.Id = Guid.NewGuid();
-                tournament.AddPlayer(player);
-            }
+            return null;
+            //var tournament = Tournament.Create(new Name("test"), new TournamentLimit(limit));
+            //for(int i = 0; i < players; i++)
+            //{
+            //    var player = Player.Register(new Name(i.ToString()), new Name(i.ToString()));
+            //    player.Id = Guid.NewGuid();
+            //    tournament.AddPlayer(player);
+            //}
 
-            for(int i =0; i < selectedTeams; i++)
-            {
-                var player = tournament.Players.ElementAt(i);
+            //for(int i =0; i < selectedTeams; i++)
+            //{
+            //    var player = tournament.Players.ElementAt(i);
 
-                tournament.SelectTeam(player.Id, TournamentTeamNames.Teams[i]);
-            }
+            //    tournament.SelectTeam(player.Id, TournamentTeamNames.Teams[i]);
+            //}
 
-            var dbContext = GetDbContext();
-            await dbContext.Tournaments.AddAsync(tournament);
-            await dbContext.SaveChangesAsync();
+            //var dbContext = GetDbContext();
+            //await dbContext.Tournaments.AddAsync(tournament);
+            //await dbContext.SaveChangesAsync();
 
-            return tournament;
+            //return tournament;
         }
 
         private async Task<List<DrawnTeamDto>> DrawTeamQueryHandlerResult(DrawTeamForPlayersQuery query)

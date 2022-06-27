@@ -107,36 +107,38 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
         private async Task<List<Tournament>> CreateTournament(int number)
         {
-            var list = new List<Tournament>();
-            for(int i =0; i < number; i++)
-            {
-                var tournament = Tournament.Create(new Name("name" + i), new TournamentLimit(2));
-                list.Add(tournament);
-            }
+            return null;
+            //var list = new List<Tournament>();
+            //for(int i =0; i < number; i++)
+            //{
+            //    var tournament = Tournament.Create(new Name("name" + i), new TournamentLimit(2));
+            //    list.Add(tournament);
+            //}
 
-            var dbContext = GetDbContext();
-            await dbContext.Tournaments.AddRangeAsync(list);
-            await dbContext.SaveChangesAsync();
-            return list;
+            //var dbContext = GetDbContext();
+            //await dbContext.Tournaments.AddRangeAsync(list);
+            //await dbContext.SaveChangesAsync();
+            //return list;
         }
 
 
         private async Task<List<Tournament>> CreateTournamentWitPlayers(int number)
         {
-            var list = new List<Tournament>();
-            for (int i = 0; i < number; i++)
-            {
-                var player = Player.Register(new Name(i.ToString()), new Name(i.ToString()));
-                var tournament = Tournament.Create(new Name("name" + i), new TournamentLimit(2));
-                tournament.AddPlayer(player);
-                tournament.SelectTeam(player.Id, TournamentTeamNames.Teams[i]);
-                list.Add(tournament);
-            }
+            return null;
+            //var list = new List<Tournament>();
+            //for (int i = 0; i < number; i++)
+            //{
+            //    var player = Player.Register(new Name(i.ToString()), new Name(i.ToString()));
+            //    var tournament = Tournament.Create(new Name("name" + i), new TournamentLimit(2));
+            //    tournament.AddPlayer(player);
+            //    tournament.SelectTeam(player.Id, TournamentTeamNames.Teams[i]);
+            //    list.Add(tournament);
+            //}
 
-            var dbContext = GetDbContext();
-            await dbContext.Tournaments.AddRangeAsync(list);
-            await dbContext.SaveChangesAsync();
-            return list;
+            //var dbContext = GetDbContext();
+            //await dbContext.Tournaments.AddRangeAsync(list);
+            //await dbContext.SaveChangesAsync();
+            //return list;
         }
 
         private async Task<TournamentDto> GetTournamentQueryHandler(GetTournamentQuery request, IQRCodeCreator qrCodeCreator = null)

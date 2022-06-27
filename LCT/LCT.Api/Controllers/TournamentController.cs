@@ -24,17 +24,7 @@ namespace LCT.Api.Controllers
 
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateTournamentCommand request)
-        {
-            try
-            {
-                var aggregate = await _repo.LoadAsync<Tournament>(Guid.NewGuid());
-                
-            }catch (Exception ex)
-            {
-
-            }
-            return Ok(await _mediator.Send(request));
-        }
+        => Ok(await _mediator.Send(request));
 
         [HttpPost("assignPlayer")]
         public async Task<IActionResult> AssignPlayerToTournament(AssignPlayerToTournamentCommand request)

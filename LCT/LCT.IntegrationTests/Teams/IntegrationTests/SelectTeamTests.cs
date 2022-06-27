@@ -90,17 +90,18 @@ namespace LCT.IntegrationTests.Teams.IntegrationTests
 
         private async Task<Tournament> CreateTournament()
         {
-            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(3));
-            var players = new List<Player>()
-            {
-                Player.Register(new Name("1"), new Name("2")),
-                Player.Register(new Name("3"), new Name("4"))
-            };
-            tournament.AddPlayer(players[0]);
-            tournament.AddPlayer(players[1]);
-            tournament.SelectTeam(players[0].Id, TournamentTeamNames.Teams.Last());
-            await AddAsync(tournament);
-            return tournament;
+            return null;
+            //var tournament = Tournament.Create(new Name("test"), new TournamentLimit(3));
+            //var players = new List<Player>()
+            //{
+            //    Player.Register(new Name("1"), new Name("2")),
+            //    Player.Register(new Name("3"), new Name("4"))
+            //};
+            //tournament.AddPlayer(players[0]);
+            //tournament.AddPlayer(players[1]);
+            //tournament.SelectTeam(players[0].Id, TournamentTeamNames.Teams.Last());
+            //await AddAsync(tournament);
+            //return tournament;
         }
 
         private async Task<Unit> SelectTeamCommandHandlerAsync(Guid playerId, Guid TournamentId, string Team, IHubContext<PlayerAssignedHub> hub = null)

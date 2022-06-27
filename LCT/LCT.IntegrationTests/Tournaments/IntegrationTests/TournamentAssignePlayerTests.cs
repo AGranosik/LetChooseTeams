@@ -91,9 +91,10 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             .SingleOrDefaultAsync(t => t.Id == id);
         private async Task<Tournament> CreateTournament()
         {
-            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(3));
-            await AddAsync(tournament);
-            return tournament;
+            return null;
+            //var tournament = Tournament.Create(new Name("test"), new TournamentLimit(3));
+            //await AddAsync(tournament);
+            //return tournament;
         }
     }
 }

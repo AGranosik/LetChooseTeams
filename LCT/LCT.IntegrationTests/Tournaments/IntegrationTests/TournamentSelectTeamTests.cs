@@ -118,12 +118,13 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
         private async Task<Tournament> CreateTournamentWithPlayers(List<Player> players)
         {
-            var tournament = Tournament.Create(new Name("test"), new TournamentLimit(3));
-            foreach (var player in players)
-                tournament.AddPlayer(player);
+            return null;
+            //var tournament = Tournament.Create(new Name("test"), new TournamentLimit(3));
+            //foreach (var player in players)
+            //    tournament.AddPlayer(player);
 
-            await AddAsync(tournament);
-            return tournament;
+            //await AddAsync(tournament);
+            //return tournament;
         }
     }
 }
