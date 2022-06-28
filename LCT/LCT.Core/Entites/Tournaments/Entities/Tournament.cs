@@ -9,10 +9,14 @@ namespace LCT.Core.Entites.Tournaments.Entities
     {
         public Tournament() { }
 
+        public static Tournament Create(Name tournamentName, TournamentLimit limit)
+            => new(tournamentName, limit);
+
         private Tournament(Name tournamentName, TournamentLimit limit)
         {
             Limit = limit;
             TournamentName = tournamentName;
+            Id = Guid.NewGuid();
         }
         public Name TournamentName { get; private set; }
         private List<Player> _players = new List<Player>();
@@ -84,11 +88,11 @@ namespace LCT.Core.Entites.Tournaments.Entities
                 throw new PlayerSelectedTeamBeforeException();
         }
 
-        public Tournament Create(Name tournamentName, TournamentLimit limit)
-        {
-            Apply(new TournamentCreated(tournamentName, limit));
-            return this;
-        }
+        //public Tournament Create(Name tournamentName, TournamentLimit limit)
+        //{
+        //    Apply(new TournamentCreated(tournamentName, limit));
+        //    return this;
+        //}
 
         protected override void When(object @event)
         {

@@ -1,13 +1,12 @@
 ﻿namespace LCT.Core.Entites
 {
-    public abstract class Aggregate : Entity
+    public abstract class Aggregate
     {
         // Defincja listy w której będziemy przechowywać agregaty
         readonly IList<object> _changes = new List<object>();
 
         // Agregat będzie skadał się z unikalnego identyfikatora
         public Guid Id { get; protected set; } = Guid.Empty;
-
         // Agregat będzie wersjonowany
         public long Version { get; private set; } = -1;
 

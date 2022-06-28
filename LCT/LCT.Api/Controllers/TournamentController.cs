@@ -12,10 +12,8 @@ namespace LCT.Api.Controllers
     [ApiController]
     public class TournamentController : BaseApiController
     {
-        private readonly AggregateRepository _repo;
-        public TournamentController(IMediator mediator, AggregateRepository repo) : base(mediator)
+        public TournamentController(IMediator mediator) : base(mediator)
         {
-            _repo = repo;
         }
 
         [HttpGet]

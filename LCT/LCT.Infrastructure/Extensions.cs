@@ -1,10 +1,12 @@
 ﻿using EventStore.ClientAPI;
 using LCT.Infrastructure.EF;
 using LCT.Infrastructure.EventSourcing;
+using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 
 namespace LCT.Infrastructure
 {
@@ -13,22 +15,20 @@ namespace LCT.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             var options = services.GetOptions<EfOptions>("sql");
-            services.AddDbContext<LctDbContext>(x => x.UseSqlServer(options.ConnectionString));
+            services.AddDbContext<LctDbContext>(x => x.UseSqlServer(options.ConnectionString))
+                .ConfigureMongo();
 
-            var esOptions = services.GetOptions<EsOptions>("EventStore");
-            var eventStoreConnection = EventStoreConnection.Create(
-                    connectionString: esOptions.ConnectionString,
-                    builder: ConnectionSettings.Create().KeepReconnecting(),
-                    connectionName: esOptions.ConnectionName);
-
-            eventStoreConnection.ConnectAsync().GetAwaiter().GetResult();
-
-            services.AddSingleton(eventStoreConnection);
-            services.AddTransient<AggregateRepository>();
 
             return services;
         }
 
+        private static IServiceCollection ConfigureMongo(this IServiceCollection services)
+        {
+            var mongoConfig = services.GetOptions<MongoSettings>("mongo");
+            var mongoClient = new MongoClient(mongoConfig.ConnectionString);
+            services.AddSingleton(mongoClient);
+            return services;
+        }
         public static T GetOptions<T>(this IServiceCollection services, string sectionName) where T : new()
         {
             using var serviceProvider = services.BuildServiceProvider();
