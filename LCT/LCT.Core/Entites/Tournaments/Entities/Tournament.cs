@@ -85,10 +85,11 @@ namespace LCT.Core.Entites.Tournaments.Entities
                 throw new PlayerSelectedTeamBeforeException();
         }
 
-        public Tournament Create(Name tournamentName, TournamentLimit limit)
+        public static Tournament Create(Name tournamentName, TournamentLimit limit)
         {
-            Apply(new TournamentCreated(tournamentName, limit));
-            return this;
+            var t = new Tournament();
+            t.Apply(new TournamentCreated(tournamentName, limit));
+            return t;
         }
 
         protected override void When(object @event)

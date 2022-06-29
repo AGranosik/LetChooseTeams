@@ -26,7 +26,9 @@ namespace LCT.Infrastructure
         {
             var mongoConfig = services.GetOptions<MongoSettings>("mongo");
             var mongoClient = new MongoClient(mongoConfig.ConnectionString);
+            services.AddSingleton(mongoConfig);
             services.AddSingleton(mongoClient);
+            services.AddSingleton<IMongoPersistanceClient, MongoPersistanceClient>();
             return services;
         }
         public static T GetOptions<T>(this IServiceCollection services, string sectionName) where T : new()

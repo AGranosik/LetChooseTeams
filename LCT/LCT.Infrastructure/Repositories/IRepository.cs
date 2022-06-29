@@ -2,7 +2,7 @@
 {
     public interface IRepository<T>
     {
-        T Load(Guid Id);
+        Task<T> Load(Guid Id);
         Task Save(T model);
     }
 }
