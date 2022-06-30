@@ -15,9 +15,8 @@ namespace LCT.Infrastructure
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
         {
             var options = services.GetOptions<EfOptions>("sql");
-            services.AddDbContext<LctDbContext>(x => x.UseSqlServer(options.ConnectionString))
+            services.AddDbContext<LctDbContext>(x => x.UseSqlServer(options.ConnectionString), ServiceLifetime.Singleton)
                 .ConfigureMongo();
-
 
             return services;
         }
@@ -27,8 +26,9 @@ namespace LCT.Infrastructure
             var mongoConfig = services.GetOptions<MongoSettings>("mongo");
             var mongoClient = new MongoClient(mongoConfig.ConnectionString);
             services.AddSingleton(mongoConfig);
-            services.AddSingleton(mongoClient);
+            services.AddSingleton<IMongoClient>(mongoClient);
             services.AddSingleton<IMongoPersistanceClient, MongoPersistanceClient>();
+            services.AddSingleton(typeof(IRepository<>), typeof(AggregateRepository<>));
             return services;
         }
         public static T GetOptions<T>(this IServiceCollection services, string sectionName) where T : new()

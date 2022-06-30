@@ -5,20 +5,20 @@ namespace LCT.Infrastructure.Persistance.Mongo
 {
     public interface IMongoPersistanceClient
     {
-        IMongoCollection<BaseEvent> TournamentStream { get; }
+        IMongoCollection<object> TournamentStream { get; }
     }
 
     public class MongoPersistanceClient : IMongoPersistanceClient
     {
-        private readonly MongoClient _mongoClient;
+        private readonly IMongoClient _mongoClient;
         private readonly string _dbName;
-        public MongoPersistanceClient(MongoClient mongoClient, MongoSettings mongoSettings)
+        public MongoPersistanceClient(IMongoClient mongoClient, MongoSettings mongoSettings)
         {
             _mongoClient = mongoClient;
             _dbName = mongoSettings.DatabaseName;
         }
 
-        public IMongoCollection<BaseEvent> TournamentStream
-            => _mongoClient.GetDatabase(_dbName).GetCollection<BaseEvent>("Tournament");
+        public IMongoCollection<object> TournamentStream
+            => _mongoClient.GetDatabase(_dbName).GetCollection<object>("TournamentEvents");
     }
 }
