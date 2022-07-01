@@ -24,11 +24,21 @@ namespace LCT.Application.Tournaments.Commands
 
         public async Task<Guid> Handle(CreateTournamentCommand request, CancellationToken cancellationToken)
         {
-            var tournament = Tournament.Create(new Name(request.Name), new TournamentLimit(request.PlayerLimit));
-            await _dbContext.Tournaments.AddAsync(tournament, cancellationToken);
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            try
+            {
+                var tournament = Tournament.Create(new Name(request.Name), new TournamentLimit(request.PlayerLimit));
+                await _repository.Save(tournament);
 
-            return tournament.Id;
+            }
+            catch (Exception ex)
+            {
+
+            }
+            //await _dbContext.Tournaments.AddAsync(tournament, cancellationToken);
+            //await _dbContext.SaveChangesAsync(cancellationToken);
+
+            //return tournament.Id;
+            return Guid.Empty;
         }
     }
 }

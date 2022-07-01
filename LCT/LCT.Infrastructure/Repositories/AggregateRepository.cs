@@ -1,13 +1,13 @@
 ﻿using LCT.Core.Entites;
-using MongoDB.Driver;
+using LCT.Infrastructure.Persistance.Mongo;
 
 namespace LCT.Infrastructure.Repositories
 {
     public class AggregateRepository<T> : IRepository<T>
         where T : Aggregate
     {
-        private readonly IMongoClient _client;
-        public AggregateRepository(IMongoClient client)
+        private readonly IMongoPersistanceClient _client;
+        public AggregateRepository(IMongoPersistanceClient client)
         {
             _client = client;
         }
@@ -16,9 +16,9 @@ namespace LCT.Infrastructure.Repositories
             throw new NotImplementedException();
         }
 
-        public Task Save(T model)
+        public async Task Save(T model)
         {
-            throw new NotImplementedException();
+            await _client.TournamentStream.InsertOneAsync(model.GetChanges());
         }
     }
 }
