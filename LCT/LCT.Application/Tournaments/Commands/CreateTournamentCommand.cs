@@ -26,7 +26,7 @@ namespace LCT.Application.Tournaments.Commands
         {
             try
             {
-                var tournament = Tournament.Create(new Name(request.Name), new TournamentLimit(request.PlayerLimit));
+                var tournament = Tournament.Create(request.Name, request.PlayerLimit);
                 await _repository.Save(tournament);
 
             }

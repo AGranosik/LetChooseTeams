@@ -85,7 +85,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
                 throw new PlayerSelectedTeamBeforeException();
         }
 
-        public static Tournament Create(Name tournamentName, TournamentLimit limit)
+        public static Tournament Create(string tournamentName, int limit)
         {
             var t = new Tournament();
             t.Apply(new TournamentCreated(tournamentName, limit));
@@ -104,7 +104,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
 
         private void OnCreated(TournamentCreated tc)
         {
-            TournamentName = tc.TournamentName;
+            TournamentName = tc.Name;
             Limit = tc.Limit;
             Id = Guid.NewGuid();
         }

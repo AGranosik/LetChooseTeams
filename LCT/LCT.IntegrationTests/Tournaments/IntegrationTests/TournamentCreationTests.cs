@@ -66,9 +66,10 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             //await action.Should().ThrowAsync<DbUpdateException>();
         }
 
-        private async Task<Guid> CreateTournamenCommandHander(CreateTournamentCommand request)
+        private Task<Guid> CreateTournamenCommandHander(CreateTournamentCommand request)
         {
-            return await new CreateTournamentCommandHandler(GetDbContext()).Handle(request, new CancellationToken());
+            return null;
+            //return await new CreateTournamentCommandHandler(GetDbContext()).Handle(request, new CancellationToken());
         }
 
         private Task<List<Tournament>> GetTournaments()

@@ -24,5 +24,7 @@ namespace LCT.Core.Entites.Tournaments.ValueObjects
             if (currentNumberOfPlayers + 1 > Limit)
                 throw new TournamentLimitCannotBeExceededException();
         }
+
+        public static implicit operator TournamentLimit(int limit) => new(limit);
     }
 }
