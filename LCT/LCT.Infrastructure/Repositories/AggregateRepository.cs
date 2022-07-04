@@ -1,5 +1,6 @@
 ﻿using LCT.Core.Entites;
 using LCT.Infrastructure.Persistance.Mongo;
+using MongoDB.Driver;
 
 namespace LCT.Infrastructure.Repositories
 {
@@ -11,14 +12,16 @@ namespace LCT.Infrastructure.Repositories
         {
             _client = client;
         }
-        public Task<T> Load(Guid Id)
+        public async Task<T> Load(Guid Id)
         {
-            throw new NotImplementedException();
+            var t = await _client.TournamentStream.FindAsync(ts => true);
+            var result = t.ToList();
+            return null;
         }
 
         public async Task Save(T model)
         {
-            await _client.TournamentStream.InsertOneAsync(model.GetChanges());
+            await _client.TournamentStream.InsertOneAsync(model.GetChanges().Last());
         }
     }
 }

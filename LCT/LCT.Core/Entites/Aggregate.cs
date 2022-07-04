@@ -4,7 +4,7 @@ namespace LCT.Core.Entites
 {
     public abstract class Aggregate
     {
-        private readonly IList<object> _changes = new List<object>();
+        private readonly IList<BaseEvent> _changes = new List<BaseEvent>();
         public Guid Id { get; protected set; } = Guid.Empty;
         public long Version { get; private set; } = -1;
 
@@ -25,6 +25,6 @@ namespace LCT.Core.Entites
                 When(item);
             }
         }
-        public object[] GetChanges() => _changes.ToArray();
+        public BaseEvent[] GetChanges() => _changes.ToArray();
     }
 }

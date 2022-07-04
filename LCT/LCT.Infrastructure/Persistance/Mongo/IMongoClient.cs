@@ -5,7 +5,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
 {
     public interface IMongoPersistanceClient
     {
-        IMongoCollection<object> TournamentStream { get; }
+        IMongoCollection<BaseEvent> TournamentStream { get; }
     }
 
     public class MongoPersistanceClient : IMongoPersistanceClient
@@ -18,7 +18,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
             _dbName = mongoSettings.DatabaseName;
         }
 
-        public IMongoCollection<object> TournamentStream
-            => _mongoClient.GetDatabase(_dbName).GetCollection<object>("TournamentEvents");
+        public IMongoCollection<BaseEvent> TournamentStream
+            => _mongoClient.GetDatabase(_dbName).GetCollection<BaseEvent>("TournamentEvents");
     }
 }

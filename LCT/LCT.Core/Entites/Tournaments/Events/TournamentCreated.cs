@@ -1,15 +1,17 @@
-﻿using LCT.Core.Entites.Tournaments.ValueObjects;
+﻿using MongoDB.Bson.Serialization.Attributes;
 
 namespace LCT.Core.Entites.Tournaments.Events
 {
+    [BsonIgnoreExtraElements]
+    [BsonDiscriminator("TournamentCreated")]
     public class TournamentCreated : BaseEvent
     {
-        public string Name { get; private set; }
-        public int Limit { get; private set; }
-        public TournamentCreated(string TournamentName, int Limit)
+        public string Name { get; set; }
+        public int Limit { get; set; }
+        public TournamentCreated(string tournamentName, int limit): base(Guid.NewGuid())
         {
-            this.Name = TournamentName;
-            this.Limit = Limit;
+            Name = tournamentName;
+            Limit = limit;
         }
     }
 }

@@ -89,6 +89,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
         {
             var t = new Tournament();
             t.Apply(new TournamentCreated(tournamentName, limit));
+            t.Apply(new Test(Guid.NewGuid()));
             return t;
         }
 
