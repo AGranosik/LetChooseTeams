@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 namespace LCT.IntegrationTests.Teams.IntegrationTests
 {
     [TestFixture]
-    public class GetTeamsNames: Testing<LctDbContext>
+    public class GetTeamsNames: Testing<Tournament>
     {
         public GetTeamsNames() : base()
         {
@@ -79,6 +79,7 @@ namespace LCT.IntegrationTests.Teams.IntegrationTests
         }
 
         private async Task<List<TeamToSelectDto>> GetTeamsNamesQueryHandler(Guid tournamentId)
-            => await new GetTeamsQueryHandler(GetDbContext()).Handle(new GetTeamsQuery() { TournamentId = tournamentId }, new CancellationToken());
+            => null;
+            //=> await new GetTeamsQueryHandler(GetRepository()).Handle(new GetTeamsQuery() { TournamentId = tournamentId }, new CancellationToken());
     }
 }

@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 {
     [TestFixture]
-    public class GetTournamentTests : Testing<LctDbContext>
+    public class GetTournamentTests : Testing<Tournament>
     {
         public GetTournamentTests() : base()
         {
@@ -143,8 +143,9 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
         private async Task<TournamentDto> GetTournamentQueryHandler(GetTournamentQuery request, IQRCodeCreator qrCodeCreator = null)
         {
-            qrCodeCreator ??= _scope.ServiceProvider.GetRequiredService<IQRCodeCreator>();
-            return await new GetTournamentQueryHandler(GetDbContext(), qrCodeCreator).Handle(request, new CancellationToken());
+            return null;
+            //qrCodeCreator ??= _scope.ServiceProvider.GetRequiredService<IQRCodeCreator>();
+            //return await new GetTournamentQueryHandler(GetRepository(), qrCodeCreator).Handle(request, new CancellationToken());
         }
     }
 }

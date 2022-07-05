@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 {
     [TestFixture]
-    public class TournamentCreationTests : Testing<LctDbContext>
+    public class TournamentCreationTests : Testing<Tournament>
     {
         public TournamentCreationTests() : base()
         {
@@ -74,8 +74,9 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
         private Task<List<Tournament>> GetTournaments()
         {
-            var dbContext = GetDbContext();
-            return dbContext.Tournaments.ToListAsync();
+            return null;
+            //var dbContext = GetRepository();
+            //return dbContext.Tournaments.ToListAsync();
         }
 
     }

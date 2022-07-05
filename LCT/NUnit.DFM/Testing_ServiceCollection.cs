@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LCT.Core.Entites;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM.Interfaces;
 
 namespace NUnit.DFM
 {
-    public partial class Testing<TContext> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
-        where TContext : DbContext
+    public partial class Testing<TModel> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
+        where TModel : Aggregate
     {
         public IServiceCollectionSetUp SwapSingleton<TSingleton>(TSingleton singleton)
             where TSingleton : class

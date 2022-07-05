@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 namespace LCT.IntegrationTests.Core.IntegrationTests
 {
     [TestFixture]
-    public class EntityCreationDateTests : Testing<LctDbContext>
+    public class EntityCreationDateTests : Testing<Tournament>
     {
         public EntityCreationDateTests() : base()
         {

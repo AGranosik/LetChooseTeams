@@ -1,17 +1,11 @@
-﻿using LCT.Infrastructure.EF;
+﻿using LCT.Core.Entites;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using NUnit.DFM.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NUnit.DFM
 {
-    public partial class Testing<TContext> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
-        where TContext : DbContext
+    public partial class Testing<TModel> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
+        where TModel : Aggregate
     {
         public IAppConfigurationSetUp Environment(string env)
             => _appConfiguration.Environment(env);

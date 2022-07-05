@@ -18,7 +18,7 @@ using System.Threading.Tasks;
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 {
     [TestFixture]
-    public class TournamentDrawTeamTests : Testing<LctDbContext>
+    public class TournamentDrawTeamTests : Testing<Tournament>
     {
         public TournamentDrawTeamTests() : base()
         {
@@ -85,12 +85,13 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
         private async Task<Tournament> GetTournamentByIdAsync(Guid tournamentId)
         {
-            var context = GetDbContext();
-            return await context.Tournaments
-                .Include(t => t.Players)
-                .Include(t => t.SelectedTeams)
-                .Include(t => t.DrawTeams)
-                .FirstOrDefaultAsync(t => t.Id == tournamentId);
+            return null;
+            //var context = GetRepository();
+            //return await context.Tournaments
+            //    .Include(t => t.Players)
+            //    .Include(t => t.SelectedTeams)
+            //    .Include(t => t.DrawTeams)
+            //    .FirstOrDefaultAsync(t => t.Id == tournamentId);
         }
 
         private async Task<Tournament> CreateCompleteTournament(int limit, int players, int selectedTeams)
@@ -119,7 +120,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         }
 
         private async Task<List<DrawnTeamDto>> DrawTeamQueryHandlerResult(DrawTeamForPlayersQuery query)
-            => await new DrawTeamForPlayersQueryHandler(GetDbContext(), new TournamentDomainService()).Handle(query, CancellationToken.None);
+            => null;
+            //=> await new DrawTeamForPlayersQueryHandler(GetRepository(), new TournamentDomainService()).Handle(query, CancellationToken.None);
         
     }
 }

@@ -1,7 +1,10 @@
 ﻿using LCT.Api;
+using LCT.Core.Entites;
+using LCT.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Driver;
 using NUnit.DFM.Builders;
 using NUnit.DFM.Interfaces;
 using NUnit.Framework;
@@ -9,8 +12,8 @@ using NUnit.Framework;
 namespace NUnit.DFM
 {
     [SetUpFixture]
-    public partial class Testing<TContext>: IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
-        where TContext: DbContext
+    public partial class Testing<TModel>: IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
+        where TModel: Aggregate
     {
         protected IServiceScopeFactory _scopeFactory;
         protected IServiceScope _scope;
@@ -40,21 +43,14 @@ namespace NUnit.DFM
 
             _scopeFactory = _services.BuildServiceProvider().GetService<IServiceScopeFactory>();
             _scope = _scopeFactory.CreateScope();
-            await EnsureDatabase();
-        }
-
-        private async Task EnsureDatabase()
-        {
-            var context = _scope.ServiceProvider.GetService<TContext>();
-
-            await context.Database.MigrateAsync();
         }
 
         [OneTimeTearDown]
         public async Task GlobalTeardown()
         {
-            var context = _scope.ServiceProvider.GetService<TContext>();
-            await context.Database.EnsureDeletedAsync();
+            
+            var context = _scope.ServiceProvider.GetService<IMongoClient>();
+            await context.DropDatabaseAsync("Lct_test");
         }
 
         [SetUp]
@@ -66,34 +62,35 @@ namespace NUnit.DFM
         [TearDown]
         public virtual async Task TearDownAsync()
         {
-            var dbContext = GetDbContext();
-            foreach (var table in _tableToTruncate)
-                await dbContext.Database.ExecuteSqlRawAsync($@"DELETE FROM {table}");
+            var mongoClient = GetMongoClient();
+            await mongoClient.DropDatabaseAsync("Lct_test");
             _scope.Dispose();
         }
 
-        protected Testing<TContext> AddTableToTruncate(string name)
+        protected Testing<TModel> AddTableToTruncate(string name)
         {
             _tableToTruncate.Add(name);
             return this;
         }
 
-        protected Testing<TContext> AddTablesToTruncate(List<string> tables)
+        protected Testing<TModel> AddTablesToTruncate(List<string> tables)
         {
             _tableToTruncate.AddRange(tables);
             return this;
         }
 
-        protected TContext GetDbContext()
+        protected IRepository<TModel> GetRepository()
         {
-            return _scope.ServiceProvider.GetService<TContext>();
+            return _scope.ServiceProvider.GetRequiredService<IRepository<TModel>>();
         }
 
-        protected async Task AddAsync<TEntity>(TEntity entity)
+        protected IMongoClient GetMongoClient()
+            => _scope.ServiceProvider.GetRequiredService<IMongoClient>();
+
+        protected async Task AddAsync(TModel entity)
         {
-            var dbContext = GetDbContext();
-            await dbContext.AddAsync(entity);
-            await dbContext.SaveChangesAsync();
+            var dbContext = GetRepository();
+            await dbContext.Save(entity);
         }
 
     }
