@@ -26,17 +26,17 @@ namespace LCT.Api
             services.AddInfrastructure()
                 .AddApplication();
 
-            BsonClassMap.RegisterClassMap<Test>(cm =>
-            {
-                cm.AutoMap();
-                cm.SetDiscriminator("Test");
-            });
+            //BsonClassMap.RegisterClassMap<Test>(cm =>
+            //{
+            //    cm.AutoMap();
+            //    cm.SetDiscriminator("Test");
+            //});
 
-            BsonClassMap.RegisterClassMap<TournamentCreated>(cm =>
-            {
-                cm.AutoMap();
-                cm.SetDiscriminator("TournamentCreated");
-            });
+            //BsonClassMap.RegisterClassMap<TournamentCreated>(cm =>
+            //{
+            //    cm.AutoMap();
+            //    cm.SetDiscriminator("TournamentCreated");
+            //});
 
             services.AddSignalR();
         }

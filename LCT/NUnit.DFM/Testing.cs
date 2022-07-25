@@ -1,5 +1,6 @@
 ﻿using LCT.Api;
 using LCT.Core.Entites;
+using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -43,6 +44,7 @@ namespace NUnit.DFM
 
             _scopeFactory = _services.BuildServiceProvider().GetService<IServiceScopeFactory>();
             _scope = _scopeFactory.CreateScope();
+
         }
 
         [OneTimeTearDown]
@@ -86,6 +88,9 @@ namespace NUnit.DFM
 
         protected IMongoClient GetMongoClient()
             => _scope.ServiceProvider.GetRequiredService<IMongoClient>();
+
+        protected IRepository<TModel> GetRepository<TModel>()
+            => _scope.ServiceProvider.GetRequiredService<IRepository<TModel>>();
 
         protected async Task AddAsync(TModel entity)
         {

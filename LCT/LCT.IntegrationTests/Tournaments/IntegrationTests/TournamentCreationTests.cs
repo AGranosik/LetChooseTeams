@@ -3,6 +3,7 @@ using LCT.Application.Tournaments.Commands;
 using LCT.Core.Entites.Tournaments.Entities;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Infrastructure.EF;
+using LCT.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using NUnit.DFM;
 using NUnit.Framework;
@@ -66,10 +67,9 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             //await action.Should().ThrowAsync<DbUpdateException>();
         }
 
-        private Task<Guid> CreateTournamenCommandHander(CreateTournamentCommand request)
+        private async Task<Guid> CreateTournamenCommandHander(CreateTournamentCommand request)
         {
-            return null;
-            //return await new CreateTournamentCommandHandler(GetDbContext()).Handle(request, new CancellationToken());
+            return await new CreateTournamentCommandHandler(GetRepository()).Handle(request, new CancellationToken());
         }
 
         private Task<List<Tournament>> GetTournaments()

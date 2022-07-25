@@ -5,7 +5,7 @@ using MongoDB.Driver;
 namespace LCT.Infrastructure.Repositories
 {
     public class AggregateRepository<T> : IRepository<T>
-        where T : Aggregate
+        where T : Aggregate, new ()
     {
         private readonly IMongoPersistanceClient _client;
         public AggregateRepository(IMongoPersistanceClient client)
@@ -14,9 +14,11 @@ namespace LCT.Infrastructure.Repositories
         }
         public async Task<T> Load(Guid Id)
         {
-            var t = await _client.TournamentStream.FindAsync(ts => true);
+            var t = await _client.TournamentStream.FindAsync(ts => ts.EventId == Id);
             var result = t.ToList();
-            return null;
+            var aggregate = new T();
+            aggregate.Load(1, result);
+            return aggregate;
         }
 
         public async Task Save(T model)
