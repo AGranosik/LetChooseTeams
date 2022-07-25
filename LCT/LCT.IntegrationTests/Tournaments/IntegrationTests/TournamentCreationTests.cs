@@ -39,15 +39,10 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
                 Name = "testName",
                 PlayerLimit = 10
             };
-            var action = () => CreateTournamenCommandHander(request);
+            var id = await CreateTournamenCommandHander(request);
 
-            await action.Should().NotThrowAsync();
-
-            var tournaments = await GetTournaments();
-            tournaments.Should().NotBeEmpty();
-            tournaments.Count.Should().Be(1);
-
-            var tournament = tournaments.First();
+            var tournament = await GetTournament(id);
+            tournament.Should().NotBeNull();
             tournament.TournamentName.Value.Should().Be(request.Name);
             tournament.Limit.Limit.Should().Be(request.PlayerLimit);
         }
@@ -72,11 +67,10 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             return await new CreateTournamentCommandHandler(GetRepository()).Handle(request, new CancellationToken());
         }
 
-        private Task<List<Tournament>> GetTournaments()
+        private async Task<Tournament> GetTournament(Guid id)
         {
-            return null;
-            //var dbContext = GetRepository();
-            //return dbContext.Tournaments.ToListAsync();
+            var repository = GetRepository();
+            return await repository.Load(id);
         }
 
     }

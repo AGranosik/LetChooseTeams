@@ -24,8 +24,7 @@ namespace LCT.Application.Tournaments.Commands
 
             var tournament = Tournament.Create(request.Name, request.PlayerLimit);
             await _repository.Save(tournament);
-            var heh = await _repository.Load(tournament.Id);
-            return tournament.Id;
+            return tournament.GetChanges().Last().EventId;
         }
     }
 }
