@@ -50,16 +50,16 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         [Test]
         public async Task Tournament_NameUniqnessChecked_ThrowsAsync()
         {
-            //var tournament = Tournament.Create(new Name("unique"), new TournamentLimit(2));
-            //await AddAsync(tournament);
+            var tournament = Tournament.Create("unique", 2);
+            await AddAsync(tournament);
 
-            //var action = () => CreateTournamenCommandHander(new CreateTournamentCommand
-            //{
-            //    Name = "unique",
-            //    PlayerLimit = 10
-            //});
+            var action = () => CreateTournamenCommandHander(new CreateTournamentCommand
+            {
+                Name = "unique",
+                PlayerLimit = 10
+            });
 
-            //await action.Should().ThrowAsync<DbUpdateException>();
+            await action.Should().ThrowAsync<DbUpdateException>();
         }
 
         private async Task<Guid> CreateTournamenCommandHander(CreateTournamentCommand request)

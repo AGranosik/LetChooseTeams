@@ -48,11 +48,10 @@ namespace NUnit.DFM
         }
 
         [OneTimeTearDown]
-        public async Task GlobalTeardown()
+        public virtual async Task OneTimeTearDown()
         {
-            
-            var context = _scope.ServiceProvider.GetService<IMongoClient>();
-            await context.DropDatabaseAsync("Lct_test");
+            var mongoClient = _services.BuildServiceProvider().GetRequiredService<IMongoClient>();
+            await mongoClient.DropDatabaseAsync("Lct_test");
         }
 
         [SetUp]
@@ -64,8 +63,8 @@ namespace NUnit.DFM
         [TearDown]
         public virtual async Task TearDownAsync()
         {
-            var mongoClient = GetMongoClient();
-            await mongoClient.DropDatabaseAsync("Lct_test");
+            var mongoClient = _scope.ServiceProvider.GetRequiredService<IMongoPersistanceClient>();
+            await mongoClient.TournamentStream.DeleteManyAsync(x => true);
             _scope.Dispose();
         }
 
