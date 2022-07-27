@@ -64,7 +64,7 @@ namespace NUnit.DFM
         public virtual async Task TearDownAsync()
         {
             var mongoClient = _scope.ServiceProvider.GetRequiredService<IMongoPersistanceClient>();
-            await mongoClient.TournamentStream.DeleteManyAsync(x => true);
+            await mongoClient.GetStream("TournamentStream").DeleteManyAsync(x => true);
             _scope.Dispose();
         }
 
