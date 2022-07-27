@@ -14,7 +14,7 @@ namespace LCT.Infrastructure.Repositories
         }
         public async Task<T> Load(Guid Id)
         {
-            var t = await _client.GetStream(nameof(T)).FindAsync(ts => ts.StreamId == Id);
+            var t = await _client.GetStream(typeof(T).Name).FindAsync(ts => ts.StreamId == Id);
             var result = t.ToList();
             var aggregate = new T();
             aggregate.Load(1, result);
@@ -23,7 +23,7 @@ namespace LCT.Infrastructure.Repositories
 
         public async Task Save(T model)
         {
-            await _client.GetStream(nameof(T)).InsertOneAsync(model.GetChanges().Last());
+            await _client.GetStream(typeof(T).Name).InsertOneAsync(model.GetChanges().Last());
         }
     }
 }

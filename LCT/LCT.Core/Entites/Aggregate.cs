@@ -24,6 +24,6 @@ namespace LCT.Core.Entites
                 When(item);
             }
         }
-        public BaseEvent[] GetChanges() => _changes.ToArray();
+        public BaseEvent[] GetChanges() => _changes.OrderBy(c => c.TimeStamp).ToArray();
     }
 }
