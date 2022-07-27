@@ -26,29 +26,30 @@ namespace LCT.Application.Players.Commands
         }
         public async Task<Guid> Handle(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)
         {
-            var tournament = await _dbContext.Tournaments.Include(t => t.Players).FirstOrDefaultAsync(t => t.Id == request.TournamentId, cancellationToken);
-            var player = Player.Register(new Name(request.Name), new Name(request.Surname));
+            return Guid.Empty;
+            //var tournament = await _dbContext.Tournaments.Include(t => t.Players).FirstOrDefaultAsync(t => t.Id == request.TournamentId, cancellationToken);
+            //var player = Player.Register(new Name(request.Name), new Name(request.Surname));
 
-            tournament.AddPlayer(player);
+            //tournament.AddPlayer(player);
 
-            await _dbContext.SaveChangesAsync(cancellationToken);
+            //await _dbContext.SaveChangesAsync(cancellationToken);
 
-            try
-            {
-                await _mediator.Publish(new PlayerAssignedEvent
-                {
-                    TournamentId = request.TournamentId,
-                    Name = request.Name,
-                    Surname = request.Surname,
-                    PlayerId = player.Id
-                });
+            //try
+            //{
+            //    await _mediator.Publish(new PlayerAssignedEvent
+            //    {
+            //        TournamentId = request.TournamentId,
+            //        Name = request.Name,
+            //        Surname = request.Surname,
+            //        PlayerId = player.Id
+            //    });
 
-            }
-            catch (Exception ex)
-            {
+            //}
+            //catch (Exception ex)
+            //{
 
-            }
-            return player.Id;
+            //}
+            //return player.Id;
         }
     }
 

@@ -39,31 +39,32 @@ namespace LCT.Application.Tournaments.Queries
         }
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
-            var tournament = await _dbContext.Tournaments
-                .Where(t => t.Id == request.TournamentId)
-                .Select(t => new TournamentDto
-                    {
-                        Id = t.Id,
-                        TournamentName = t.TournamentName.ToString(),
-                        PlayerLimit = t.Limit.Limit,
-                        Players = t.Players.Select(p => new PlayerDto
-                        {
-                            Id = p.Id,
-                            Name = p.Name,
-                            Surname = p.Surname,
-                            SelectedTeam = t.SelectedTeams.Where(st => st.Player.Id == p.Id).Select(st => st.TeamName).FirstOrDefault(),
-                            DrawnTeam = t.DrawTeams.Where(dt => dt.Player.Id == p.Id).Select(dt => dt.TeamName).FirstOrDefault()
-                        }).ToList()
-                })
-                .FirstOrDefaultAsync(cancellationToken);
+            return null;
+            //var tournament = await _dbContext.Tournaments
+            //    .Where(t => t.Id == request.TournamentId)
+            //    .Select(t => new TournamentDto
+            //        {
+            //            Id = t.Id,
+            //            TournamentName = t.TournamentName.ToString(),
+            //            PlayerLimit = t.Limit.Limit,
+            //            Players = t.Players.Select(p => new PlayerDto
+            //            {
+            //                Id = p.Id,
+            //                Name = p.Name,
+            //                Surname = p.Surname,
+            //                SelectedTeam = t.SelectedTeams.Where(st => st.Player.Id == p.Id).Select(st => st.TeamName).FirstOrDefault(),
+            //                DrawnTeam = t.DrawTeams.Where(dt => dt.Player.Id == p.Id).Select(dt => dt.TeamName).FirstOrDefault()
+            //            }).ToList()
+            //    })
+            //    .FirstOrDefaultAsync(cancellationToken);
 
-            if (tournament == null)
-                throw new EntityDoesNotExist(nameof(Tournament));
+            //if (tournament == null)
+            //    throw new EntityDoesNotExist(nameof(Tournament));
             
-            var feLink = "http://" + IpAdressProvider.GetHostAdress() + ":3000/player/register/" + request.TournamentId;
-            tournament.QRCode = _qrCodeCreator.Generate(feLink);
+            //var feLink = "http://" + IpAdressProvider.GetHostAdress() + ":3000/player/register/" + request.TournamentId;
+            //tournament.QRCode = _qrCodeCreator.Generate(feLink);
 
-            return tournament;
+            //return tournament;
         }
     }
 }

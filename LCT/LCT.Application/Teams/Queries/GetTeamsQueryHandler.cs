@@ -21,10 +21,11 @@ namespace LCT.Application.Teams.Queries
         }
         public async Task<List<TeamToSelectDto>> Handle(GetTeamsQuery request, CancellationToken cancellationToken)
         {
-            var alreadySelected = await _dbContext.Tournaments.Where(t => t.Id == request.TournamentId)
-                .SelectMany(t => t.SelectedTeams).Select(st => st.TeamName).ToListAsync();
+            return null;
+            //var alreadySelected = await _dbContext.Tournaments.Where(t => t.Id == request.TournamentId)
+            //    .SelectMany(t => t.SelectedTeams).Select(st => st.TeamName).ToListAsync();
 
-            return TournamentTeamNames.Teams.Select(t => new TeamToSelectDto(t, alreadySelected.Any(selected => selected.Value == t))).ToList();
+            //return TournamentTeamNames.Teams.Select(t => new TeamToSelectDto(t, alreadySelected.Any(selected => selected.Value == t))).ToList();
         }
         
     }

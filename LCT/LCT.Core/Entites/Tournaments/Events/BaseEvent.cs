@@ -7,10 +7,10 @@ namespace LCT.Core.Entites.Tournaments.Events
     {
         public BaseEvent(Guid id)
         {
-            EventId= id;
+            StreamId= id;
         }
         public string EventType => this.GetType().ToString();
-        public Guid EventId { get; private set; }
-        public DateTime TimeStamp = DateTime.UtcNow;
+        public Guid StreamId { get; private set; }
+        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
     }
 }

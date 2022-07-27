@@ -13,7 +13,6 @@ namespace LCT.Core.Entites.Tournaments.Entities
         {
             Limit = limit;
             TournamentName = tournamentName;
-            Id = Guid.NewGuid();
         }
         public Name TournamentName { get; private set; }
         private List<Player> _players = new List<Player>();
@@ -88,7 +87,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
         public static Tournament Create(string tournamentName, int limit)
         {
             var t = new Tournament();
-            t.Apply(new TournamentCreated(tournamentName, limit));
+            t.Apply(new TournamentCreated(tournamentName, limit, Guid.NewGuid()));
             return t;
         }
 
@@ -106,7 +105,6 @@ namespace LCT.Core.Entites.Tournaments.Entities
         {
             TournamentName = tc.Name;
             Limit = tc.Limit;
-            Id = Guid.NewGuid();
         }
     }
 }

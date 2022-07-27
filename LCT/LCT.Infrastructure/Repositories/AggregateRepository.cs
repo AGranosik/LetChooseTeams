@@ -14,7 +14,7 @@ namespace LCT.Infrastructure.Repositories
         }
         public async Task<T> Load(Guid Id)
         {
-            var t = await _client.TournamentStream.FindAsync(ts => ts.EventId == Id);
+            var t = await _client.TournamentStream.FindAsync(ts => ts.StreamId == Id);
             var result = t.ToList();
             var aggregate = new T();
             aggregate.Load(1, result);

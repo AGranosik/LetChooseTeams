@@ -5,7 +5,6 @@ namespace LCT.Core.Entites
     public abstract class Aggregate
     {
         private readonly IList<BaseEvent> _changes = new List<BaseEvent>();
-        public Guid Id { get; protected set; } = Guid.Empty;
         public long Version { get; private set; } = -1;
 
         protected abstract void When(object @event);
