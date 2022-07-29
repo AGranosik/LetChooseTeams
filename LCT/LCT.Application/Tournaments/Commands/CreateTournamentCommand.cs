@@ -21,7 +21,9 @@ namespace LCT.Application.Tournaments.Commands
 
         public async Task<Guid> Handle(CreateTournamentCommand request, CancellationToken cancellationToken)
         {
-
+            // find a way to check uniqness of name
+            // db constraint isnt great solution because there can be more than per entity
+            // proxy collection? But how the fuck implement that
             var tournament = Tournament.Create(request.Name, request.PlayerLimit);
             await _repository.Save(tournament);
             return tournament.GetChanges().Last().StreamId;
