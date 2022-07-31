@@ -1,22 +1,10 @@
-﻿using FluentAssertions;
-using LCT.Application.Players.Commands;
-using LCT.Application.Tournaments.Hubs;
-using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entites.Tournaments.Exceptions;
-using LCT.Core.Entites.Tournaments.ValueObjects;
-using LCT.Infrastructure.EF;
+﻿using LCT.Core.Entites.Tournaments.Entities;
 using MediatR;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using Moq;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
-using LCT.IntegrationTests.Mocks;
-using LCT.Application.Players.Events;
 
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 {
@@ -25,12 +13,6 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
     {
         public TournamentAssignePlayerTests()
         {
-            AddTablesToTruncate(new List<string>
-            {
-                nameof(LctDbContext.Players),
-                nameof(LctDbContext.Tournaments)
-            });
-
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();

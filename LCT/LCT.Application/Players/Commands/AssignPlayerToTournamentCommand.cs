@@ -1,9 +1,4 @@
-﻿using LCT.Application.Players.Events;
-using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entites.Tournaments.ValueObjects;
-using LCT.Infrastructure.EF;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
 
 namespace LCT.Application.Players.Commands
 {
@@ -17,11 +12,9 @@ namespace LCT.Application.Players.Commands
     public record PlayerAssignedMessageDto(Guid Id, string Name, string Surname);
     public class AssignPlayerToTournamentCommandHandler : IRequestHandler<AssignPlayerToTournamentCommand, Guid>
     {
-        private readonly LctDbContext _dbContext;
         private readonly IMediator _mediator;
-        public AssignPlayerToTournamentCommandHandler(LctDbContext dbContext, IMediator mediator)
+        public AssignPlayerToTournamentCommandHandler(IMediator mediator)
         {
-            _dbContext = dbContext;
             _mediator = mediator;
         }
         public async Task<Guid> Handle(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)

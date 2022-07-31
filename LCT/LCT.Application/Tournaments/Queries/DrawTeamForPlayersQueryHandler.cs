@@ -1,8 +1,5 @@
-﻿using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entites.Tournaments.Services;
-using LCT.Infrastructure.EF;
+﻿using LCT.Core.Entites.Tournaments.Services;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Application.Tournaments.Queries
 {
@@ -14,11 +11,9 @@ namespace LCT.Application.Tournaments.Queries
     public record DrawnTeamDto(Guid playerId, string teamName);
     public class DrawTeamForPlayersQueryHandler : IRequestHandler<DrawTeamForPlayersQuery, List<DrawnTeamDto>>
     {
-        private readonly LctDbContext _dbContext;
         private readonly ITournamentDomainService _tournamentDomainService;
-        public DrawTeamForPlayersQueryHandler(LctDbContext dbContext, ITournamentDomainService tournamentDomainService)
+        public DrawTeamForPlayersQueryHandler(ITournamentDomainService tournamentDomainService)
         {
-            _dbContext = dbContext;
             _tournamentDomainService = tournamentDomainService;
         }
         public async Task<List<DrawnTeamDto>> Handle(DrawTeamForPlayersQuery request, CancellationToken cancellationToken)

@@ -2,17 +2,11 @@
 using LCT.Application.Common;
 using LCT.Application.Tournaments.Queries;
 using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entites.Tournaments.ValueObjects;
-using LCT.Core.Entities.Tournaments.Types;
 using LCT.Core.Shared.Exceptions;
-using LCT.Infrastructure.EF;
-using Microsoft.Extensions.DependencyInjection;
-using Moq;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests
@@ -22,14 +16,6 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
     {
         public GetTournamentTests() : base()
         {
-            AddTablesToTruncate(new List<string>
-            {
-                nameof(LctDbContext.DrawnTeams),
-                nameof(LctDbContext.SelectedTeams),
-                nameof(LctDbContext.Players),
-                nameof(LctDbContext.Tournaments),
-            });
-
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();

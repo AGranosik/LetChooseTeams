@@ -1,9 +1,5 @@
 ﻿using LCT.Application.Common;
-using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Shared.Exceptions;
-using LCT.Infrastructure.EF;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Application.Tournaments.Queries
 {
@@ -30,11 +26,9 @@ namespace LCT.Application.Tournaments.Queries
     }
     public class GetTournamentQueryHandler : IRequestHandler<GetTournamentQuery, TournamentDto>
     {
-        private readonly LctDbContext _dbContext;
         private readonly IQRCodeCreator _qrCodeCreator;
-        public GetTournamentQueryHandler(LctDbContext dbContext, IQRCodeCreator qRCodeCreator)
+        public GetTournamentQueryHandler(IQRCodeCreator qRCodeCreator)
         {
-            _dbContext = dbContext;
             _qrCodeCreator = qRCodeCreator;
         }
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)

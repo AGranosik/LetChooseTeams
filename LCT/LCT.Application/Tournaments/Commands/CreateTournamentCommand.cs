@@ -1,5 +1,4 @@
 ﻿using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Infrastructure.EF;
 using LCT.Infrastructure.Repositories;
 using MediatR;
 

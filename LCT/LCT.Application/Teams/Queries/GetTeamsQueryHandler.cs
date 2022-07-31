@@ -1,9 +1,4 @@
-﻿using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entities.Tournaments.Types;
-using LCT.Core.Shared.Exceptions;
-using LCT.Infrastructure.EF;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
 
 namespace LCT.Application.Teams.Queries
 {
@@ -14,10 +9,8 @@ namespace LCT.Application.Teams.Queries
     }
     public class GetTeamsQueryHandler : IRequestHandler<GetTeamsQuery, List<TeamToSelectDto>>
     {
-        private readonly LctDbContext _dbContext;
-        public GetTeamsQueryHandler(LctDbContext dbContext)
+        public GetTeamsQueryHandler()
         {
-            _dbContext = dbContext;
         }
         public async Task<List<TeamToSelectDto>> Handle(GetTeamsQuery request, CancellationToken cancellationToken)
         {

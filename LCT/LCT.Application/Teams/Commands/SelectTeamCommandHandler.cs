@@ -1,7 +1,4 @@
-﻿using LCT.Application.Teams.Events;
-using LCT.Infrastructure.EF;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+﻿using MediatR;
 
 namespace LCT.Application.Teams.Commands
 {
@@ -15,11 +12,9 @@ namespace LCT.Application.Teams.Commands
     public record SelectTeamMessageDto(Guid playerId, string team);
     public class SelectTeamCommandHandler : IRequestHandler<SelectTeamCommand>
     {
-        private readonly LctDbContext _dbContext;
         private readonly IMediator _mediator;
-        public SelectTeamCommandHandler(LctDbContext dbContext, IMediator mediator)
+        public SelectTeamCommandHandler(IMediator mediator)
         {
-            _dbContext = dbContext;
             _mediator = mediator;
         }
         public async Task<Unit> Handle(SelectTeamCommand request, CancellationToken cancellationToken)

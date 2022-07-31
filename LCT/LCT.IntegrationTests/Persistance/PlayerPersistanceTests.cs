@@ -1,12 +1,6 @@
-﻿using FluentAssertions;
-using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entites.Tournaments.ValueObjects;
-using LCT.Infrastructure.EF;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
+﻿using LCT.Core.Entites.Tournaments.Entities;
 using NUnit.DFM;
 using NUnit.Framework;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace LCT.IntegrationTests.Persistance
@@ -17,9 +11,6 @@ namespace LCT.IntegrationTests.Persistance
 
         public PlayerPersistanceTests()
         {
-            AddTableToTruncate(nameof(LctDbContext.Players));
-            AddTableToTruncate(nameof(LctDbContext.Tournaments));
-
             this.Environment("Development")
             .ProjectName("LCT.Api")
             .Build();

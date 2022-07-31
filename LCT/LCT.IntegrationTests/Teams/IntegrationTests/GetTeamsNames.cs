@@ -1,16 +1,11 @@
 ﻿using FluentAssertions;
 using LCT.Application.Teams.Queries;
 using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entites.Tournaments.ValueObjects;
-using LCT.Core.Entities.Tournaments.Types;
 using LCT.Core.Shared.Exceptions;
-using LCT.Infrastructure.EF;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace LCT.IntegrationTests.Teams.IntegrationTests

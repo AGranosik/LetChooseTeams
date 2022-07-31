@@ -1,7 +1,4 @@
-﻿using EventStore.ClientAPI;
-using LCT.Infrastructure.EF;
-using LCT.Infrastructure.EventSourcing;
-using LCT.Infrastructure.Persistance.Mongo;
+﻿using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -13,13 +10,7 @@ namespace LCT.Infrastructure
     public static class Extensions
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
-        {
-            var options = services.GetOptions<EfOptions>("sql");
-            services.AddDbContext<LctDbContext>(x => x.UseSqlServer(options.ConnectionString), ServiceLifetime.Singleton)
-                .ConfigureMongo();
-
-            return services;
-        }
+            => services.ConfigureMongo();
 
         private static IServiceCollection ConfigureMongo(this IServiceCollection services)
         {
