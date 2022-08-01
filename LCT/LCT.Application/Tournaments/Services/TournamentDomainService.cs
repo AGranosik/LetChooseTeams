@@ -1,10 +1,17 @@
 ﻿using LCT.Core.Entites.Tournaments.Entities;
+using LCT.Core.Entites.Tournaments.Exceptions;
 using LCT.Core.Extensions;
+using LCT.Infrastructure.Persistance.Mongo;
 
 namespace LCT.Core.Entites.Tournaments.Services
 {
     public class TournamentDomainService : ITournamentDomainService
     {
+        private readonly IPersistanceClient _dbContext;
+        public TournamentDomainService(IPersistanceClient dbContext)
+        {
+            _dbContext = dbContext;
+        }
         public List<DrawnTeam> DrawTeamForPlayers(List<SelectedTeam> selectedTeams)
         {
             var playerList = selectedTeams
@@ -22,6 +29,13 @@ namespace LCT.Core.Entites.Tournaments.Services
                 return DrawTeamForPlayers(selectedTeams);
 
             return result;
+        }
+
+        public async Task ValidateAsync(Tournament tournament)
+        {
+            var isNameUnique = await _dbContext.CheckUniqness(nameof(Tournament), nameof(Tournament.TournamentName), tournament.TournamentName);
+            if (!isNameUnique)
+                throw new TournamentNameNotUniqueException();
         }
     }
 }

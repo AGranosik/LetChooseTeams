@@ -18,7 +18,7 @@ namespace LCT.Infrastructure
             var mongoClient = new MongoClient(mongoConfig.ConnectionString);
             services.AddSingleton(mongoConfig);
             services.AddSingleton<IMongoClient>(mongoClient);
-            services.AddSingleton<IMongoPersistanceClient, MongoPersistanceClient>();
+            services.AddSingleton<IPersistanceClient, MongoPersistanceClient>();
             services.AddSingleton(typeof(IRepository<>), typeof(AggregateRepository<>));
             return services;
         }

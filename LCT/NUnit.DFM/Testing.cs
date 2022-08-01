@@ -1,5 +1,6 @@
 ﻿using LCT.Api;
 using LCT.Core.Entites;
+using LCT.Core.Entites.Tournaments.Services;
 using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
@@ -63,7 +64,7 @@ namespace NUnit.DFM
         [TearDown]
         public virtual async Task TearDownAsync()
         {
-            var mongoClient = _scope.ServiceProvider.GetRequiredService<IMongoPersistanceClient>();
+            var mongoClient = _scope.ServiceProvider.GetRequiredService<IPersistanceClient>();
             await mongoClient.GetStream("TournamentStream").DeleteManyAsync(x => true);
             _scope.Dispose();
         }
@@ -83,6 +84,11 @@ namespace NUnit.DFM
         protected IRepository<TModel> GetRepository()
         {
             return _scope.ServiceProvider.GetRequiredService<IRepository<TModel>>();
+        }
+
+        protected ITournamentDomainService GetTournamentDomainService()
+        {
+            return _scope.ServiceProvider.GetRequiredService<ITournamentDomainService>();
         }
 
         protected IMongoClient GetMongoClient()

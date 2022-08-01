@@ -7,8 +7,8 @@ namespace LCT.Infrastructure.Repositories
     public class AggregateRepository<T> : IRepository<T>
         where T : Aggregate, new ()
     {
-        private readonly IMongoPersistanceClient _client;
-        public AggregateRepository(IMongoPersistanceClient client)
+        private readonly IPersistanceClient _client;
+        public AggregateRepository(IPersistanceClient client)
         {
             _client = client;
         }

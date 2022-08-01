@@ -1,4 +1,5 @@
 ﻿using LCT.Core.Entites.Tournaments.Entities;
+using LCT.Core.Entites.Tournaments.Services;
 using LCT.Infrastructure.Repositories;
 using MediatR;
 
@@ -13,17 +14,17 @@ namespace LCT.Application.Tournaments.Commands
     public class CreateTournamentCommandHandler : IRequestHandler<CreateTournamentCommand, Guid>
     {
         private readonly IRepository<Tournament> _repository;
-        public CreateTournamentCommandHandler(IRepository<Tournament> repository)
+        private readonly ITournamentDomainService _tournamentService;
+        public CreateTournamentCommandHandler(IRepository<Tournament> repository, ITournamentDomainService domainService)
         {
             _repository = repository;
+            _tournamentService = domainService;
         }
 
         public async Task<Guid> Handle(CreateTournamentCommand request, CancellationToken cancellationToken)
         {
-            // find a way to check uniqness of name
-            // db constraint isnt great solution because there can be more than per entity
-            // proxy collection? But how the fuck implement that
             var tournament = Tournament.Create(request.Name, request.PlayerLimit);
+            await _tournamentService.ValidateAsync(tournament); // Czy nie przeniesc tego gdzieś, bo wtedy mozna tego nie uzyc i nie wymuszam tego na devie...
             await _repository.Save(tournament);
             return tournament.GetChanges().Last().StreamId;
         }
