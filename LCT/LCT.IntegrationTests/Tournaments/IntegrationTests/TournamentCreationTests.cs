@@ -40,9 +40,17 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         [Test]
         public async Task Tournament_NameUniqnessChecked_ThrowsAsync()
         {
-            var tournament = Tournament.Create("unique", 2);
-            await AddAsync(tournament);
+            var hehe = await CreateTournamenCommandHander(new CreateTournamentCommand
+            {
+                Name = "unique",
+                PlayerLimit = 10
+            });
 
+            var hehe2 = await CreateTournamenCommandHander(new CreateTournamentCommand
+            {
+                Name = "unique",
+                PlayerLimit = 10
+            });
             var action = () => CreateTournamenCommandHander(new CreateTournamentCommand
             {
                 Name = "unique",

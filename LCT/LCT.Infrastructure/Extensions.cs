@@ -1,4 +1,5 @@
-﻿using LCT.Infrastructure.Persistance.Mongo;
+﻿using LCT.Core.Entites.Tournaments.ValueObjects;
+using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -20,7 +21,15 @@ namespace LCT.Infrastructure
             services.AddSingleton<IMongoClient>(mongoClient);
             services.AddSingleton<IPersistanceClient, MongoPersistanceClient>();
             services.AddSingleton(typeof(IRepository<>), typeof(AggregateRepository<>));
+            AddIndexes(mongoClient, mongoConfig.DatabaseName);
             return services;
+        }
+
+        private static void AddIndexes(MongoClient client, string dbName)
+        {
+            var index = Builders<Name>.IndexKeys.Ascending(x => x.Value);
+            client.GetDatabase(dbName).GetCollection<Name>("Tournament_TournamentName_index")
+                .Indexes.CreateOne(index);
         }
         public static T GetOptions<T>(this IServiceCollection services, string sectionName) where T : new()
         {
