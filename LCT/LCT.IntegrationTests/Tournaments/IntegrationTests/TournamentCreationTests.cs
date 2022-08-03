@@ -1,6 +1,7 @@
 using FluentAssertions;
 using LCT.Application.Tournaments.Commands;
 using LCT.Core.Entites.Tournaments.Entities;
+using LCT.Core.Entites.Tournaments.Exceptions;
 using Microsoft.EntityFrameworkCore;
 using NUnit.DFM;
 using NUnit.Framework;
@@ -45,19 +46,13 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
                 Name = "unique",
                 PlayerLimit = 10
             });
-
-            var hehe2 = await CreateTournamenCommandHander(new CreateTournamentCommand
-            {
-                Name = "unique",
-                PlayerLimit = 10
-            });
             var action = () => CreateTournamenCommandHander(new CreateTournamentCommand
             {
                 Name = "unique",
                 PlayerLimit = 10
             });
 
-            await action.Should().ThrowAsync<DbUpdateException>();
+            await action.Should().ThrowAsync<TournamentNameNotUniqueException>();
         }
 
         private async Task<Guid> CreateTournamenCommandHander(CreateTournamentCommand request)

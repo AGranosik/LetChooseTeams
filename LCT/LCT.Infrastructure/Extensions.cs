@@ -4,6 +4,7 @@ using LCT.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace LCT.Infrastructure
@@ -25,11 +26,11 @@ namespace LCT.Infrastructure
             return services;
         }
 
-        private static void AddIndexes(MongoClient client, string dbName)
+        private static async Task AddIndexes(MongoClient client, string dbName)
         {
-            var index = Builders<Name>.IndexKeys.Ascending(x => x.Value);
-            client.GetDatabase(dbName).GetCollection<Name>("Tournament_TournamentName_index")
-                .Indexes.CreateOne(index);
+            var indexModel = new CreateIndexModel<Name>(new BsonDocument("Value", 1), new CreateIndexOptions { Unique = true });
+            await client.GetDatabase(dbName).GetCollection<Name>("Tournament_TournamentName_index")
+                .Indexes.CreateOneAsync(indexModel);
         }
         public static T GetOptions<T>(this IServiceCollection services, string sectionName) where T : new()
         {
