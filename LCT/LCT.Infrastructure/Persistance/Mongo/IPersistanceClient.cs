@@ -1,4 +1,6 @@
 ﻿using LCT.Core.Entites.Tournaments.Events;
+using LCT.Core.Entites.Tournaments.ValueObjects;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace LCT.Infrastructure.Persistance.Mongo
@@ -7,6 +9,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
     {
         IMongoCollection<BaseEvent> GetStream(string streamName);
         Task<bool> CheckUniqness<T>(string entity, string fieldName, T value);
+        void Configure();
     }
 
     public class MongoPersistanceClient : IPersistanceClient
@@ -17,6 +20,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
         {
             _mongoClient = mongoClient;
             _dbName = mongoSettings.DatabaseName;
+            Configure();
         }
 
         public IMongoCollection<BaseEvent> GetStream(string streamName)
@@ -34,6 +38,14 @@ namespace LCT.Infrastructure.Persistance.Mongo
             {
                 return false;
             }
+        }
+
+        public void Configure()
+        {
+            // rule i zczytywac refleksja? w sumie to testy sa gwarancje implementacji tego?
+            var indexModel = new CreateIndexModel<Name>(new BsonDocument("Value", 1), new CreateIndexOptions { Unique = true });
+            _mongoClient.GetDatabase(_dbName).GetCollection<Name>("Tournament_TournamentName_index")
+                .Indexes.CreateOne(indexModel);
         }
     }
 }

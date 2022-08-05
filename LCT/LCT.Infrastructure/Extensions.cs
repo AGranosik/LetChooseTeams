@@ -26,11 +26,12 @@ namespace LCT.Infrastructure
             return services;
         }
 
-        private static async Task AddIndexes(MongoClient client, string dbName)
+        private static void AddIndexes(MongoClient client, string dbName)
         {
+            // move to persistance layer (interface)
             var indexModel = new CreateIndexModel<Name>(new BsonDocument("Value", 1), new CreateIndexOptions { Unique = true });
-            await client.GetDatabase(dbName).GetCollection<Name>("Tournament_TournamentName_index")
-                .Indexes.CreateOneAsync(indexModel);
+            client.GetDatabase(dbName).GetCollection<Name>("Tournament_TournamentName_index")
+                .Indexes.CreateOne(indexModel);
         }
         public static T GetOptions<T>(this IServiceCollection services, string sectionName) where T : new()
         {
