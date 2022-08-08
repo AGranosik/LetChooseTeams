@@ -1,4 +1,8 @@
-﻿using MediatR;
+﻿using LCT.Application.Players.Events;
+using LCT.Core.Entites.Tournaments.Entities;
+using LCT.Core.Entites.Tournaments.ValueObjects;
+using LCT.Infrastructure.Repositories;
+using MediatR;
 
 namespace LCT.Application.Players.Commands
 {
@@ -13,36 +17,37 @@ namespace LCT.Application.Players.Commands
     public class AssignPlayerToTournamentCommandHandler : IRequestHandler<AssignPlayerToTournamentCommand, Guid>
     {
         private readonly IMediator _mediator;
-        public AssignPlayerToTournamentCommandHandler(IMediator mediator)
+        private readonly IRepository<Tournament> _repository;
+        public AssignPlayerToTournamentCommandHandler(IMediator mediator, IRepository<Tournament> reposiotry)
         {
             _mediator = mediator;
+            _repository = reposiotry;
         }
         public async Task<Guid> Handle(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)
         {
-            return Guid.Empty;
-            //var tournament = await _dbContext.Tournaments.Include(t => t.Players).FirstOrDefaultAsync(t => t.Id == request.TournamentId, cancellationToken);
-            //var player = Player.Register(new Name(request.Name), new Name(request.Surname));
+            var tournament = await _repository.Load(request.TournamentId);
+            var player = Player.Register(new Name(request.Name), new Name(request.Surname));
 
-            //tournament.AddPlayer(player);
+            tournament.AddPlayer(player);
 
-            //await _dbContext.SaveChangesAsync(cancellationToken);
+            await _repository.Save(tournament);
 
-            //try
-            //{
-            //    await _mediator.Publish(new PlayerAssignedEvent
-            //    {
-            //        TournamentId = request.TournamentId,
-            //        Name = request.Name,
-            //        Surname = request.Surname,
-            //        PlayerId = player.Id
-            //    });
+            try
+            {
+                await _mediator.Publish(new PlayerAssignedEvent
+                {
+                    TournamentId = request.TournamentId,
+                    Name = request.Name,
+                    Surname = request.Surname,
+                    PlayerId = player.Id
+                });
 
-            //}
-            //catch (Exception ex)
-            //{
+            }
+            catch (Exception ex)
+            {
 
-            //}
-            //return player.Id;
+            }
+            return player.Id;
         }
     }
 

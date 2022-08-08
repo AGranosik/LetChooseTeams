@@ -24,7 +24,7 @@ namespace LCT.Application.Tournaments.Commands
         public async Task<Guid> Handle(CreateTournamentCommand request, CancellationToken cancellationToken)
         {
             var tournament = Tournament.Create(request.Name, request.PlayerLimit);
-            await _tournamentService.ValidateAsync(tournament); // Czy nie przeniesc tego gdzieś, bo wtedy mozna tego nie uzyc i nie wymuszam tego na devie...
+            await _tournamentService.ValidateAsync(tournament); 
             await _repository.Save(tournament);
             return tournament.GetChanges().Last().StreamId;
         }

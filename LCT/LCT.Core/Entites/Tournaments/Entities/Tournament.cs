@@ -14,6 +14,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
             Limit = limit;
             TournamentName = tournamentName;
         }
+        private Guid Id { get; set; }
         public Name TournamentName { get; private set; }
         private List<Player> _players = new List<Player>();
         public IReadOnlyCollection<Player> Players => _players;
@@ -24,12 +25,11 @@ namespace LCT.Core.Entites.Tournaments.Entities
         public TournamentLimit Limit { get; private set; }
         public int NumberOfPlayers => _players.Count;
 
-        public IReadOnlyCollection<Player> AddPlayer(Player player)
+        public void AddPlayer(Player player)
         {
             CheckIfPlayerAlreadyExists(player);
             Limit.ChceckIfPlayerCanBeAdded(NumberOfPlayers);
-            _players.Add(player);
-            return Players;
+            Apply(new PlayerAdded(player.Name, player.Surname, Id));
         }
 
         private void CheckIfPlayerAlreadyExists(Player player)
@@ -98,13 +98,22 @@ namespace LCT.Core.Entites.Tournaments.Entities
                 case TournamentCreated tc:
                     OnCreated(tc);
                     break;
+                case PlayerAdded pa:
+                    OnPlayerAdded(pa);
+                    break;
             }
+        }
+
+        private void OnPlayerAdded(PlayerAdded pa)
+        {
+            _players.Add(Player.Register(pa.Name, pa.Surname));
         }
 
         private void OnCreated(TournamentCreated tc)
         {
             TournamentName = tc.Name;
             Limit = tc.Limit;
+            Id = tc.StreamId;
         }
     }
 }

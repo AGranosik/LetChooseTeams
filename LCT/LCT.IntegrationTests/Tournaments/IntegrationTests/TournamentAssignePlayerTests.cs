@@ -1,4 +1,5 @@
-﻿using LCT.Core.Entites.Tournaments.Entities;
+﻿using LCT.Application.Players.Commands;
+using LCT.Core.Entites.Tournaments.Entities;
 using MediatR;
 using NUnit.DFM;
 using NUnit.Framework;
@@ -23,7 +24,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         {
             //var tournament = await CreateTournament();
             //var action = () => AssignPlayerCommandHandleAsync("name", "surname", tournament.Id, IMediatorMock.GetMock());
-            
+
             //await action.Should().NotThrowAsync();
 
             //var tournamentFromDb = await GetTournamentById(tournament.Id);

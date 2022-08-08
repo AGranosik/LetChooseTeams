@@ -42,7 +42,6 @@ namespace LCT.Infrastructure.Persistance.Mongo
 
         public void Configure()
         {
-            // rule i zczytywac refleksja? w sumie to testy sa gwarancje implementacji tego?
             var indexModel = new CreateIndexModel<Name>(new BsonDocument("Value", 1), new CreateIndexOptions { Unique = true });
             _mongoClient.GetDatabase(_dbName).GetCollection<Name>("Tournament_TournamentName_index")
                 .Indexes.CreateOne(indexModel);
