@@ -25,11 +25,15 @@ namespace LCT.Core.Entites.Tournaments.Entities
         public TournamentLimit Limit { get; private set; }
         public int NumberOfPlayers => _players.Count;
 
-        public void AddPlayer(Player player)
+        public Guid AddPlayer(string name, string surname)
         {
+            var playerId = Guid.NewGuid();
+            var player = Player.Register(name, surname, playerId);
             CheckIfPlayerAlreadyExists(player);
             Limit.ChceckIfPlayerCanBeAdded(NumberOfPlayers);
-            Apply(new PlayerAdded(player.Name, player.Surname, Id));
+            Apply(new PlayerAdded(player.Name, player.Surname, Id, playerId));
+
+            return playerId;
         }
 
         private void CheckIfPlayerAlreadyExists(Player player)
@@ -106,7 +110,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
 
         private void OnPlayerAdded(PlayerAdded pa)
         {
-            _players.Add(Player.Register(pa.Name, pa.Surname));
+            _players.Add(Player.Register(pa.Name, pa.Surname, pa.Id));
         }
 
         private void OnCreated(TournamentCreated tc)
@@ -114,6 +118,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
             TournamentName = tc.Name;
             Limit = tc.Limit;
             Id = tc.StreamId;
+            // jak dodawaćte dodatkowe dane typu Id i timestamp
         }
     }
 }

@@ -8,7 +8,7 @@ namespace LCT.Core.Entites.Tournaments.Events
     {
         public string Name { get; set; }
         public int Limit { get; set; }
-        public TournamentCreated(string tournamentName, int limit, Guid streamId): base(streamId)
+        public TournamentCreated(string tournamentName, int limit, Guid streamId): base(streamId, streamId)
         {
             Name = tournamentName;
             Limit = limit;

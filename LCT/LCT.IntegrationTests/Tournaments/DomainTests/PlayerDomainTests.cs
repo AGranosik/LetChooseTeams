@@ -16,8 +16,8 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
         [Test]
         public void EqualityTest_DifferentSurname_ReturnFalse()
         {
-            var player1 = Player.Register(new Name("test"), new Name("test"));
-            var player2 = Player.Register(new Name("test"), new Name("test2"));
+            var player1 = Player.Register("test", "test", Guid.NewGuid());
+            var player2 = Player.Register("test", "test2", Guid.NewGuid());
 
             (player1 == player2).Should().BeFalse();
         }
@@ -25,8 +25,8 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
         [Test]
         public void EqualityTest_DifferentNameSurname_ReturnFalse()
         {
-            var player1 = Player.Register(new Name("test"), new Name("test"));
-            var player2 = Player.Register(new Name("test2"), new Name("test2"));
+            var player1 = Player.Register("test", "test", Guid.NewGuid());
+            var player2 = Player.Register("test", "test2", Guid.NewGuid());
 
             (player1 == player2).Should().BeFalse();
         }
@@ -34,8 +34,8 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
         [Test]
         public void EqualityTest_ReturnTrue()
         {
-            var player1 = Player.Register(new Name("test"), new Name("test"));
-            var player2 = Player.Register(new Name("test"), new Name("test"));
+            var player1 = Player.Register("test", "test", Guid.NewGuid());
+            var player2 = Player.Register("test", "test", Guid.NewGuid());
 
             (player1 == player2).Should().BeTrue();
         }

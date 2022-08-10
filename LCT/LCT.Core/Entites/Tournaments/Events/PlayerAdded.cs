@@ -8,7 +8,7 @@ namespace LCT.Core.Entites.Tournaments.Events
     {
         public string Name { get; private set; }
         public string Surname { get; private set; }
-        public PlayerAdded(string name, string surname, Guid streamId) : base(streamId)
+        public PlayerAdded(string name, string surname, Guid streamId, Guid id) : base(streamId, id)
         {
             Name = name;
             Surname = surname;

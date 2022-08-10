@@ -26,9 +26,7 @@ namespace LCT.Application.Players.Commands
         public async Task<Guid> Handle(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)
         {
             var tournament = await _repository.Load(request.TournamentId);
-            var player = Player.Register(new Name(request.Name), new Name(request.Surname));
-
-            tournament.AddPlayer(player);
+            var playerId = tournament.AddPlayer(request.Name, request.Surname);
 
             await _repository.Save(tournament);
             await _mediator.Publish(new PlayerAssignedEvent
@@ -36,9 +34,9 @@ namespace LCT.Application.Players.Commands
                 TournamentId = request.TournamentId,
                 Name = request.Name,
                 Surname = request.Surname,
-                PlayerId = player.Id
+                PlayerId = playerId
             });
-            return player.Id;
+            return playerId;
         }
     }
 

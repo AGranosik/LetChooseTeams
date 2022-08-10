@@ -105,7 +105,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.Services
             var result = new List<Player>();
             for(int i = 0; i < numberOfPlayers; i++)
             {
-                result.Add(Player.Register(new Name(i.ToString()), new Name(i.ToString())));
+                result.Add(Player.Register(i.ToString(), i.ToString(), Guid.NewGuid()));
             }
             return result;
         }

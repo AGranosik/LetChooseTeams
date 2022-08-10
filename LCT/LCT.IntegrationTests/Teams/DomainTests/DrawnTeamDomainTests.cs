@@ -10,7 +10,7 @@ namespace LCT.IntegrationTests.Teams.DomainTests
 {
     public class DrawnTeamDomainTests
     {
-        private readonly Player _player = Player.Register(new Name("sdasd"), new Name("hehe"));
+        private readonly Player _player = Player.Register("sdasd", "hehe", Guid.NewGuid());
 
         [Test]
         public void TeamNameCannotBeEmpty()

@@ -4,6 +4,7 @@ using LCT.Core.Entites.Tournaments.Entities;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 using NUnit.DFM;
 using NUnit.Framework;
+using System;
 using System.Threading.Tasks;
 
 namespace LCT.IntegrationTests.Core.IntegrationTests
@@ -40,7 +41,7 @@ namespace LCT.IntegrationTests.Core.IntegrationTests
         [Test]
         public void PlayerIsEntityType()
         {
-            var player = Player.Register(new Name("sss"), new Name("hehe"));
+            var player = Player.Register("sss", "hehe", Guid.NewGuid());
             (player is Entity).Should().BeTrue();
         }
 
