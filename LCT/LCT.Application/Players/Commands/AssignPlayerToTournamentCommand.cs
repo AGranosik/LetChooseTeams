@@ -31,22 +31,13 @@ namespace LCT.Application.Players.Commands
             tournament.AddPlayer(player);
 
             await _repository.Save(tournament);
-
-            try
+            await _mediator.Publish(new PlayerAssignedEvent
             {
-                await _mediator.Publish(new PlayerAssignedEvent
-                {
-                    TournamentId = request.TournamentId,
-                    Name = request.Name,
-                    Surname = request.Surname,
-                    PlayerId = player.Id
-                });
-
-            }
-            catch (Exception ex)
-            {
-
-            }
+                TournamentId = request.TournamentId,
+                Name = request.Name,
+                Surname = request.Surname,
+                PlayerId = player.Id
+            });
             return player.Id;
         }
     }

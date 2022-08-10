@@ -14,7 +14,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
             Limit = limit;
             TournamentName = tournamentName;
         }
-        private Guid Id { get; set; }
+        public Guid Id { get; private set; }
         public Name TournamentName { get; private set; }
         private List<Player> _players = new List<Player>();
         public IReadOnlyCollection<Player> Players => _players;
