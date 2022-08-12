@@ -3,6 +3,7 @@ using LCT.Core.Entites.Tournaments.Entities;
 using LCT.Core.Entites.Tournaments.ValueObjects;
 using LCT.Infrastructure.Repositories;
 using MediatR;
+using Serilog;
 
 namespace LCT.Application.Players.Commands
 {
@@ -29,13 +30,21 @@ namespace LCT.Application.Players.Commands
             var playerId = tournament.AddPlayer(request.Name, request.Surname);
 
             await _repository.Save(tournament);
-            await _mediator.Publish(new PlayerAssignedEvent
+            try
             {
-                TournamentId = request.TournamentId,
-                Name = request.Name,
-                Surname = request.Surname,
-                PlayerId = playerId
-            });
+                await _mediator.Publish(new PlayerAssignedEvent
+                {
+                    TournamentId = request.TournamentId,
+                    Name = request.Name,
+                    Surname = request.Surname,
+                    PlayerId = playerId
+                });
+
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex, "While publishing player assigment event...");
+            }
             return playerId;
         }
     }

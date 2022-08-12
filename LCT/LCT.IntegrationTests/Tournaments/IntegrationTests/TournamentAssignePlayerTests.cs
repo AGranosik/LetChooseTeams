@@ -1,6 +1,8 @@
 ﻿using FluentAssertions;
 using LCT.Application.Players.Commands;
+using LCT.Application.Players.Events;
 using LCT.Core.Entites.Tournaments.Entities;
+using LCT.Core.Entites.Tournaments.Exceptions;
 using LCT.IntegrationTests.Mocks;
 using MediatR;
 using NUnit.DFM;
@@ -37,25 +39,25 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         [Test]
         public async Task AssignPlayer_playerAlreadyExists_ThrowsExceptionAsync()
         {
-            //var tournament = await CreateTournament();
-            //var player = Player.Register(new Name("name"), new Name("surname"));
-            //tournament.AddPlayer(player);
-            //await GetRepository().SaveChangesAsync();
+            var tournament = await CreateTournament();
+            tournament.AddPlayer("name", "surname");
+            var repository = GetRepository();
+            await repository.Save(tournament);
 
-            //var action = () => AssignPlayerCommandHandleAsync(player.Name, player.Surname, tournament.Id, IMediatorMock.GetMock());
+            var action = () => AssignPlayerCommandHandleAsync("name", "surname", tournament.Id, IMediatorMock.GetMock());
 
-            //await action.Should().ThrowAsync<PlayerAlreadyAssignedToTournamentException>();
+            await action.Should().ThrowAsync<PlayerAlreadyAssignedToTournamentException>();
         }
 
         [Test]
         public async Task AssignPlayer_ReturnsPlayerIdDespiteHubException()
         {
-            //var tournament = await CreateTournament();
-            //var result = await AssignPlayerCommandHandleAsync("name", "surname", tournament.Id, IMediatorMock.GetMockWithException<PlayerAssignedEvent>());
+            var tournament = await CreateTournament();
+            var result = await AssignPlayerCommandHandleAsync("name", "surname", tournament.Id, IMediatorMock.GetMockWithException<PlayerAssignedEvent>());
 
-            //result.Should().NotBeEmpty();
-            //result.Should().NotBe(default(Guid));
-            
+            result.Should().NotBeEmpty();
+            result.Should().NotBe(default(Guid));
+
         }
 
         private async Task<Guid> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId, IMediator mediator)
