@@ -16,6 +16,8 @@ namespace LCT.Infrastructure.Repositories
         {
             var t = await _client.GetStream(typeof(T).Name).FindAsync(ts => ts.StreamId == Id);
             var result = t.ToList();
+            if (result.Count == 0)
+                return null;
             var aggregate = new T();
             aggregate.Load(1, result);
             return aggregate;

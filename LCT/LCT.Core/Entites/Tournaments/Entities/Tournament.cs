@@ -31,7 +31,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
             var player = Player.Register(name, surname, playerId);
             CheckIfPlayerAlreadyExists(player);
             Limit.ChceckIfPlayerCanBeAdded(NumberOfPlayers);
-            Apply(new PlayerAdded(player.Name, player.Surname, Id, playerId));
+            Apply(new PlayerAdded(player.Name, player.Surname, playerId, Id));
 
             return playerId;
         }
@@ -49,7 +49,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
             var selectedTeam = SelectedTeam.Create(player, team);
             CheckIfPlayerNotSelectedTeamBefore(selectedTeam);
             CheckIfTeamAlreadySelected(selectedTeam);
-            _selectedTeams.Add(selectedTeam);
+            Apply(new TeamSelected(team, playerId, Id));
         }
 
         public void DrawnTeamForPLayers(ITournamentDomainService service)
@@ -105,12 +105,21 @@ namespace LCT.Core.Entites.Tournaments.Entities
                 case PlayerAdded pa:
                     OnPlayerAdded(pa);
                     break;
+                case TeamSelected ts:
+                    OnTeamSelect(ts);
+                    break;
             }
+        }
+
+        private void OnTeamSelect(TeamSelected ts)
+        {
+            var player = _players.FirstOrDefault(p => p.Id == ts.PlayerId);
+            _selectedTeams.Add(SelectedTeam.Create(player, ts.TeamName));
         }
 
         private void OnPlayerAdded(PlayerAdded pa)
         {
-            _players.Add(Player.Register(pa.Name, pa.Surname, pa.Id));
+            _players.Add(Player.Register(pa.Name, pa.Surname, pa.PlayerId));
         }
 
         private void OnCreated(TournamentCreated tc)

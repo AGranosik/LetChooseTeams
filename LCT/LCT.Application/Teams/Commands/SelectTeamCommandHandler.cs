@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LCT.Application.Teams.Events;
+using LCT.Core.Entites.Tournaments.Entities;
+using LCT.Infrastructure.Repositories;
+using MediatR;
 
 namespace LCT.Application.Teams.Commands
 {
@@ -13,36 +16,35 @@ namespace LCT.Application.Teams.Commands
     public class SelectTeamCommandHandler : IRequestHandler<SelectTeamCommand>
     {
         private readonly IMediator _mediator;
-        public SelectTeamCommandHandler(IMediator mediator)
+        private readonly IRepository<Tournament> _repository;
+        public SelectTeamCommandHandler(IRepository<Tournament> repository, IMediator mediator)
         {
             _mediator = mediator;
+            _repository = repository;
         }
         public async Task<Unit> Handle(SelectTeamCommand request, CancellationToken cancellationToken)
         {
-            //var tournament = await _dbContext.Tournaments
-            //    .Include(t => t.Players)
-            //    .Include(t => t.SelectedTeams)
-            //    .SingleOrDefaultAsync(t => t.Id == request.TournamentId, cancellationToken);
+            var tournament = await _repository.Load(request.TournamentId);
 
-            //if (tournament == null)
-            //    throw new ArgumentException("Turniej nie istnieje.");
+            if (tournament == null)
+                throw new ArgumentException("Turniej nie istnieje.");
 
-            //tournament.SelectTeam(request.PlayerId, request.Team);
+            tournament.SelectTeam(request.PlayerId, request.Team);
 
-            //await _dbContext.SaveChangesAsync(cancellationToken);
+            await _repository.Save(tournament);
 
-            //try
-            //{
-            //    await _mediator.Publish(new TeamSelectedMessageEvent
-            //    {
-            //        PlayerId = request.PlayerId,
-            //        Team = request.Team,
-            //        TournamentId = request.TournamentId,
-            //    });
-            //}
-            //catch (Exception ex)
-            //{
-            //}
+            try
+            {
+                await _mediator.Publish(new TeamSelectedMessageEvent
+                {
+                    PlayerId = request.PlayerId,
+                    Team = request.Team,
+                    TournamentId = request.TournamentId,
+                });
+            }
+            catch (Exception ex)
+            {
+            }
 
             return Unit.Value;
         }

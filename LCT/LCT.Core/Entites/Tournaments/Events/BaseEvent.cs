@@ -5,10 +5,9 @@ namespace LCT.Core.Entites.Tournaments.Events
     [BsonIgnoreExtraElements]
     public abstract class BaseEvent
     {
-        public BaseEvent(Guid streamId, Guid id)
+        public BaseEvent(Guid streamId)
         {
             StreamId = streamId;
-            Id = id;
         }
         public Guid Id { get; set; }
         public Guid StreamId { get; private set; }
