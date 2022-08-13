@@ -95,6 +95,7 @@ namespace NUnit.DFM
             => _scope.ServiceProvider.GetRequiredService<IMongoClient>();
 
         protected IRepository<TModel> GetRepository<TModel>()
+            where TModel : Aggregate
             => _scope.ServiceProvider.GetRequiredService<IRepository<TModel>>();
 
         protected async Task AddAsync(TModel entity)
