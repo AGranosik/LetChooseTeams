@@ -5,7 +5,7 @@ using LCT.Core.Entites.Tournaments.ValueObjects;
 
 namespace LCT.Core.Entites.Tournaments.Entities
 {
-    public class Tournament : Aggregate
+    public class Tournament : Aggregate<Guid>
     {
         public Tournament() { }
 
@@ -14,7 +14,6 @@ namespace LCT.Core.Entites.Tournaments.Entities
             Limit = limit;
             TournamentName = tournamentName;
         }
-        public Guid Id { get; private set; }
         public Name TournamentName { get; private set; }
         private List<Player> _players = new List<Player>();
         public IReadOnlyCollection<Player> Players => _players;
@@ -35,7 +34,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
 
             return playerId;
         }
-
+        //
         private void CheckIfPlayerAlreadyExists(Player player)
         {
             if(_players.Any(p => p == player))
@@ -52,7 +51,7 @@ namespace LCT.Core.Entites.Tournaments.Entities
             Apply(new TeamSelected(team, playerId, Id));
         }
 
-        public void DrawnTeamForPLayers(ITournamentDomainService service)
+        public void DrawnTeamForPLayers(ITournamentDomainService service) // to chyba do wywalenia
         {
             if(service is null)
                 throw new ArgumentNullException(nameof(service));

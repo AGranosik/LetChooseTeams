@@ -2,11 +2,11 @@
 
 namespace LCT.Core.Entites
 {
-    public abstract class Aggregate
+    public abstract class Aggregate<TKey>
     {
         private readonly IList<BaseEvent> _changes = new List<BaseEvent>();
         public long Version { get; private set; } = -1;
-
+        public TKey Id { get; set; }
         protected abstract void When(object @event);
         public void Apply(BaseEvent @event)
         {
