@@ -1,6 +1,7 @@
 ﻿using LCT.Application.Teams.Events;
-using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Infrastructure.Repositories;
+using LCT.Core.Aggregates.TournamentAggregate.Entities;
+using LCT.Infrastructure.Repositories
+    ;
 using MediatR;
 
 namespace LCT.Application.Teams.Commands

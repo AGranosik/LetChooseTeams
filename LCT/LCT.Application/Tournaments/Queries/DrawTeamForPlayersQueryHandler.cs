@@ -1,4 +1,5 @@
-﻿using LCT.Core.Entites.Tournaments.Services;
+﻿using LCT.Core.Aggregates.TournamentAggregate.Services;
+using LCT.Core.Entites.Tournaments.Services;
 using MediatR;
 
 namespace LCT.Application.Tournaments.Queries

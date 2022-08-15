@@ -1,4 +1,4 @@
-﻿using LCT.Core.Entites;
+﻿using LCT.Core.Shared;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM.Interfaces;
 

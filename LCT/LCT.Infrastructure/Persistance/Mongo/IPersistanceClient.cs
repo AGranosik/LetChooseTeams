@@ -1,5 +1,5 @@
-﻿using LCT.Core.Entites.Tournaments.Events;
-using LCT.Core.Entites.Tournaments.ValueObjects;
+﻿using LCT.Core.Aggregates.TournamentAggregate.Events;
+using LCT.Core.Aggregates.TournamentAggregate.ValueObjects;
 using MongoDB.Bson;
 using MongoDB.Driver;
 

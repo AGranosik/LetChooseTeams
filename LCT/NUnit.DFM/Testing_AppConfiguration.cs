@@ -1,4 +1,4 @@
-﻿using LCT.Core.Entites;
+﻿using LCT.Core.Shared;
 using Microsoft.AspNetCore.Hosting;
 using NUnit.DFM.Interfaces;
 

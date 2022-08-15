@@ -1,10 +1,7 @@
-﻿using LCT.Core.Entites.Tournaments.ValueObjects;
-using LCT.Infrastructure.Persistance.Mongo;
+﻿using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace LCT.Infrastructure

@@ -1,12 +1,4 @@
-﻿using FluentAssertions;
-using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entites.Tournaments.Exceptions;
-using LCT.Core.Entites.Tournaments.Services;
-using LCT.Core.Entites.Tournaments.ValueObjects;
-using LCT.Core.Entities.Tournaments.Types;
-using NUnit.Framework;
-using System;
-using System.Linq;
+﻿using NUnit.Framework;
 
 namespace LCT.IntegrationTests.Tournaments.DomainTests
 {

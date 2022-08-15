@@ -1,6 +1,5 @@
 ﻿using LCT.Application.Players.Events;
-using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entites.Tournaments.ValueObjects;
+using LCT.Core.Aggregates.TournamentAggregate.Entities;
 using LCT.Infrastructure.Repositories;
 using MediatR;
 using Serilog;

@@ -1,12 +1,7 @@
 ﻿using FluentAssertions;
-using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entites.Tournaments.ValueObjects;
+using LCT.Core.Aggregates.TournamentAggregate.Entities;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace LCT.IntegrationTests.Tournaments.DomainTests
 {

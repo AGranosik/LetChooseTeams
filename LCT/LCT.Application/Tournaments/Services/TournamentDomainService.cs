@@ -1,5 +1,6 @@
-﻿using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entites.Tournaments.Exceptions;
+﻿using LCT.Core.Aggregates.TournamentAggregate.Entities;
+using LCT.Core.Aggregates.TournamentAggregate.Exceptions;
+using LCT.Core.Aggregates.TournamentAggregate.Services;
 using LCT.Core.Extensions;
 using LCT.Infrastructure.Persistance.Mongo;
 

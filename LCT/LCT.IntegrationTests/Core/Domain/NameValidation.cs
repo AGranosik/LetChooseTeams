@@ -1,5 +1,5 @@
 ﻿using FluentAssertions;
-using LCT.Core.Entites.Tournaments.ValueObjects;
+using LCT.Core.Aggregates.TournamentAggregate.ValueObjects;
 using LCT.Core.Shared.Exceptions;
 using NUnit.Framework;
 

@@ -1,12 +1,10 @@
 using FluentAssertions;
 using LCT.Application.Tournaments.Commands;
-using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Core.Entites.Tournaments.Exceptions;
-using Microsoft.EntityFrameworkCore;
+using LCT.Core.Aggregates.TournamentAggregate.Entities;
+using LCT.Core.Aggregates.TournamentAggregate.Exceptions;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 

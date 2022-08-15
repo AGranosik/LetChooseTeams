@@ -1,8 +1,6 @@
 ﻿using LCT.Application.Players.Commands;
 using LCT.Application.Tournaments.Commands;
 using LCT.Application.Tournaments.Queries;
-using LCT.Core.Entites.Tournaments.Entities;
-using LCT.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 

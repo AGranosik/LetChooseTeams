@@ -1,9 +1,7 @@
 ﻿using LCT.Api.Configuration;
 using LCT.Application;
 using LCT.Application.Tournaments.Hubs;
-using LCT.Core.Entites.Tournaments.Events;
 using LCT.Infrastructure;
-using MongoDB.Bson.Serialization;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
@@ -25,18 +23,6 @@ namespace LCT.Api
             services.AddSwaggerGen();
             services.AddInfrastructure()
                 .AddApplication();
-
-            //BsonClassMap.RegisterClassMap<Test>(cm =>
-            //{
-            //    cm.AutoMap();
-            //    cm.SetDiscriminator("Test");
-            //});
-
-            //BsonClassMap.RegisterClassMap<TournamentCreated>(cm =>
-            //{
-            //    cm.AutoMap();
-            //    cm.SetDiscriminator("TournamentCreated");
-            //});
 
             services.AddSignalR();
         }

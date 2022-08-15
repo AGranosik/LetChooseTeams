@@ -1,4 +1,5 @@
 ﻿using LCT.Application.Common;
+using LCT.Core.Aggregates.TournamentAggregate.Services;
 using LCT.Core.Entites.Tournaments.Services;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

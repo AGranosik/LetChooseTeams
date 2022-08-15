@@ -1,4 +1,4 @@
-﻿using LCT.Core.Entites.Tournaments.Entities;
+﻿using LCT.Core.Aggregates.TournamentAggregate.Entities;
 using NUnit.DFM;
 using NUnit.Framework;
 using System.Threading.Tasks;

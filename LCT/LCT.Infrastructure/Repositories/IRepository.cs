@@ -1,4 +1,4 @@
-﻿using LCT.Core.Entites;
+﻿using LCT.Core.Shared;
 
 namespace LCT.Infrastructure.Repositories
 {
