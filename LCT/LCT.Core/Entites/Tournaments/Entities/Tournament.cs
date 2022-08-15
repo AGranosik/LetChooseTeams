@@ -5,16 +5,17 @@ using LCT.Core.Entites.Tournaments.ValueObjects;
 
 namespace LCT.Core.Entites.Tournaments.Entities
 {
-    public class Tournament : Aggregate<Guid>
+    public class Tournament : Aggregate
     {
         public Tournament() { }
 
-        private Tournament(Name tournamentName, TournamentLimit limit)
+        private Tournament(TournamentName tournamentName, TournamentLimit limit)
         {
             Limit = limit;
             TournamentName = tournamentName;
         }
-        public Name TournamentName { get; private set; }
+        public Guid Id { get; private set; }
+        public TournamentName TournamentName { get; private set; }
         private List<Player> _players = new List<Player>();
         public IReadOnlyCollection<Player> Players => _players;
         private List<SelectedTeam> _selectedTeams = new List<SelectedTeam>();

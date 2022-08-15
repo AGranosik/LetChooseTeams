@@ -2,16 +2,16 @@
 
 namespace LCT.Core.Entites.Tournaments.ValueObjects
 {
-    public class FullName : IEquatable<FullName>
+    public class PlayerName : IEquatable<PlayerName>
     {
         public string Name { get; private set; }
         public string Surname { get; private set; }
-        public FullName(string name, string surname)
+        public PlayerName(string name, string surname)
         {
             Name = name;
             Surname = surname;
         }
-        public bool Equals(FullName other)
+        public bool Equals(PlayerName other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;

@@ -42,8 +42,8 @@ namespace LCT.Infrastructure.Persistance.Mongo
 
         public void Configure()
         {
-            var indexModel = new CreateIndexModel<Name>(new BsonDocument("Value", 1), new CreateIndexOptions { Unique = true });
-            _mongoClient.GetDatabase(_dbName).GetCollection<Name>("Tournament_TournamentName_index")
+            var indexModel = new CreateIndexModel<TournamentName>(new BsonDocument("Value", 1), new CreateIndexOptions { Unique = true });
+            _mongoClient.GetDatabase(_dbName).GetCollection<TournamentName>("Tournament_TournamentName_index")
                 .Indexes.CreateOne(indexModel);
         }
     }

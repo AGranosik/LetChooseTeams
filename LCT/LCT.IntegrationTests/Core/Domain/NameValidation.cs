@@ -11,14 +11,14 @@ namespace LCT.IntegrationTests.Domain.Core
         [Test]
         public void Name_CannotBeNull()
         {
-            var func = () => new Name(null);
+            var func = () => new TournamentName(null);
             func.Should().Throw<FieldCannotBeEmptyException>();
         }
 
         [Test]
         public void Name_CannotBeEmpty()
         {
-            var func = () => new Name(string.Empty);
+            var func = () => new TournamentName(string.Empty);
             func.Should().Throw<InvalidFieldException>();
         }
     }

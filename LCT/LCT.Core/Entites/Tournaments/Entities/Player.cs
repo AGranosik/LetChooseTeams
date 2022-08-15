@@ -6,15 +6,15 @@ namespace LCT.Core.Entites.Tournaments.Entities
     public class Player : Entity
     {
         private Player(): base() { }
-        private Player(Name name, Name surname, Guid id): base(){
+        private Player(TournamentName name, TournamentName surname, Guid id): base(){
             Name = name;
             Surname = surname;
             Id = id;
         }
-        public Name Name { get; private set; }
-        public Name Surname { get; private set; }
+        public TournamentName Name { get; private set; }
+        public TournamentName Surname { get; private set; }
 
-        public static Player Register(Name name, Name surname, Guid id)
+        public static Player Register(TournamentName name, TournamentName surname, Guid id)
             => new (name, surname, id);
 
         public static bool operator ==(Player a, Player b)

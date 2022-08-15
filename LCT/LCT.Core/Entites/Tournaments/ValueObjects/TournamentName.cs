@@ -4,13 +4,13 @@ using static LCT.Core.Shared.Validation.FieldValidationExtension;
 namespace LCT.Core.Entites.Tournaments.ValueObjects
 {
     [Keyless]
-    public class Name
+    public class TournamentName
     {
-        public Name()
+        public TournamentName()
         {
 
         }
-        public Name(string name)
+        public TournamentName(string name)
         {
             Validate(name);
             Value = name;
@@ -19,15 +19,15 @@ namespace LCT.Core.Entites.Tournaments.ValueObjects
 
         public static void Validate(string name)
         { 
-            CheckIfNullOrEmpty(name, nameof(Name));
-            CheckFieldLength(name, nameof(Name));
+            CheckIfNullOrEmpty(name, nameof(TournamentName));
+            CheckFieldLength(name, nameof(TournamentName));
         }
 
-        public static implicit operator string(Name name) => name.Value;
+        public static implicit operator string(TournamentName name) => name.Value;
 
-        public static implicit operator Name(string name) => new (name);
+        public static implicit operator TournamentName(string name) => new (name);
 
-        public static bool operator ==(Name a, Name b)
+        public static bool operator ==(TournamentName a, TournamentName b)
         {
             if (ReferenceEquals(a, b))
             {
@@ -42,7 +42,7 @@ namespace LCT.Core.Entites.Tournaments.ValueObjects
             return false;
         }
 
-        public static bool operator !=(Name a, Name b) => !(a == b);
+        public static bool operator !=(TournamentName a, TournamentName b) => !(a == b);
 
         public override string ToString() => Value;
 
