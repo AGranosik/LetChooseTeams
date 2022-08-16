@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using LCT.Core.Shared;
+using Microsoft.EntityFrameworkCore;
 using static LCT.Core.Shared.Validation.FieldValidationExtension;
 
 namespace LCT.Core.Aggregates.TournamentAggregate.ValueObjects
 {
-    [Keyless]
-    public class TournamentName
+    public class TournamentName : ValueType<TournamentName>
     {
         public TournamentName()
         {
@@ -27,25 +27,22 @@ namespace LCT.Core.Aggregates.TournamentAggregate.ValueObjects
 
         public static implicit operator TournamentName(string name) => new (name);
 
-        public static bool operator ==(TournamentName a, TournamentName b)
+        public override string ToString() => Value;
+
+        public override bool Equals(object obj)
         {
-            if (ReferenceEquals(a, b))
+            if (ReferenceEquals(this, obj))
             {
                 return true;
             }
 
-            if (a is not null && b is not null)
-            {
-                return a.Value.Equals(b.Value);
-            }
+            var tournamentName = obj as TournamentName;
 
-            return false;
+            if (tournamentName == null)
+                return false;
+
+            return Value == tournamentName.Value;
         }
-
-        public static bool operator !=(TournamentName a, TournamentName b) => !(a == b);
-
-        public override string ToString() => Value;
-
     }
 
 

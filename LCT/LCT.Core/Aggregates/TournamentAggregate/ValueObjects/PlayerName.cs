@@ -1,6 +1,4 @@
-﻿using static LCT.Core.Shared.Validation.FieldValidationExtension;
-
-namespace LCT.Core.Aggregates.TournamentAggregate.ValueObjects
+﻿namespace LCT.Core.Aggregates.TournamentAggregate.ValueObjects
 {
     public class PlayerName : IEquatable<PlayerName>
     {

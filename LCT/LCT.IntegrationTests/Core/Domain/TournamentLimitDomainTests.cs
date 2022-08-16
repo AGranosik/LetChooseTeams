@@ -8,6 +8,7 @@ namespace LCT.IntegrationTests.Core.Domain
     [TestFixture]
     public class TournamentLimitDomainTests
     {
+
         [Test]
         public void Limit_CannotBeNegative_ThrowsException()
         {
@@ -27,6 +28,25 @@ namespace LCT.IntegrationTests.Core.Domain
         {
             var action = () => new TournamentLimit(2);
             action.Should().NotThrow<ValueSmallerThanMinimalValueException>();
+        }
+
+        [Test]
+        public void Limit_BothAreNull_True()
+        {
+            TournamentLimit limit = null;
+            (limit == null).Should().BeTrue();
+            (limit != null).Should().BeFalse();
+        }
+
+        [Test]
+        public void Limit_OneIsNull_False()
+        {
+            TournamentLimit limit = new TournamentLimit(3);
+            TournamentLimit nullLimit = null;
+            (limit == nullLimit).Should().BeFalse();
+            (limit != nullLimit).Should().BeTrue();
+            (nullLimit == limit).Should().BeFalse();
+            (nullLimit != limit).Should().BeTrue();
         }
 
         [Test]

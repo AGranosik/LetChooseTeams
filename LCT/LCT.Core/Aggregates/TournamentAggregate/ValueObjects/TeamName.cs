@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LCT.Core.Aggregates.TournamentAggregate.ValueObjects
 {
-    [Keyless]
+
     public class TeamName
     {
         public TeamName(string name)
