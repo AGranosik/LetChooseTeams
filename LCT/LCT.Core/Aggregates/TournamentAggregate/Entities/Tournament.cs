@@ -18,11 +18,11 @@ namespace LCT.Core.Aggregates.TournamentAggregate.Entities
         public Guid Id { get; private set; }
         public TournamentName TournamentName { get; private set; }
         private List<Player> _players = new List<Player>();
-        public IReadOnlyCollection<Player> Players => _players;
+        public IReadOnlyCollection<Player> Players => _players.AsReadOnly();
         private List<SelectedTeam> _selectedTeams = new List<SelectedTeam>();
-        public virtual IReadOnlyCollection<SelectedTeam> SelectedTeams => _selectedTeams;
+        public virtual IReadOnlyCollection<SelectedTeam> SelectedTeams => _selectedTeams.AsReadOnly();
         private List<DrawnTeam> _drawTeams = new List<DrawnTeam>();
-        public virtual IReadOnlyCollection<DrawnTeam> DrawTeams => _drawTeams;
+        public virtual IReadOnlyCollection<DrawnTeam> DrawTeams => _drawTeams.AsReadOnly();
         public TournamentLimit Limit { get; private set; }
         public int NumberOfPlayers => _players.Count;
 
@@ -36,7 +36,7 @@ namespace LCT.Core.Aggregates.TournamentAggregate.Entities
 
             return playerId;
         }
-        //
+        
         private void CheckIfPlayerAlreadyExists(Player player)
         {
             if(_players.Any(p => p == player))
