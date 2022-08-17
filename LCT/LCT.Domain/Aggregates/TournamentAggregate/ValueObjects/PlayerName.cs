@@ -1,4 +1,4 @@
-﻿using LCT.Core.Shared;
+﻿using LCT.Core.Shared.BaseTypes;
 using static LCT.Core.Shared.Validation.FieldValidationExtension;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects

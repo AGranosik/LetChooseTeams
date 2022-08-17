@@ -1,5 +1,5 @@
 ﻿using LCT.Api;
-using LCT.Core.Shared;
+using LCT.Core.Shared.BaseTypes;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;

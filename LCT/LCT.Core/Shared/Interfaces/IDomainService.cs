@@ -1,4 +1,4 @@
-﻿namespace LCT.Core.Shared
+﻿namespace LCT.Core.Shared.Interfaces
 {
     public interface IDomainService
     {

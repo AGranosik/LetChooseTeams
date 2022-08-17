@@ -1,4 +1,4 @@
-﻿using LCT.Core.Shared;
+﻿using LCT.Core.Shared.BaseTypes;
 using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 

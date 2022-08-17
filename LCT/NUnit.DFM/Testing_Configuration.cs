@@ -1,4 +1,4 @@
-﻿using LCT.Core.Shared;
+﻿using LCT.Core.Shared.BaseTypes;
 using Microsoft.Extensions.Configuration;
 using NUnit.DFM.Interfaces;
 

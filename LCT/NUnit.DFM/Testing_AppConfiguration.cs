@@ -1,4 +1,4 @@
-﻿using LCT.Core.Shared;
+﻿using LCT.Core.Shared.BaseTypes;
 using Microsoft.AspNetCore.Hosting;
 using NUnit.DFM.Interfaces;
 

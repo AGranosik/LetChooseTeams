@@ -1,4 +1,4 @@
-﻿using LCT.Core;
+﻿using LCT.Core.Shared.BaseTypes;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using MongoDB.Bson;
 using MongoDB.Driver;

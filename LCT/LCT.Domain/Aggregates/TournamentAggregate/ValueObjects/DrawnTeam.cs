@@ -1,4 +1,4 @@
-﻿using LCT.Core.Shared;
+﻿using LCT.Core.Shared.BaseTypes;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects

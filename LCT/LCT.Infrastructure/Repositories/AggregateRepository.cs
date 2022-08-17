@@ -1,4 +1,4 @@
-﻿using LCT.Core.Shared;
+﻿using LCT.Core.Shared.BaseTypes;
 using LCT.Infrastructure.Persistance.Mongo;
 using MongoDB.Driver;
 

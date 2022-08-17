@@ -1,4 +1,4 @@
-﻿namespace LCT.Core.Shared
+﻿namespace LCT.Core.Shared.BaseTypes
 {
     public abstract class ValueType<T> where T : ValueType<T>
     {

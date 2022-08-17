@@ -1,4 +1,4 @@
-﻿namespace LCT.Core.Shared
+﻿namespace LCT.Core.Shared.BaseTypes
 {
     public abstract class Aggregate
     {
@@ -9,7 +9,7 @@
         {
             When(@event);
 
-            _changes.Add(@event);
+            _changes.Add(@event); // handle somehow domain events as well
         }
 
         public void Load(long version, IEnumerable<object> history)

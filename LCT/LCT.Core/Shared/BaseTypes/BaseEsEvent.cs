@@ -1,6 +1,6 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace LCT.Core
+namespace LCT.Core.Shared.BaseTypes
 {
     [BsonIgnoreExtraElements]
     public abstract class BaseEsEvent

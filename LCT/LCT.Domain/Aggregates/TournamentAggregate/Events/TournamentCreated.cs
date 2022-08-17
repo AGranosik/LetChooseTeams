@@ -1,4 +1,4 @@
-﻿using LCT.Core;
+﻿using LCT.Core.Shared.BaseTypes;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.Events
