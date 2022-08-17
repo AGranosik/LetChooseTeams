@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LCT.Core\LCT.Core.csproj" />
+    <ProjectReference Include="..\LCT.Domain\LCT.Domain.csproj" />
   </ItemGroup>
 
 </Project>

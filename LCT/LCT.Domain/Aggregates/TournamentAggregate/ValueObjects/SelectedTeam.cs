@@ -1,9 +1,9 @@
-﻿using LCT.Core.Aggregates.TournamentAggregate.ValueObjects;
-using LCT.Core.Shared;
+﻿using LCT.Core.Shared;
+using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 
-namespace LCT.Core.Aggregates.TournamentAggregate.Entities
+namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 {
-    public class SelectedTeam : Entity
+    public class SelectedTeam : ValueType<SelectedTeam>
     {
         private SelectedTeam() { }
         private SelectedTeam(Player player, string teamName)
@@ -14,10 +14,10 @@ namespace LCT.Core.Aggregates.TournamentAggregate.Entities
 
         public static SelectedTeam Create(Player player, string teamName)
         {
-            if(player is null)
+            if (player is null)
                 throw new ArgumentNullException(nameof(player));
             return new SelectedTeam(player, teamName);
-        } 
+        }
 
         public Tournament Tournament { get; private set; }
         public Player Player { get; private set; }
@@ -26,6 +26,11 @@ namespace LCT.Core.Aggregates.TournamentAggregate.Entities
         public bool IsAlreadyPicked(SelectedTeam team)
         {
             return team.TeamName == TeamName;
+        }
+
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
         }
     }
 }

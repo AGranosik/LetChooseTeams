@@ -1,9 +1,9 @@
-﻿using LCT.Core.Aggregates.TournamentAggregate.ValueObjects;
-using LCT.Core.Shared;
+﻿using LCT.Core.Shared;
+using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 
-namespace LCT.Core.Aggregates.TournamentAggregate.Entities
+namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 {
-    public class DrawnTeam : Entity
+    public class DrawnTeam : ValueType<DrawnTeam>
     {
         private DrawnTeam() { }
         private DrawnTeam(Player player, string teamName)
@@ -17,6 +17,11 @@ namespace LCT.Core.Aggregates.TournamentAggregate.Entities
             if (player is null)
                 throw new ArgumentNullException(nameof(player));
             return new DrawnTeam(player, teamName);
+        }
+
+        public override bool Equals(object obj)
+        {
+            throw new NotImplementedException();
         }
 
         public Tournament Tournament { get; private set; }

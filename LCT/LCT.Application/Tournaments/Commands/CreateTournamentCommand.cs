@@ -1,5 +1,5 @@
-﻿using LCT.Core.Aggregates.TournamentAggregate.Entities;
-using LCT.Core.Aggregates.TournamentAggregate.Services;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Infrastructure.Repositories;
 using MediatR;
 

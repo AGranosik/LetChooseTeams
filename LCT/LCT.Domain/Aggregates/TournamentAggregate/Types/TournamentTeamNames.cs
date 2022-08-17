@@ -1,4 +1,4 @@
-﻿namespace LCT.Core.Aggregates.TournamentAggregate.Types
+﻿namespace LCT.Domain.Aggregates.TournamentAggregate.Types
 {
     public static class TournamentTeamNames
     {

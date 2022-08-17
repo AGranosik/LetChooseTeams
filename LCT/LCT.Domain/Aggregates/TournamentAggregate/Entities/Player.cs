@@ -1,15 +1,13 @@
-﻿using LCT.Core.Aggregates.TournamentAggregate.ValueObjects;
-using LCT.Core.Shared;
+﻿using LCT.Core.Shared;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 
-namespace LCT.Core.Aggregates.TournamentAggregate.Entities
+namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 {
-    public class Player : Entity
+    public class Player : Entity<Guid>
     {
-        private Player(): base() { }
-        private Player(TournamentName name, TournamentName surname, Guid id): base(){
+        private Player(TournamentName name, TournamentName surname, Guid id): base(id){
             Name = name;
             Surname = surname;
-            Id = id;
         }
         public TournamentName Name { get; private set; }
         public TournamentName Surname { get; private set; }

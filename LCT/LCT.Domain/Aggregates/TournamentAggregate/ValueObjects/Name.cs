@@ -1,7 +1,7 @@
 ﻿using LCT.Core.Shared;
 using static LCT.Core.Shared.Validation.FieldValidationExtension;
 
-namespace LCT.Core.Aggregates.TournamentAggregate.ValueObjects
+namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 {
     public abstract class Name: ValueType<Name>
     {

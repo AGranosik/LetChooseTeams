@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using static LCT.Core.Shared.Validation.FieldValidationExtension;
 
-namespace LCT.Core.Aggregates.TournamentAggregate.ValueObjects
+namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 {
     public class TournamentName : Name
     {

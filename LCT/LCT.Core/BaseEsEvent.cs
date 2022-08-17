@@ -1,11 +1,11 @@
 ﻿using MongoDB.Bson.Serialization.Attributes;
 
-namespace LCT.Core.Aggregates.TournamentAggregate.Events
+namespace LCT.Core
 {
     [BsonIgnoreExtraElements]
-    public abstract class BaseEvent
+    public abstract class BaseEsEvent
     {
-        public BaseEvent(Guid streamId)
+        public BaseEsEvent(Guid streamId)
         {
             StreamId = streamId;
         }

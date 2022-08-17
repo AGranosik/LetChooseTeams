@@ -1,7 +1,8 @@
-﻿using LCT.Core.Aggregates.TournamentAggregate.Entities;
-using LCT.Core.Shared;
+﻿using LCT.Core.Shared;
+using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 
-namespace LCT.Core.Aggregates.TournamentAggregate.Services
+namespace LCT.Domain.Aggregates.TournamentAggregate.Services
 {
     public interface ITournamentDomainService: IDomainService
     {

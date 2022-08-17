@@ -1,6 +1,6 @@
 ﻿using LCT.Api;
-using LCT.Core.Aggregates.TournamentAggregate.Services;
 using LCT.Core.Shared;
+using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;

@@ -1,5 +1,5 @@
-﻿using LCT.Core.Aggregates.TournamentAggregate.Events;
-using LCT.Core.Aggregates.TournamentAggregate.ValueObjects;
+﻿using LCT.Core;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -7,7 +7,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
 {
     public interface IPersistanceClient
     {
-        IMongoCollection<BaseEvent> GetStream(string streamName);
+        IMongoCollection<BaseEsEvent> GetStream(string streamName);
         Task<bool> CheckUniqness<T>(string entity, string fieldName, T value);
         void Configure();
     }
@@ -23,8 +23,8 @@ namespace LCT.Infrastructure.Persistance.Mongo
             Configure();
         }
 
-        public IMongoCollection<BaseEvent> GetStream(string streamName)
-            => _mongoClient.GetDatabase(_dbName).GetCollection<BaseEvent>($"{streamName}Stream");
+        public IMongoCollection<BaseEsEvent> GetStream(string streamName)
+            => _mongoClient.GetDatabase(_dbName).GetCollection<BaseEsEvent>($"{streamName}Stream");
 
         public async Task<bool> CheckUniqness<T>(string entity, string fieldName, T value)
         {

@@ -1,7 +1,8 @@
-﻿using LCT.Core.Aggregates.TournamentAggregate.Entities;
-using LCT.Core.Aggregates.TournamentAggregate.Exceptions;
-using LCT.Core.Aggregates.TournamentAggregate.Services;
-using LCT.Core.Extensions;
+﻿using LCT.Core.Extensions;
+using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
+using LCT.Domain.Aggregates.TournamentAggregate.Services;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using LCT.Infrastructure.Persistance.Mongo;
 
 namespace LCT.Core.Entites.Tournaments.Services

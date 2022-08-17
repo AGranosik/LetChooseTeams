@@ -1,10 +1,11 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using LCT.Core;
+using MongoDB.Bson.Serialization.Attributes;
 
-namespace LCT.Core.Aggregates.TournamentAggregate.Events
+namespace LCT.Domain.Aggregates.TournamentAggregate.Events
 {
     [BsonIgnoreExtraElements]
     [BsonDiscriminator("TeamSelected")]
-    public class TeamSelected : BaseEvent
+    public class TeamSelected : BaseEsEvent
     {
         public string TeamName { get; set; }
         public Guid PlayerId { get; set; }

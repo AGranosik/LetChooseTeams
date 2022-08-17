@@ -1,13 +1,11 @@
-﻿using LCT.Core.Aggregates.TournamentAggregate.Events;
-
-namespace LCT.Core.Shared
+﻿namespace LCT.Core.Shared
 {
     public abstract class Aggregate
     {
-        private readonly IList<BaseEvent> _changes = new List<BaseEvent>();
+        private readonly IList<BaseEsEvent> _changes = new List<BaseEsEvent>();
         public long Version { get; private set; } = -1;
         protected abstract void When(object @event);
-        public void Apply(BaseEvent @event)
+        public void Apply(BaseEsEvent @event)
         {
             When(@event);
 
@@ -23,6 +21,6 @@ namespace LCT.Core.Shared
                 When(item);
             }
         }
-        public BaseEvent[] GetChanges() => _changes.OrderBy(c => c.TimeStamp).ToArray();
+        public BaseEsEvent[] GetChanges() => _changes.OrderBy(c => c.TimeStamp).ToArray();
     }
 }

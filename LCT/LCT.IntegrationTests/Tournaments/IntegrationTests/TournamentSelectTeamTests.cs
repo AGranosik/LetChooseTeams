@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using LCT.Application.Teams.Commands;
 using LCT.Application.Teams.Events;
-using LCT.Core.Aggregates.TournamentAggregate.Entities;
-using LCT.Core.Aggregates.TournamentAggregate.Types;
+using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.IntegrationTests.Mocks;
 using MediatR;
 using NUnit.DFM;

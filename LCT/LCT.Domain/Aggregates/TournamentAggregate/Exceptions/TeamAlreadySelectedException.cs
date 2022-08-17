@@ -1,4 +1,4 @@
-﻿namespace LCT.Core.Aggregates.TournamentAggregate.Exceptions
+﻿namespace LCT.Domain.Aggregates.TournamentAggregate.Exceptions
 {
     public class TeamAlreadySelectedException: Exception
     {

@@ -1,10 +1,10 @@
-﻿using LCT.Core.Aggregates.TournamentAggregate.Events;
-using LCT.Core.Aggregates.TournamentAggregate.Exceptions;
-using LCT.Core.Aggregates.TournamentAggregate.Services;
-using LCT.Core.Aggregates.TournamentAggregate.ValueObjects;
-using LCT.Core.Shared;
+﻿using LCT.Core.Shared;
+using LCT.Domain.Aggregates.TournamentAggregate.Events;
+using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
+using LCT.Domain.Aggregates.TournamentAggregate.Services;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 
-namespace LCT.Core.Aggregates.TournamentAggregate.Entities
+namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 {
     public class Tournament : Aggregate
     {

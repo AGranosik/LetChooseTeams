@@ -1,11 +1,13 @@
 ﻿namespace LCT.Core.Shared
 {
-    public class Entity
+    public class Entity<TKey>
     {
-        protected Entity()
+        protected Entity(TKey id)
         {
+            Id = id;
         }
-        public Guid Id { get; set; }
+        public TKey Id { get; private set; }
         public DateTime CreatedAt { get; set; }
+        public DateTime LastModifiedAt { get; set; }
     }
 }

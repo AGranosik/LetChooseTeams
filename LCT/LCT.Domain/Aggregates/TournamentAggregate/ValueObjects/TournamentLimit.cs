@@ -1,8 +1,8 @@
-﻿using LCT.Core.Aggregates.TournamentAggregate.Exceptions;
-using LCT.Core.Shared;
+﻿using LCT.Core.Shared;
 using LCT.Core.Shared.Exceptions;
+using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 
-namespace LCT.Core.Aggregates.TournamentAggregate.ValueObjects
+namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 {
     public class TournamentLimit : ValueType<TournamentLimit>
     {

@@ -1,7 +1,7 @@
 using FluentAssertions;
 using LCT.Application.Tournaments.Commands;
-using LCT.Core.Aggregates.TournamentAggregate.Entities;
-using LCT.Core.Aggregates.TournamentAggregate.Exceptions;
+using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;

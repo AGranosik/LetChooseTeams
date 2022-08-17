@@ -1,6 +1,6 @@
-﻿using LCT.Core.Aggregates.TournamentAggregate.Types;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.Types;
 
-namespace LCT.Core.Aggregates.TournamentAggregate.ValueObjects
+namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 {
     public class TeamName : Name
     {

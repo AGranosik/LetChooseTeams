@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\LCT.Core\LCT.Core.csproj" />
+  </ItemGroup>
+
 </Project>
