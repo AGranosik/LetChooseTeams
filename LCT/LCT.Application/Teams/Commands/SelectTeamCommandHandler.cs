@@ -8,7 +8,8 @@ namespace LCT.Application.Teams.Commands
 {
     public class SelectTeamCommand: IRequest
     {
-        public Guid PlayerId { get; set; }
+        public string PlayerName { get; set; }
+        public string PlayerSurname { get; set; }
         public Guid TournamentId { get; set; }
         public string Team { get; set; }
     }
@@ -30,7 +31,7 @@ namespace LCT.Application.Teams.Commands
             if (tournament == null)
                 throw new ArgumentException("Turniej nie istnieje.");
 
-            tournament.SelectTeam(request.PlayerId, request.Team);
+            tournament.SelectTeam(request.PlayerName, request.PlayerSurname, request.Team);
 
             await _repository.Save(tournament);
 
@@ -38,7 +39,8 @@ namespace LCT.Application.Teams.Commands
             {
                 await _mediator.Publish(new TeamSelectedMessageEvent
                 {
-                    PlayerId = request.PlayerId,
+                    PlayerSurname = request.PlayerSurname,
+                    PlayerName = request.PlayerName,
                     Team = request.Team,
                     TournamentId = request.TournamentId,
                 });

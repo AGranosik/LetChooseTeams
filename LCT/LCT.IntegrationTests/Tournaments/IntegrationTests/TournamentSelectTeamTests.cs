@@ -3,6 +3,7 @@ using LCT.Application.Teams.Commands;
 using LCT.Application.Teams.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using LCT.IntegrationTests.Mocks;
 using MediatR;
 using NUnit.DFM;
@@ -20,8 +21,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
     {
         private readonly List<Player> _players = new List<Player>()
         {
-            Player.Register("test1", "test2", Guid.NewGuid()),
-            Player.Register("hehe", "fiu", Guid.NewGuid())
+            Player.Create("test1", "test2"),
+            Player.Create("hehe", "fiu")
         };
         public TournamentSelectTeamTests()
         {
@@ -34,13 +35,13 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         public async Task SelectTeam_FirstTeamSelect()
         {
             var tournament = await CreateTournamentWithPlayers(_players);
-            var firstPlayerId = tournament.Players.First().Id;
-            var secondPLayerId = tournament.Players.Last().Id;
-            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.First(), firstPlayerId, IMediatorMock.GetMock());
+            var firstPlayer = tournament.Players.First();
+            var secondPlayer = tournament.Players.Last();
+            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.First(), firstPlayer.Name, firstPlayer.Surname, IMediatorMock.GetMock());
 
             firstPlayerAssign.Should().NotBeNull();
 
-            var secondPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.Last(), secondPLayerId, IMediatorMock.GetMock());
+            var secondPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.Last(), secondPlayer.Name, secondPlayer.Surname, IMediatorMock.GetMock());
             secondPlayerAssign.Should().NotBeNull();
 
             var savedTournament = await GetTournamentById(tournament.Id);
@@ -51,11 +52,13 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
             selectedTeams.Count.Should().Be(2);
             var firstSelectedTeam = selectedTeams.First();
-            firstSelectedTeam.Player.Id.Should().Be(firstPlayerId);
+            firstSelectedTeam.Player.Name.Should().Be(firstPlayer.Name);
+            firstSelectedTeam.Player.Surname.Should().Be(firstPlayer.Surname);
             firstSelectedTeam.TeamName.Value.Should().Be(TournamentTeamNames.Teams.First());
 
             var secondSelectedPlayer = selectedTeams.Last();
-            secondSelectedPlayer.Player.Id.Should().Be(secondPLayerId);
+            secondSelectedPlayer.Player.Name.Should().Be(secondPlayer.Name);
+            secondSelectedPlayer.Player.Surname.Should().Be(secondPlayer.Surname);
             secondSelectedPlayer.TeamName.Value.Should().Be(TournamentTeamNames.Teams.Last());
         }
 
@@ -63,8 +66,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         public async Task TeamSelectedDespiteHubException()
         {
             var tournament = await CreateTournamentWithPlayers(_players);
-            var playerId = tournament.Players.First().Id;
-            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.First(), playerId, IMediatorMock.GetMockWithException<TeamSelectedMessageEvent>());
+            var player = tournament.Players.First();
+            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.First(), player.Name, player.Surname, IMediatorMock.GetMockWithException<TeamSelectedMessageEvent>());
 
             firstPlayerAssign.Should().NotBeNull();
 
@@ -76,7 +79,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
             selectedTeams.Count.Should().Be(1);
             var firstSelectedTeam = selectedTeams.First();
-            firstSelectedTeam.Player.Id.Should().Be(playerId);
+            firstSelectedTeam.Player.Name.Should().Be(player.Name);
+            firstSelectedTeam.Player.Surname.Should().Be(player.Surname);
             firstSelectedTeam.TeamName.Value.Should().Be(TournamentTeamNames.Teams.First());
         }
 
@@ -84,15 +88,16 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         [Test]
         public async Task SelectTeam_TournamentDoesNotExist_ThrowsAsync()
         {
-            var func = () => SelectTeamCommandHandler(Guid.NewGuid(), "asdasd", Guid.NewGuid(), IMediatorMock.GetMock());
+            var func = () => SelectTeamCommandHandler(Guid.NewGuid(), "asdasd", "hehe", "fiu fiu", IMediatorMock.GetMock());
             await func.Should().ThrowAsync<ArgumentException>();
         }
 
-        private async Task<Unit> SelectTeamCommandHandler(Guid tournamentId, string teamName, Guid playerId, IMediator mediatorMock)
+        private async Task<Unit> SelectTeamCommandHandler(Guid tournamentId, string teamName, string playerName, string playerSurname, IMediator mediatorMock)
         {
             return await new SelectTeamCommandHandler(GetRepository(), mediatorMock).Handle(new SelectTeamCommand
             {
-                PlayerId = playerId,
+                PlayerName = playerName,
+                PlayerSurname = playerSurname,
                 Team = teamName,
                 TournamentId = tournamentId
             }, new CancellationToken());

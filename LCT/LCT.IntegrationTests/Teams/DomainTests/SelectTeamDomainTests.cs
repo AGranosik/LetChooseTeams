@@ -1,5 +1,4 @@
 ﻿using FluentAssertions;
-using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using NUnit.Framework;
@@ -11,7 +10,7 @@ namespace LCT.IntegrationTests.Teams.DomainTests
     [TestFixture]
     public class SelectTeamDomainTests
     {
-        private readonly Player _player = Player.Register("sdasd", "hehe", Guid.NewGuid());
+        private readonly Player _player = Player.Create("sdasd", "hehe");
 
         [Test]
         public void TeamNameCannotBeEmpty()

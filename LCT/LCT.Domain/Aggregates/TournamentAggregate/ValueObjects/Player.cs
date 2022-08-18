@@ -3,11 +3,13 @@ using static LCT.Core.Shared.Validation.FieldValidationExtension;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 {
-    public class PlayerName : ValueType<PlayerName>
+    public class Player : ValueType<Player>
     {
+        public static Player Create(string name, string surname)
+            => new(name, surname);
         public string Name { get; private set; }
         public string Surname { get; private set; }
-        public PlayerName(string name, string surname)
+        private Player(string name, string surname)
         {
             Validate(name);
             Validate(surname);
@@ -17,8 +19,8 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 
         private void Validate(string field)
         {
-            CheckIfNullOrEmpty(field, nameof(PlayerName));
-            CheckFieldLength(field, nameof(PlayerName));
+            CheckIfNullOrEmpty(field, nameof(Player));
+            CheckFieldLength(field, nameof(Player));
         }
 
         public override bool Equals(object obj)
@@ -26,7 +28,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
 
-            PlayerName other = obj as PlayerName;
+            Player other = obj as Player;
             if(other == null) return false;
             return Name == other.Name && Surname == other.Surname;
         }

@@ -1,4 +1,5 @@
 ﻿using LCT.Core.Shared.BaseTypes;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.Events
@@ -8,12 +9,12 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Events
     public class TeamSelected : BaseEsEvent
     {
         public string TeamName { get; set; }
-        public Guid PlayerId { get; set; }
+        public Player Player { get; set; }
 
-        public TeamSelected(string teamName, Guid playerId, Guid streamId) : base(streamId)
+        public TeamSelected(Player player, string teamName, Guid streamId) : base(streamId)
         {
             TeamName = teamName;
-            PlayerId = playerId;
+            Player = player;
         }
     }
 }

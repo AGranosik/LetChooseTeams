@@ -10,7 +10,8 @@ namespace LCT.Application.Teams.Events
     {
         public override string Type { get => "TeamSelected"; }
         public Guid TournamentId { get; set; }
-        public Guid PlayerId { get; set; }
+        public string PlayerName { get; set; }
+        public string PlayerSurname { get; set; }
         public string Team { get; set; }
     }
 

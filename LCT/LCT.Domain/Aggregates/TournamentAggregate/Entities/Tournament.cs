@@ -29,7 +29,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
         public Guid AddPlayer(string name, string surname)
         {
             var playerId = Guid.NewGuid();
-            var player = Player.Register(name, surname, playerId);
+            var player = Player.Create(name, surname);
             CheckIfPlayerAlreadyExists(player);
             Limit.ChceckIfPlayerCanBeAdded(NumberOfPlayers);
             Apply(new PlayerAdded(player.Name, player.Surname, playerId, Id));
@@ -43,14 +43,15 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
                 throw new PlayerAlreadyAssignedToTournamentException();
         }
 
-        public void SelectTeam(Guid playerId, string team)
+        public void SelectTeam(string playerName, string playerSurname, string team)
         {
-            var player = _players.FirstOrDefault(p => p.Id == playerId);
+            var playerToFind = Player.Create(playerName, playerSurname);
+            var player = _players.FirstOrDefault(p => p == playerToFind);
             CheckIfPlayerInTournament(player);
             var selectedTeam = SelectedTeam.Create(player, team);
             CheckIfPlayerNotSelectedTeamBefore(selectedTeam);
             CheckIfTeamAlreadySelected(selectedTeam);
-            Apply(new TeamSelected(team, playerId, Id));
+            Apply(new TeamSelected(player, team, Id));
         }
 
         public void DrawnTeamForPLayers(ITournamentDomainService service) // to chyba do wywalenia
@@ -114,13 +115,13 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 
         private void OnTeamSelect(TeamSelected ts)
         {
-            var player = _players.FirstOrDefault(p => p.Id == ts.PlayerId);
+            var player = _players.FirstOrDefault(p => p == ts.Player);
             _selectedTeams.Add(SelectedTeam.Create(player, ts.TeamName));
         }
 
         private void OnPlayerAdded(PlayerAdded pa)
         {
-            _players.Add(Player.Register(pa.Name, pa.Surname, pa.PlayerId));
+            _players.Add(Player.Create(pa.Name, pa.Surname));
         }
 
         private void OnCreated(TournamentCreated tc)
