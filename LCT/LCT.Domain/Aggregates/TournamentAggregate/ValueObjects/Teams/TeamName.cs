@@ -1,6 +1,6 @@
 ﻿using LCT.Domain.Aggregates.TournamentAggregate.Types;
 
-namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
+namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
 {
     public class TeamName : Name
     {
@@ -10,7 +10,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 
         protected override void Validate(string name)
         {
-            if(string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
                 throw new ArgumentNullException("Nazwa druzyny nie moze byc pusta.");
 
             if (!TournamentTeamNames.TeamExists(name))

@@ -15,8 +15,8 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 
         protected virtual void Validate(string name)
         {
-            CheckIfNullOrEmpty(name, nameof(TournamentName));
-            CheckFieldLength(name, nameof(TournamentName));
+            CheckIfNullOrEmpty(name, nameof(Name));
+            CheckFieldLength(name, nameof(Name));
         }
 
         public static implicit operator string(Name name) => name.Value;

@@ -4,15 +4,16 @@ using MongoDB.Driver;
 
 namespace LCT.Infrastructure.Repositories
 {
-    public class AggregateRepository<T> : IRepository<T>
-        where T : Aggregate, new ()
+    public class AggregateRepository<T, TKey> : IRepository<T, TKey>
+        where T : Aggregate<TKey>, new ()
+        where TKey : ValueType<TKey>
     {
         private readonly IPersistanceClient _client;
         public AggregateRepository(IPersistanceClient client)
         {
             _client = client;
         }
-        public async Task<T> Load(Guid Id)
+        public async Task<T> LoadAsync(Guid Id)
         {
             var t = await _client.GetStream(typeof(T).Name).FindAsync(ts => ts.StreamId == Id);
             var result = t.ToList();
@@ -23,7 +24,7 @@ namespace LCT.Infrastructure.Repositories
             return aggregate;
         }
 
-        public async Task Save(T model)
+        public async Task SaveAsync(T model)
         {
             await _client.GetStream(typeof(T).Name).InsertOneAsync(model.GetChanges().Last());
         }

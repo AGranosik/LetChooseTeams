@@ -1,7 +1,8 @@
 ﻿using LCT.Core.Shared.BaseTypes;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 
-namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
+namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
 {
     public class SelectedTeam : ValueType<SelectedTeam>
     {

@@ -17,7 +17,7 @@ namespace LCT.Application.Players.Commands
     public class AssignPlayerToTournamentCommandHandler : IRequestHandler<AssignPlayerToTournamentCommand, Guid>
     {
         private readonly IMediator _mediator;
-        private readonly IRepository<Tournament> _repository;
+        private readonly IRepository<Tournament> _repository; // jakos ograniczyc by to byl aggregate, ale co w sytuacji gdy w aggregacie będzie aggregat??
         public AssignPlayerToTournamentCommandHandler(IMediator mediator, IRepository<Tournament> reposiotry)
         {
             _mediator = mediator;

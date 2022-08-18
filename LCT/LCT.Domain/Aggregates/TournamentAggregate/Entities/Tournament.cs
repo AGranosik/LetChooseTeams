@@ -3,19 +3,19 @@ using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 {
-    public class Tournament : Aggregate
+    public class Tournament : Aggregate<TournamentId>
     {
-        public Tournament() { }
-
-        private Tournament(TournamentName tournamentName, TournamentLimit limit)
+        private Tournament() : base(TournamentId.Create()) { }
+        private Tournament(TournamentName tournamentName, TournamentLimit limit) : base(TournamentId.Create())
         {
             Limit = limit;
             TournamentName = tournamentName;
         }
-        public Guid Id { get; private set; }
         public TournamentName TournamentName { get; private set; }
         private List<Player> _players = new List<Player>();
         public IReadOnlyCollection<Player> Players => _players.AsReadOnly();

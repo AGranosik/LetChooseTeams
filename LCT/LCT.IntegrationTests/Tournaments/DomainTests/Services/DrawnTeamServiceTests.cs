@@ -1,6 +1,7 @@
 ﻿using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
-using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

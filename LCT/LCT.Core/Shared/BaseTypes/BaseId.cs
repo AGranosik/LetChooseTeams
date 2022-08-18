@@ -3,7 +3,7 @@
     public abstract class BaseId<TKey, TType> : ValueType<TKey>
         where TKey : ValueType<TKey>
     {
-        public BaseId(TType id)
+        protected BaseId(TType id)
         {
             Value = id;
         }
@@ -16,7 +16,5 @@
 
             return Value.Equals(key.Value);
         }
-
-
     }
 }

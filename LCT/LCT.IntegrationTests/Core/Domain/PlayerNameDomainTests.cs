@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using LCT.Core.Shared.Exceptions;
-using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 using NUnit.Framework;
 
 namespace LCT.IntegrationTests.Core.Domain

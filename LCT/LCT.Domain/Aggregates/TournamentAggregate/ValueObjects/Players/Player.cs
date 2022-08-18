@@ -1,6 +1,6 @@
 ﻿using LCT.Core.Shared.BaseTypes;
 
-namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
+namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players
 {
     public class Player : ValueType<Player>
     {
@@ -20,7 +20,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
             if (ReferenceEquals(this, obj)) return true;
 
             Player other = obj as Player;
-            if(other == null) return false;
+            if (other == null) return false;
             return Name == other.Name && Surname == other.Surname;
         }
     }

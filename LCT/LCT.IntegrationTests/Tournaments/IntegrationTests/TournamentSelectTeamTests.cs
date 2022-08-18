@@ -3,7 +3,7 @@ using LCT.Application.Teams.Commands;
 using LCT.Application.Teams.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
-using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 using LCT.IntegrationTests.Mocks;
 using MediatR;
 using NUnit.DFM;

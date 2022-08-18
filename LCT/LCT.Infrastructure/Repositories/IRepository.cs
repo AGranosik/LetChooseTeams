@@ -2,10 +2,11 @@
 
 namespace LCT.Infrastructure.Repositories
 {
-    public interface IRepository<T>
-        where T : Aggregate
+    public interface IRepository<T, TKey>
+        where T : Aggregate<TKey>, new()
+        where TKey : ValueType<TKey>
     {
-        Task<T> Load(Guid Id);
-        Task Save(T model);
+        Task<T> LoadAsync(Guid Id);
+        Task SaveAsync(T model);
     }
 }

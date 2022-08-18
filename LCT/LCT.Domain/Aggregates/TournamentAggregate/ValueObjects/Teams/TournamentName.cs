@@ -1,4 +1,4 @@
-﻿namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
+﻿namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
 {
     public class TournamentName : Name
     {

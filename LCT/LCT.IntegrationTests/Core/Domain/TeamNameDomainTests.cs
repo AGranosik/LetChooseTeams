@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
-using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 using NUnit.Framework;
 using System;
 using System.Linq;
