@@ -11,7 +11,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
             Validate(limit);
             Limit = limit;
         }
-        public int Limit { get; private set; }
+        public int Limit { get; init; }
 
         private void Validate(int limit)
         {

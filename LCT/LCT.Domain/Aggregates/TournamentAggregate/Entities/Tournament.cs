@@ -126,7 +126,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 
         private void OnCreated(TournamentCreated tc)
         {
-            TournamentName = tc.Name;
+            TournamentName = new TournamentName(tc.Name);
             Limit = tc.Limit;
             Id = tc.StreamId;
             // jak dodawaćte dodatkowe dane typu Id i timestamp

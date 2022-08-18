@@ -16,10 +16,5 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
             if (!TournamentTeamNames.TeamExists(name))
                 throw new ArgumentNullException("Niepoprawna nazwa druzyny.");
         }
-
-
-        public static implicit operator string(TeamName name) => name.Value;
-
-        public static implicit operator TeamName(string name) => new(name);
     }
 }

@@ -10,13 +10,16 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
             Validate(name);
             Value = name;
         }
-        public string Value { get; private set; }
+
+        public string Value { get; init; }
 
         protected virtual void Validate(string name)
         {
             CheckIfNullOrEmpty(name, nameof(TournamentName));
             CheckFieldLength(name, nameof(TournamentName));
         }
+
+        public static implicit operator string(Name name) => name.Value;
 
         public override string ToString() => Value;
 

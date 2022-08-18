@@ -1,5 +1,4 @@
 ﻿using LCT.Core.Shared.BaseTypes;
-using static LCT.Core.Shared.Validation.FieldValidationExtension;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 {
@@ -7,20 +6,12 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
     {
         public static Player Create(string name, string surname)
             => new(name, surname);
-        public string Name { get; private set; }
-        public string Surname { get; private set; }
+        public PlayerName Name { get; init; }
+        public PlayerSurname Surname { get; init; }
         private Player(string name, string surname)
         {
-            Validate(name);
-            Validate(surname);
-            Name = name;
-            Surname = surname;
-        }
-
-        private void Validate(string field)
-        {
-            CheckIfNullOrEmpty(field, nameof(Player));
-            CheckFieldLength(field, nameof(Player));
+            Name = new PlayerName(name);
+            Surname = new PlayerSurname(surname);
         }
 
         public override bool Equals(object obj)
