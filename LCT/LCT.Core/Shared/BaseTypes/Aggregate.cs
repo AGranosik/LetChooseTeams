@@ -1,6 +1,6 @@
 ﻿namespace LCT.Core.Shared.BaseTypes
 {
-    public abstract class Aggregate<TKey> : Entity<TKey>
+    public abstract class Aggregate<TKey> : Entity<TKey>, IAgregateRoot
         where TKey : ValueType<TKey>
     {
         private readonly IList<BaseEsEvent> _changes = new List<BaseEsEvent>();
@@ -29,4 +29,11 @@
         }
         public BaseEsEvent[] GetChanges() => _changes.OrderBy(c => c.TimeStamp).ToArray();
     }
+
+    public interface IAgregateRoot {
+        void Load(long version, IEnumerable<object> history);
+
+        BaseEsEvent[] GetChanges();
+    }
+
 }

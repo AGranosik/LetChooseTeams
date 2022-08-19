@@ -14,7 +14,7 @@ namespace NUnit.DFM
 {
     [SetUpFixture]
     public partial class Testing<TModel>: IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
-        where TModel: Aggregate
+        where TModel: IAgregateRoot
     {
         protected IServiceScopeFactory _scopeFactory;
         protected IServiceScope _scope;
@@ -94,13 +94,13 @@ namespace NUnit.DFM
             => _scope.ServiceProvider.GetRequiredService<IMongoClient>();
 
         protected IRepository<TModel> GetRepository<TModel>()
-            where TModel : Aggregate
+            where TModel : IAgregateRoot
             => _scope.ServiceProvider.GetRequiredService<IRepository<TModel>>();
 
         protected async Task AddAsync(TModel entity)
         {
             var dbContext = GetRepository();
-            await dbContext.Save(entity);
+            await dbContext.SaveAsync(entity);
         }
 
     }

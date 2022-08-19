@@ -61,7 +61,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         private async Task<Tournament> GetTournament(Guid id)
         {
             var repository = GetRepository();
-            return await repository.Load(id);
+            return await repository.LoadAsync(id);
         }
 
     }

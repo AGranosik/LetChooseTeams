@@ -26,14 +26,14 @@ namespace LCT.Application.Teams.Commands
         }
         public async Task<Unit> Handle(SelectTeamCommand request, CancellationToken cancellationToken)
         {
-            var tournament = await _repository.Load(request.TournamentId);
+            var tournament = await _repository.LoadAsync(request.TournamentId);
 
             if (tournament == null)
                 throw new ArgumentException("Turniej nie istnieje.");
 
             tournament.SelectTeam(request.PlayerName, request.PlayerSurname, request.Team);
 
-            await _repository.Save(tournament);
+            await _repository.SaveAsync(tournament);
 
             try
             {

@@ -37,14 +37,14 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             var tournament = await CreateTournamentWithPlayers(_players);
             var firstPlayer = tournament.Players.First();
             var secondPlayer = tournament.Players.Last();
-            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.First(), firstPlayer.Name, firstPlayer.Surname, IMediatorMock.GetMock());
+            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id.Value, TournamentTeamNames.Teams.First(), firstPlayer.Name, firstPlayer.Surname, IMediatorMock.GetMock());
 
             firstPlayerAssign.Should().NotBeNull();
 
-            var secondPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.Last(), secondPlayer.Name, secondPlayer.Surname, IMediatorMock.GetMock());
+            var secondPlayerAssign = await SelectTeamCommandHandler(tournament.Id.Value, TournamentTeamNames.Teams.Last(), secondPlayer.Name, secondPlayer.Surname, IMediatorMock.GetMock());
             secondPlayerAssign.Should().NotBeNull();
 
-            var savedTournament = await GetTournamentById(tournament.Id);
+            var savedTournament = await GetTournamentById(tournament.Id.Value);
             savedTournament.Should().NotBeNull();
 
             var selectedTeams = savedTournament.SelectedTeams;
@@ -67,11 +67,11 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         {
             var tournament = await CreateTournamentWithPlayers(_players);
             var player = tournament.Players.First();
-            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id, TournamentTeamNames.Teams.First(), player.Name, player.Surname, IMediatorMock.GetMockWithException<TeamSelectedMessageEvent>());
+            var firstPlayerAssign = await SelectTeamCommandHandler(tournament.Id.Value, TournamentTeamNames.Teams.First(), player.Name, player.Surname, IMediatorMock.GetMockWithException<TeamSelectedMessageEvent>());
 
             firstPlayerAssign.Should().NotBeNull();
 
-            var savedTournament = await GetTournamentById(tournament.Id);
+            var savedTournament = await GetTournamentById(tournament.Id.Value);
             savedTournament.Should().NotBeNull();
 
             var selectedTeams = savedTournament.SelectedTeams;
@@ -104,7 +104,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         }
 
         private async Task<Tournament> GetTournamentById(Guid id)
-        => await GetRepository().Load(id);
+        => await GetRepository().LoadAsync  (id);
 
         private async Task<Tournament> CreateTournamentWithPlayers(List<Player> players)
         {

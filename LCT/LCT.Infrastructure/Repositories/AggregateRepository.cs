@@ -4,29 +4,28 @@ using MongoDB.Driver;
 
 namespace LCT.Infrastructure.Repositories
 {
-    public class AggregateRepository<T, TKey> : IRepository<T, TKey>
-        where T : Aggregate<TKey>, new ()
-        where TKey : ValueType<TKey>
+    public class AggregateRepository<TAggregateRoot> : IRepository<TAggregateRoot>
+        where TAggregateRoot : IAgregateRoot, new()
     {
         private readonly IPersistanceClient _client;
         public AggregateRepository(IPersistanceClient client)
         {
             _client = client;
         }
-        public async Task<T> LoadAsync(Guid Id)
+        public async Task<TAggregateRoot> LoadAsync(Guid Id)
         {
-            var t = await _client.GetStream(typeof(T).Name).FindAsync(ts => ts.StreamId == Id);
+            var t = await _client.GetStream(typeof(TAggregateRoot).Name).FindAsync(ts => ts.StreamId == Id);
             var result = t.ToList();
             if (result.Count == 0)
-                return null;
-            var aggregate = new T();
+                return default(TAggregateRoot);
+            var aggregate = new TAggregateRoot();
             aggregate.Load(1, result);
             return aggregate;
         }
 
-        public async Task SaveAsync(T model)
+        public async Task SaveAsync(TAggregateRoot model)
         {
-            await _client.GetStream(typeof(T).Name).InsertOneAsync(model.GetChanges().Last());
+            await _client.GetStream(typeof(TAggregateRoot).Name).InsertOneAsync(model.GetChanges().Last());
         }
     }
 }

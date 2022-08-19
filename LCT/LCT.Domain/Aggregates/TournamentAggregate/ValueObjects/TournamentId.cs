@@ -9,6 +9,9 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
         }
 
         public static TournamentId Create()
-            => new TournamentId(Guid.NewGuid());
+            => new(Guid.NewGuid());
+
+        public static TournamentId Create(Guid id)
+            => new(id);
     }
 }

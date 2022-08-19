@@ -8,6 +8,7 @@ using MediatR;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -27,11 +28,11 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         public async Task AssignPlayer_Success()
         {
             var tournament = await CreateTournament();
-            var action = () => AssignPlayerCommandHandleAsync("name", "surname", tournament.Id, IMediatorMock.GetMock());
+            var action = () => AssignPlayerCommandHandleAsync("name", "surname", tournament.Id.Value, IMediatorMock.GetMock());
 
             await action.Should().NotThrowAsync();
 
-            var tournamentFromDb = await GetTournamentById(tournament.Id);
+            var tournamentFromDb = await GetTournamentById(tournament.Id.Value);
             tournamentFromDb.Should().NotBeNull();
             tournamentFromDb.Players.Count.Should().Be(1);
         }
@@ -42,9 +43,9 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             var tournament = await CreateTournament();
             tournament.AddPlayer("name", "surname");
             var repository = GetRepository();
-            await repository.Save(tournament);
+            await repository.SaveAsync(tournament);
 
-            var action = () => AssignPlayerCommandHandleAsync("name", "surname", tournament.Id, IMediatorMock.GetMock());
+            var action = () => AssignPlayerCommandHandleAsync("name", "surname", tournament.Id.Value, IMediatorMock.GetMock());
 
             await action.Should().ThrowAsync<PlayerAlreadyAssignedToTournamentException>();
         }
@@ -53,14 +54,13 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         public async Task AssignPlayer_ReturnsPlayerIdDespiteHubException()
         {
             var tournament = await CreateTournament();
-            var result = await AssignPlayerCommandHandleAsync("name", "surname", tournament.Id, IMediatorMock.GetMockWithException<PlayerAssignedEvent>());
+            var result = await AssignPlayerCommandHandleAsync("name", "surname", tournament.Id.Value, IMediatorMock.GetMockWithException<PlayerAssignedEvent>());
 
-            result.Should().NotBeEmpty();
-            result.Should().NotBe(default(Guid));
+            result.Should().NotBeNull();
 
         }
 
-        private async Task<Guid> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId, IMediator mediator)
+        private async Task<Unit> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId, IMediator mediator)
         {
             return await new AssignPlayerToTournamentCommandHandler(mediator, GetRepository()).Handle(new AssignPlayerToTournamentCommand
             {
@@ -73,7 +73,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
 
         private async Task<Tournament> GetTournamentById(Guid id)
-            => await GetRepository().Load(id);
+            => await GetRepository().LoadAsync(id);
         private async Task<Tournament> CreateTournament()
         {
             var tournament = Tournament.Create("test", 3);

@@ -5,7 +5,7 @@ using NUnit.DFM.Interfaces;
 namespace NUnit.DFM
 {
     public partial class Testing<TModel> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
-        where TModel : Aggregate
+        where TModel : IAgregateRoot
     {
         public IAppConfigurationSetUp Environment(string env)
             => _appConfiguration.Environment(env);

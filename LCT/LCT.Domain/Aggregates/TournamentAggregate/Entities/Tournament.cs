@@ -10,7 +10,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 {
     public class Tournament : Aggregate<TournamentId>
     {
-        private Tournament() : base(TournamentId.Create()) { }
+        public Tournament() : base(TournamentId.Create()) { }
         private Tournament(TournamentName tournamentName, TournamentLimit limit) : base(TournamentId.Create())
         {
             Limit = limit;
@@ -26,15 +26,12 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
         public TournamentLimit Limit { get; private set; }
         public int NumberOfPlayers => _players.Count;
 
-        public Guid AddPlayer(string name, string surname)
+        public void AddPlayer(string name, string surname)
         {
-            var playerId = Guid.NewGuid();
             var player = Player.Create(name, surname);
             CheckIfPlayerAlreadyExists(player);
             Limit.ChceckIfPlayerCanBeAdded(NumberOfPlayers);
-            Apply(new PlayerAdded(player.Name, player.Surname, playerId, Id));
-
-            return playerId;
+            Apply(new PlayerAdded(player.Name, player.Surname, Id.Value));
         }
         
         private void CheckIfPlayerAlreadyExists(Player player)
@@ -51,7 +48,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             var selectedTeam = SelectedTeam.Create(player, team);
             CheckIfPlayerNotSelectedTeamBefore(selectedTeam);
             CheckIfTeamAlreadySelected(selectedTeam);
-            Apply(new TeamSelected(player, team, Id));
+            Apply(new TeamSelected(player, team, Id.Value));
         }
 
         public void DrawnTeamForPLayers(ITournamentDomainService service) // to chyba do wywalenia
@@ -128,7 +125,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
         {
             TournamentName = new TournamentName(tc.Name);
             Limit = tc.Limit;
-            Id = tc.StreamId;
+            Id = TournamentId.Create(tc.StreamId);
             // jak dodawaćte dodatkowe dane typu Id i timestamp
         }
     }

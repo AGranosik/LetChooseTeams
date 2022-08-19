@@ -6,7 +6,7 @@ using Serilog;
 
 namespace LCT.Application.Players.Commands
 {
-    public class AssignPlayerToTournamentCommand: IRequest<Guid>
+    public class AssignPlayerToTournamentCommand: IRequest<Unit>
     {
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -14,7 +14,7 @@ namespace LCT.Application.Players.Commands
     }
 
     public record PlayerAssignedMessageDto(Guid Id, string Name, string Surname);
-    public class AssignPlayerToTournamentCommandHandler : IRequestHandler<AssignPlayerToTournamentCommand, Guid>
+    public class AssignPlayerToTournamentCommandHandler : IRequestHandler<AssignPlayerToTournamentCommand, Unit>
     {
         private readonly IMediator _mediator;
         private readonly IRepository<Tournament> _repository; // jakos ograniczyc by to byl aggregate, ale co w sytuacji gdy w aggregacie będzie aggregat??
@@ -23,20 +23,19 @@ namespace LCT.Application.Players.Commands
             _mediator = mediator;
             _repository = reposiotry;
         }
-        public async Task<Guid> Handle(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)
         {
-            var tournament = await _repository.Load(request.TournamentId);
-            var playerId = tournament.AddPlayer(request.Name, request.Surname);
+            var tournament = await _repository.LoadAsync(request.TournamentId);
+            tournament.AddPlayer(request.Name, request.Surname);
 
-            await _repository.Save(tournament);
+            await _repository.SaveAsync(tournament);
             try
             {
                 await _mediator.Publish(new PlayerAssignedEvent
                 {
                     TournamentId = request.TournamentId,
                     Name = request.Name,
-                    Surname = request.Surname,
-                    PlayerId = playerId
+                    Surname = request.Surname
                 });
 
             }
@@ -44,7 +43,8 @@ namespace LCT.Application.Players.Commands
             {
                 Log.Error(ex, "While publishing player assigment event...");
             }
-            return playerId;
+
+            return Unit.Value;
         }
     }
 

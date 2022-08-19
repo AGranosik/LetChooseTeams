@@ -5,7 +5,7 @@ using NUnit.DFM.Interfaces;
 namespace NUnit.DFM
 {
     public partial class Testing<TModel> : IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
-        where TModel : Aggregate
+        where TModel : IAgregateRoot
     {
         public IServiceCollectionSetUp SwapSingleton<TSingleton>(TSingleton singleton)
             where TSingleton : class

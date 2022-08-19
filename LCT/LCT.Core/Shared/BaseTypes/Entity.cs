@@ -7,7 +7,7 @@
         {
             Id = id;
         }
-        public TKey Id { get; private set; }
+        public TKey Id { get; protected set; }
 
         public override bool Equals(object obj)
         {
@@ -19,7 +19,11 @@
         }
 
         public static bool operator ==(Entity<TKey> a, Entity<TKey> b)
-            => a.Id.Equals(b.Id);
+        {
+            if(ReferenceEquals(a, b))
+                return true;
+            return a.Equals(b);
+        }
 
         public static bool operator !=(Entity<TKey> a, Entity<TKey> b) => !(a == b);
     }
