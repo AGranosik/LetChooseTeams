@@ -2,6 +2,7 @@
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
+using LCT.Domain.Aggregates.TournamentAggregate.Validators;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
@@ -10,7 +11,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 {
     public class Tournament : Aggregate<TournamentId>
     {
-        public Tournament() : base(TournamentId.Create()) { }
+        public Tournament() : base(null) { }
         private Tournament(TournamentName tournamentName, TournamentLimit limit) : base(TournamentId.Create())
         {
             Limit = limit;
@@ -28,27 +29,16 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 
         public void AddPlayer(string name, string surname)
         {
-            var player = Player.Create(name, surname);
-            CheckIfPlayerAlreadyExists(player);
-            Limit.ChceckIfPlayerCanBeAdded(NumberOfPlayers);
-            Apply(new PlayerAdded(player.Name, player.Surname, Id.Value));
+            var playerToValidate = Player.Create(name, surname);
+            this.AddPlayerValidation(playerToValidate);
+            Apply(new PlayerAdded(playerToValidate.Name, playerToValidate.Surname, Id.Value));
         }
         
-        private void CheckIfPlayerAlreadyExists(Player player)
-        {
-            if(_players.Any(p => p == player))
-                throw new PlayerAlreadyAssignedToTournamentException();
-        }
-
         public void SelectTeam(string playerName, string playerSurname, string team)
         {
             var playerToFind = Player.Create(playerName, playerSurname);
-            var player = _players.FirstOrDefault(p => p == playerToFind);
-            CheckIfPlayerInTournament(player);
-            var selectedTeam = SelectedTeam.Create(player, team);
-            CheckIfPlayerNotSelectedTeamBefore(selectedTeam);
-            CheckIfTeamAlreadySelected(selectedTeam);
-            Apply(new TeamSelected(player, team, Id.Value));
+
+            Apply(new TeamSelected(playerToFind, team, Id.Value));
         }
 
         public void DrawnTeamForPLayers(ITournamentDomainService service) // to chyba do wywalenia
@@ -67,24 +57,6 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 
             if (_drawTeams is null || _drawTeams.Count() == 0)
                 _drawTeams = service.DrawTeamForPlayers(_selectedTeams);
-        }
-
-        private void CheckIfPlayerInTournament(Player player)
-        {
-            if (!_players.Any(p => p == player))
-                throw new PlayerNotInTournamentException();
-        }
-
-        private void CheckIfTeamAlreadySelected(SelectedTeam team)
-        {
-            if(_selectedTeams.Any(p => p.IsAlreadyPicked(team)))
-                throw new TeamAlreadySelectedException();
-        }
-
-        private void CheckIfPlayerNotSelectedTeamBefore(SelectedTeam team)
-        {
-            if (_selectedTeams.Any(p => p.Player == team.Player))
-                throw new PlayerSelectedTeamBeforeException();
         }
 
         public static Tournament Create(string tournamentName, int limit)
