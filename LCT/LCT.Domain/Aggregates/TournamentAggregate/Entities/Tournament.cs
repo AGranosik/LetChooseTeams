@@ -37,7 +37,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
         public void SelectTeam(string playerName, string playerSurname, string team)
         {
             var playerToFind = Player.Create(playerName, playerSurname);
-            //write tests
+            this.SelectTeamValidation(playerToFind, team);
             Apply(new TeamSelected(playerToFind, team, Id.Value));
         }
 

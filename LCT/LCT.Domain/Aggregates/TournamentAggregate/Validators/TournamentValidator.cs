@@ -35,6 +35,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Validators
 
         private static void CheckIfPlayerInTournament(Tournament tournament, Player player)
         {
+            var hehe = tournament.Players.Any(p => p == player);
             if (!tournament.Players.Any(p => p == player))
                 throw new PlayerNotInTournamentException();
         }
