@@ -1,4 +1,7 @@
-﻿using MediatR;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Types;
+using LCT.Infrastructure.Repositories;
+using MediatR;
 
 namespace LCT.Application.Teams.Queries
 {
@@ -9,16 +12,17 @@ namespace LCT.Application.Teams.Queries
     }
     public class GetTeamsQueryHandler : IRequestHandler<GetTeamsQuery, List<TeamToSelectDto>>
     {
-        public GetTeamsQueryHandler()
+        private readonly IRepository<Tournament> _repository;
+        public GetTeamsQueryHandler(IRepository<Tournament> repository)
         {
+            _repository = repository;
         }
         public async Task<List<TeamToSelectDto>> Handle(GetTeamsQuery request, CancellationToken cancellationToken)
         {
-            return null;
-            //var alreadySelected = await _dbContext.Tournaments.Where(t => t.Id == request.TournamentId)
-            //    .SelectMany(t => t.SelectedTeams).Select(st => st.TeamName).ToListAsync();
+            var tournament = await _repository.LoadAsync(request.TournamentId);
+            var alreadySelected = tournament.SelectedTeams;
 
-            //return TournamentTeamNames.Teams.Select(t => new TeamToSelectDto(t, alreadySelected.Any(selected => selected.Value == t))).ToList();
+            return TournamentTeamNames.Teams.Select(t => new TeamToSelectDto(t, alreadySelected.Any(selected => selected.TeamName == t))).ToList();
         }
         
     }

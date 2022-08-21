@@ -5,7 +5,7 @@ using NUnit.Framework;
 using System;
 using System.Linq;
 
-namespace LCT.IntegrationTests.Core.Domain
+namespace LCT.IntegrationTests.Tournaments.DomainTests.ValueTypes
 {
     [TestFixture]
     public class TeamNameDomainTests

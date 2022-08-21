@@ -3,7 +3,7 @@ using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using NUnit.Framework;
 
-namespace LCT.IntegrationTests.Core.Domain
+namespace LCT.IntegrationTests.Tournaments.DomainTests.ValueTypes
 {
     [TestFixture]
     public class TournamentLimitDomainTests

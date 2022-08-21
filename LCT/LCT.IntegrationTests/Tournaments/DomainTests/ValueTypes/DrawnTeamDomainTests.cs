@@ -7,7 +7,7 @@ using NUnit.Framework;
 using System;
 using System.Linq;
 
-namespace LCT.IntegrationTests.Teams.DomainTests
+namespace LCT.IntegrationTests.Tournaments.DomainTests.ValueTypes
 {
     public class DrawnTeamDomainTests
     {
