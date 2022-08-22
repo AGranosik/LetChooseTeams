@@ -66,9 +66,10 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
             {
                 var player = Player.Create(i.ToString(), i.ToString());
                 tournament.AddPlayer(player.Name, player.Surname);
+                await AddAsync(tournament);
                 tournament.SelectTeam(player.Name, player.Surname, TournamentTeamNames.Teams[i]);
+                await AddAsync(tournament);
             }
-            await AddAsync(tournament);
 
             return tournament;
         }
