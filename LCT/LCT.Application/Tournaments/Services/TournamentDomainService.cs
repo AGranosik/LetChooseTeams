@@ -33,7 +33,7 @@ namespace LCT.Core.Entites.Tournaments.Services
             return result;
         }
 
-        public async Task ValidateAsync(Tournament tournament)
+        public async Task TournamentUniqnessValidationAsync(Tournament tournament)
         {
             var isNameUnique = await _dbContext.CheckUniqness(nameof(Tournament), nameof(Tournament.TournamentName), tournament.TournamentName);
             if (!isNameUnique)

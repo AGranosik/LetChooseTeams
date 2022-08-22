@@ -24,7 +24,7 @@ namespace LCT.Application.Tournaments.Commands
         public async Task<Guid> Handle(CreateTournamentCommand request, CancellationToken cancellationToken)
         {
             var tournament = Tournament.Create(request.Name, request.PlayerLimit);
-            await _tournamentService.ValidateAsync(tournament); 
+            await _tournamentService.TournamentUniqnessValidationAsync(tournament); 
             await _repository.SaveAsync(tournament);
             return tournament.GetChanges().Last().StreamId; // tournament id
         }

@@ -41,7 +41,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             Apply(new TeamSelected(playerToFind, team, Id.Value));
         }
 
-        public void DrawnTeamForPLayers(ITournamentDomainService service) // to chyba do wywalenia
+        public void DrawnTeamForPLayers(ITournamentDomainService service)
         {
             if(service is null)
                 throw new ArgumentNullException(nameof(service));
@@ -98,7 +98,6 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             TournamentName = new TournamentName(tc.Name);
             Limit = tc.Limit;
             Id = TournamentId.Create(tc.StreamId);
-            // jak dodawaćte dodatkowe dane typu Id i timestamp
         }
     }
 }

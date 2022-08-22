@@ -1,4 +1,6 @@
-﻿using LCT.Domain.Aggregates.TournamentAggregate.Services;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Services;
+using LCT.Infrastructure.Repositories;
 using MediatR;
 
 namespace LCT.Application.Tournaments.Queries
@@ -8,30 +10,25 @@ namespace LCT.Application.Tournaments.Queries
         public Guid TournamentId { get; set; }
     }
 
-    public record DrawnTeamDto(Guid playerId, string teamName);
+    public record DrawnTeamDto(string name, string surname, string teamName);
     public class DrawTeamForPlayersQueryHandler : IRequestHandler<DrawTeamForPlayersQuery, List<DrawnTeamDto>>
     {
         private readonly ITournamentDomainService _tournamentDomainService;
-        public DrawTeamForPlayersQueryHandler(ITournamentDomainService tournamentDomainService)
+        private readonly IRepository<Tournament> _repository;
+        public DrawTeamForPlayersQueryHandler(ITournamentDomainService tournamentDomainService, IRepository<Tournament> repository)
         {
             _tournamentDomainService = tournamentDomainService;
+            _repository = repository;
         }
         public async Task<List<DrawnTeamDto>> Handle(DrawTeamForPlayersQuery request, CancellationToken cancellationToken)
         {
-            return null;
-            //var tournament = await _dbContext.Tournaments
-            //        .Include(t => t.DrawTeams)
-            //        .Include(t => t.Players)
-            //        .Include(t => t.SelectedTeams)
-            //    .FirstOrDefaultAsync(t => t.Id == request.TournamentId, cancellationToken);
+            var tournament = await _repository.LoadAsync(request.TournamentId);
+            if (tournament == null)
+                throw new ArgumentNullException();
 
-            //if (tournament == null)
-            //    throw new ArgumentNullException();
-
-            //tournament.DrawnTeamForPLayers(_tournamentDomainService);
-
-            //await _dbContext.SaveChangesAsync();
-            //return tournament.DrawTeams.Select(dt => new DrawnTeamDto(dt.Player.Id, dt.TeamName.Value)).ToList();
+            tournament.DrawnTeamForPLayers(_tournamentDomainService);
+            await _repository.SaveAsync(tournament);
+            return tournament.DrawTeams.Select(dt => new DrawnTeamDto(dt.Player.Name, dt.Player.Surname, dt.TeamName.Value)).ToList();
         }
     }
 }
