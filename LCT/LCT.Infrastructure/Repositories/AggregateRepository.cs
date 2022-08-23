@@ -25,7 +25,12 @@ namespace LCT.Infrastructure.Repositories
 
         public async Task SaveAsync(TAggregateRoot model)
         {
-            await _client.GetStream(typeof(TAggregateRoot).Name).InsertOneAsync(model.GetChanges().Last());
+            var changes = model.GetChanges();
+            var numberOfChanges = changes.Length;
+            if (numberOfChanges > 1)
+                await _client.GetStream(typeof(TAggregateRoot).Name).InsertManyAsync(changes);
+            else if(numberOfChanges == 1)
+                await _client.GetStream(typeof(TAggregateRoot).Name).InsertOneAsync(model.GetChanges().First());
         }
     }
 }

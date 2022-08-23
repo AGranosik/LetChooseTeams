@@ -56,7 +56,11 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
                 throw new NotAllPlayersSelectedTeamException();
 
             if (_drawTeams is null || _drawTeams.Count() == 0)
-                _drawTeams = service.DrawTeamForPlayers(_selectedTeams);
+            {
+                var result = service.DrawTeamForPlayers(_selectedTeams);
+                foreach (var @event in result)
+                    Apply(new DrawTeamEvent(@event.Player, @event.TeamName, Id.Value));
+            }
         }
 
         public static Tournament Create(string tournamentName, int limit)
@@ -79,7 +83,16 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
                 case TeamSelected ts:
                     OnTeamSelect(ts);
                     break;
+                case DrawTeamEvent dt:
+                    OnTeamDrawn(dt);
+                    break;
+
             }
+        }
+
+        private void OnTeamDrawn(DrawTeamEvent dt)
+        {
+            _drawTeams.Add(DrawnTeam.Create(dt.Player, dt.TeamName));
         }
 
         private void OnTeamSelect(TeamSelected ts)
