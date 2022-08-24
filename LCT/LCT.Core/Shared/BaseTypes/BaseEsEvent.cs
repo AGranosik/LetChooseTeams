@@ -9,8 +9,8 @@ namespace LCT.Core.Shared.BaseTypes
         {
             StreamId = streamId;
         }
-        public Guid Id { get; set; }
-        public Guid StreamId { get; private set; }
-        public DateTime TimeStamp { get; set; } = DateTime.UtcNow;
+        public Guid Id { get; init; }
+        public Guid StreamId { get; init; }
+        public DateTime TimeStamp { get; init; } = DateTime.UtcNow;
     }
 }

@@ -81,12 +81,11 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         private async Task<Tournament> CreateCompleteTournament(int limit, int players, int selectedTeams)
         {
             var tournament = Tournament.Create("test", limit);
-            await AddAsync(tournament);
+
             for (int i = 0; i < players; i++)
             {
                 var player = Player.Create(i.ToString(), i.ToString());
                 tournament.AddPlayer(player.Name, player.Surname);
-                await AddAsync(tournament);
             }
 
             for (int i = 0; i < selectedTeams; i++)
@@ -94,8 +93,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
                 var player = tournament.Players.ElementAt(i);
 
                 tournament.SelectTeam(player.Name, player.Surname, TournamentTeamNames.Teams[i]);
-                await AddAsync(tournament);
             }
+            await AddAsync(tournament);
             return tournament;
         }
 

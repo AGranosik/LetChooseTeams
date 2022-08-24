@@ -109,13 +109,12 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         private async Task<Tournament> CreateTournamentWithPlayers(List<Player> players)
         {
             var tournament = Tournament.Create("test", 3);
-            await AddAsync(tournament);
+
             foreach (var player in players)
             {
                 tournament.AddPlayer(player.Name, player.Surname);
-                await AddAsync(tournament);
-            
             }
+            await AddAsync(tournament);
 
             return tournament;
         }

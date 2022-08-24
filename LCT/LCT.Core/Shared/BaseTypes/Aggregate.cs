@@ -27,7 +27,7 @@
                 When(item);
             }
         }
-        public BaseEsEvent[] GetChanges() => _changes.OrderBy(c => c.TimeStamp).ToArray();
+        public BaseEsEvent[] GetChanges() => _changes.Where(c => c.Id == Guid.Empty).OrderBy(c => c.TimeStamp).ToArray();
     }
 
     public interface IAgregateRoot {
