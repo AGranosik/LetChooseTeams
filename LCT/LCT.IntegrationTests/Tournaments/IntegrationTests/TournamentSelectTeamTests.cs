@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using LCT.Application.Teams.Commands;
 using LCT.Application.Teams.Events;
+using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
@@ -89,7 +90,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         public async Task SelectTeam_TournamentDoesNotExist_ThrowsAsync()
         {
             var func = () => SelectTeamCommandHandler(Guid.NewGuid(), "asdasd", "hehe", "fiu fiu", IMediatorMock.GetMock());
-            await func.Should().ThrowAsync<ArgumentException>();
+            await func.Should().ThrowAsync<EntityDoesNotExist>();
         }
 
         private async Task<Unit> SelectTeamCommandHandler(Guid tournamentId, string teamName, string playerName, string playerSurname, IMediator mediatorMock)

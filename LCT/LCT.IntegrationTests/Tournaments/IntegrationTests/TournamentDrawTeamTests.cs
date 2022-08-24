@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using LCT.Application.Tournaments.Queries;
+using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
@@ -29,7 +30,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         {
             var action = () => DrawTeamQueryHandlerResult(new DrawTeamForPlayersQuery { TournamentId = Guid.Empty });
 
-            await action.Should().ThrowAsync<ArgumentNullException>();
+            await action.Should().ThrowAsync<EntityDoesNotExist>();
         }
 
         [Test]

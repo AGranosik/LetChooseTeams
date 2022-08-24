@@ -1,4 +1,5 @@
 ﻿using LCT.Core.Shared.BaseTypes;
+using LCT.Core.Shared.Exceptions;
 using LCT.Infrastructure.Persistance.Mongo;
 using MongoDB.Driver;
 
@@ -17,7 +18,7 @@ namespace LCT.Infrastructure.Repositories
             var t = await _client.GetStream(typeof(TAggregateRoot).Name).FindAsync(ts => ts.StreamId == Id);
             var result = t.ToList();
             if (result.Count == 0)
-                return default(TAggregateRoot);
+                throw new EntityDoesNotExist(typeof(TAggregateRoot).Name);
             var aggregate = new TAggregateRoot();
             aggregate.Load(1, result);
             return aggregate;

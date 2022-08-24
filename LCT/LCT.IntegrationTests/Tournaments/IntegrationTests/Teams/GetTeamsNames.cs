@@ -25,13 +25,6 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
         }
 
         [Test]
-        public async Task GetTeamsNames_TournamentDoesNotExist_DoesNotThrowException()
-        {
-            var func = async () => await GetTeamsNamesQueryHandler(Guid.NewGuid());
-            await func.Should().NotThrowAsync<EntityDoesNotExist>();
-        }
-
-        [Test]
         public async Task GetTeamsNames_AnyTeamSelected()
         {
             var tournament = await CreateTournamentWithPlayers(0);
@@ -66,16 +59,14 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
             {
                 var player = Player.Create(i.ToString(), i.ToString());
                 tournament.AddPlayer(player.Name, player.Surname);
-                await AddAsync(tournament);
                 tournament.SelectTeam(player.Name, player.Surname, TournamentTeamNames.Teams[i]);
-                await AddAsync(tournament);
             }
-            if (numberOfPLayers == 0)
-                await AddAsync(tournament);
+
+            await AddAsync(tournament);
             return tournament;
         }
 
         private async Task<List<TeamToSelectDto>> GetTeamsNamesQueryHandler(Guid tournamentId)
-        => await new GetTeamsQueryHandler(GetRepository()).Handle(new GetTeamsQuery() { TournamentId = tournamentId }, new CancellationToken());
+            => await new GetTeamsQueryHandler(GetRepository()).Handle(new GetTeamsQuery() { TournamentId = tournamentId }, new CancellationToken());
     }
 }

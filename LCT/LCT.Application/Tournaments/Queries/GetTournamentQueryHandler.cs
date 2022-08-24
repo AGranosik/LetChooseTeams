@@ -1,4 +1,7 @@
 ﻿using LCT.Application.Common;
+using LCT.Core.Shared.Exceptions;
+using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Infrastructure.Repositories;
 using MediatR;
 
 namespace LCT.Application.Tournaments.Queries
@@ -14,7 +17,6 @@ namespace LCT.Application.Tournaments.Queries
 
     public class PlayerDto
     {
-        public Guid Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string SelectedTeam { get; set; }
@@ -27,38 +29,37 @@ namespace LCT.Application.Tournaments.Queries
     public class GetTournamentQueryHandler : IRequestHandler<GetTournamentQuery, TournamentDto>
     {
         private readonly IQRCodeCreator _qrCodeCreator;
-        public GetTournamentQueryHandler(IQRCodeCreator qRCodeCreator)
+        private readonly IRepository<Tournament> _repository;
+        public GetTournamentQueryHandler(IQRCodeCreator qRCodeCreator, IRepository<Tournament> repository)
         {
             _qrCodeCreator = qRCodeCreator;
+            _repository = repository;
         }
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
-            return null;
-            //var tournament = await _dbContext.Tournaments
-            //    .Where(t => t.Id == request.TournamentId)
-            //    .Select(t => new TournamentDto
-            //        {
-            //            Id = t.Id,
-            //            TournamentName = t.TournamentName.ToString(),
-            //            PlayerLimit = t.Limit.Limit,
-            //            Players = t.Players.Select(p => new PlayerDto
-            //            {
-            //                Id = p.Id,
-            //                Name = p.Name,
-            //                Surname = p.Surname,
-            //                SelectedTeam = t.SelectedTeams.Where(st => st.Player.Id == p.Id).Select(st => st.TeamName).FirstOrDefault(),
-            //                DrawnTeam = t.DrawTeams.Where(dt => dt.Player.Id == p.Id).Select(dt => dt.TeamName).FirstOrDefault()
-            //            }).ToList()
-            //    })
-            //    .FirstOrDefaultAsync(cancellationToken);
+            var tournament = await _repository.LoadAsync(request.TournamentId);
 
-            //if (tournament == null)
-            //    throw new EntityDoesNotExist(nameof(Tournament));
-            
-            //var feLink = "http://" + IpAdressProvider.GetHostAdress() + ":3000/player/register/" + request.TournamentId;
-            //tournament.QRCode = _qrCodeCreator.Generate(feLink);
+            var dto = new TournamentDto
+            {
+                Id = tournament.Id.Value,
+                TournamentName = tournament.TournamentName,
+                PlayerLimit = tournament.Limit.Limit,
+                Players = tournament.Players.Select(p => new PlayerDto
+                {
+                    Name = p.Name,
+                    Surname = p.Surname,
+                    SelectedTeam = tournament.SelectedTeams.Where(st => st.Player == p).Select(st => st.TeamName).FirstOrDefault(),
+                    DrawnTeam = tournament.DrawTeams.Where(dt => dt.Player == p).Select(dt => dt.TeamName).FirstOrDefault()
+                }).ToList()
+            };
 
-            //return tournament;
+            if (tournament == null)
+                throw new EntityDoesNotExist(nameof(Tournament));
+
+            var feLink = "http://" + IpAdressProvider.GetHostAdress() + ":3000/player/register/" + request.TournamentId;
+            dto.QRCode = _qrCodeCreator.Generate(feLink);
+
+            return dto;
         }
     }
 }

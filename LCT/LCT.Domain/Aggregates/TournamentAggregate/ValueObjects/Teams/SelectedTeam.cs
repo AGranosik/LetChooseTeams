@@ -20,7 +20,6 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
             return new SelectedTeam(player, teamName);
         }
 
-        public Tournament Tournament { get; private set; }
         public Player Player { get; private set; }
         public TeamName TeamName { get; private set; }
 

@@ -25,7 +25,6 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
             throw new NotImplementedException();
         }
 
-        public Tournament Tournament { get; init; }
         public Player Player { get; init; }
         public TeamName TeamName { get; init; }
     }

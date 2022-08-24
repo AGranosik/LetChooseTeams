@@ -19,7 +19,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
             CheckFieldLength(name, nameof(Name));
         }
 
-        public static implicit operator string(Name name) => name.Value;
+        public static implicit operator string(Name name) => name?.Value;
 
         public override string ToString() => Value;
 
