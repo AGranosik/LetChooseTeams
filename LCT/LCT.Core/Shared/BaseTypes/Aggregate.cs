@@ -9,7 +9,6 @@
         {
         }
 
-        public long Version { get; private set; } = -1;
         protected abstract void When(object @event);
         public void Apply(BaseEsEvent @event)
         {
@@ -18,10 +17,8 @@
             _changes.Add(@event); // handle somehow domain events as well
         }
 
-        public void Load(long version, IEnumerable<object> history)
+        public void Load(IEnumerable<object> history)
         {
-            Version = version;
-
             foreach (var item in history)
             {
                 When(item);
@@ -31,7 +28,7 @@
     }
 
     public interface IAgregateRoot {
-        void Load(long version, IEnumerable<object> history);
+        void Load(IEnumerable<object> history);
 
         BaseEsEvent[] GetChanges();
     }

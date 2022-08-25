@@ -20,7 +20,7 @@ namespace LCT.Infrastructure.Repositories
             if (result.Count == 0)
                 throw new EntityDoesNotExist(typeof(TAggregateRoot).Name);
             var aggregate = new TAggregateRoot();
-            aggregate.Load(1, result);
+            aggregate.Load(result);
             return aggregate;
         }
 
