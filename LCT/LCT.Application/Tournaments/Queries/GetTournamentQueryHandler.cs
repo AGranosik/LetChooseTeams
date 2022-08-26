@@ -53,6 +53,8 @@ namespace LCT.Application.Tournaments.Queries
                 }).ToList()
             };
 
+            // move it to function
+
             if (tournament == null)
                 throw new EntityDoesNotExist(nameof(Tournament));
 
