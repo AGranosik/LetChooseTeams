@@ -6,7 +6,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Events
 {
     [BsonIgnoreExtraElements]
     [BsonDiscriminator("DrawTeam")]
-    public class DrawTeamEvent : BaseEsEvent
+    public class DrawTeamEvent : DomainEvent
     {
         public string TeamName { get; set; }
         public Player Player { get; set; }

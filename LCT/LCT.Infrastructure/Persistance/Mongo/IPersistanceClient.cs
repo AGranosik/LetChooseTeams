@@ -7,7 +7,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
 {
     public interface IPersistanceClient
     {
-        IMongoCollection<BaseEsEvent> GetStream(string streamName);
+        IMongoCollection<DomainEvent> GetStream(string streamName);
         Task<bool> CheckUniqness<T>(string entity, string fieldName, T value);
         void Configure();
     }
@@ -23,8 +23,8 @@ namespace LCT.Infrastructure.Persistance.Mongo
             Configure();
         }
 
-        public IMongoCollection<BaseEsEvent> GetStream(string streamName)
-            => _mongoClient.GetDatabase(_dbName).GetCollection<BaseEsEvent>($"{streamName}Stream");
+        public IMongoCollection<DomainEvent> GetStream(string streamName)
+            => _mongoClient.GetDatabase(_dbName).GetCollection<DomainEvent>($"{streamName}Stream");
 
         public async Task<bool> CheckUniqness<T>(string entity, string fieldName, T value)
         {

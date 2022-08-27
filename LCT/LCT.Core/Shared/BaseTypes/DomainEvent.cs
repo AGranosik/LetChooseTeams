@@ -1,11 +1,12 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using MediatR;
+using MongoDB.Bson.Serialization.Attributes;
 
 namespace LCT.Core.Shared.BaseTypes
 {
     [BsonIgnoreExtraElements]
-    public abstract class BaseEsEvent
+    public abstract class DomainEvent : INotification
     {
-        public BaseEsEvent(Guid streamId)
+        public DomainEvent(Guid streamId)
         {
             StreamId = streamId;
         }
