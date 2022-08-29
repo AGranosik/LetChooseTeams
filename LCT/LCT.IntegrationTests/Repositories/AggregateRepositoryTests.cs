@@ -6,8 +6,11 @@ using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+using LCT.Infrastructure.Persistance.Mongo;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM;
 using NUnit.Framework;
+using MongoDB.Driver;
 
 namespace LCT.IntegrationTests.Repositories
 {
@@ -21,7 +24,17 @@ namespace LCT.IntegrationTests.Repositories
                 .Build();
         }
 
+        [Test]
+        public async Task SaveAsync_Success()
+        {
+            var mongoClient = _scope.ServiceProvider.GetRequiredService<IPersistanceClient>();
+            var tournament = await CreateCompleteTournament(3, 3, 3);
 
+            var eventsCursor = await mongoClient.GetStream(nameof(Tournament)).FindAsync(ts => ts.StreamId == tournament.Id.Value);
+            var events = await eventsCursor.ToListAsync();
+            events.Should().NotBeNull();
+            events.Should().NotBeEmpty();
+        }
 
         [Test]
         public async Task LoadAsync_AggregateDoestNotExist_ThrowsException()
@@ -39,7 +52,6 @@ namespace LCT.IntegrationTests.Repositories
             var tournamentFromDb = await repo.LoadAsync(tournament.Id.Value);
             tournamentFromDb.Should().NotBeNull();
         }
-
 
         private async Task<Tournament> CreateCompleteTournament(int limit, int players, int selectedTeams)
         {
