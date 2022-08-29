@@ -3,6 +3,7 @@ using LCT.Core.Shared.Exceptions;
 using LCT.Infrastructure.Persistance.Mongo;
 using MediatR;
 using MongoDB.Driver;
+using Serilog;
 
 namespace LCT.Infrastructure.Repositories
 {
@@ -31,13 +32,20 @@ namespace LCT.Infrastructure.Repositories
         {
             var events = model.GetChanges();
             await SaveToStreamAsync(events);
-            await PublishEventsAsync(events);
+            try
+            {
+                await PublishEventsAsync(events);
+            }
+            catch(Exception ex)
+            {
+                Log.Error(ex, ex.Message);
+            }
         }
 
         private async Task PublishEventsAsync(DomainEvent[] events)
         {
             foreach (var @event in events)
-                await _mediator.Publish(@event);
+                await _mediator.Publish(@event, CancellationToken.None);
         }
 
         private async Task SaveToStreamAsync(DomainEvent[] events)

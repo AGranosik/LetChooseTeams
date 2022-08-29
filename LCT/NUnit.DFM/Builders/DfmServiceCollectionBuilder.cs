@@ -5,8 +5,8 @@ namespace NUnit.DFM.Builders
 {
     public class DfmServiceCollectionBuilder: IServiceCollectionSetUp
     {
-        private readonly List<Type> _singletonsToAdd = new List<Type>();
-        private readonly List<Type> _transientsToAdd = new List<Type>();
+        private readonly Dictionary<Type, object> _singletonsToAdd = new Dictionary<Type, object>();
+        private readonly Dictionary<Type, object> _transientsToAdd = new Dictionary<Type, object>();
         private readonly Dictionary<Type, object> _scopedToAdd = new Dictionary<Type, object>();
         private readonly List<Type> _serviesToRemove = new List<Type>();
 
@@ -24,13 +24,13 @@ namespace NUnit.DFM.Builders
         public IServiceCollectionSetUp AddSingleton<TSingleton>(TSingleton singleton)
             where TSingleton : class
         {
-            _singletonsToAdd.Add(typeof (TSingleton));
+            _singletonsToAdd.Add(typeof (TSingleton), singleton);
             return this;
         }
 
         public IServiceCollectionSetUp AddTransient<TTransient>(TTransient transient) where TTransient : class
         {
-            _transientsToAdd.Add(typeof (TTransient));
+            _transientsToAdd.Add(typeof (TTransient), transient);
             return this;
         }
 
@@ -41,9 +41,9 @@ namespace NUnit.DFM.Builders
                 services.Remove(service);
 
             foreach(var service in _singletonsToAdd)
-                services.AddSingleton(service);
+                services.AddSingleton(service.Key, service.Value);
             foreach (var service in _transientsToAdd)
-                services.AddTransient(service);
+                services.AddTransient(service.Key, service.Value.GetType());
             foreach (var service in _scopedToAdd)
                 services.AddScoped(service.Key, service.Value.GetType());
 
