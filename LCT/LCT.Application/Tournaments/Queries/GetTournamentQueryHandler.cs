@@ -58,7 +58,7 @@ namespace LCT.Application.Tournaments.Queries
             if (tournament == null)
                 throw new EntityDoesNotExist(nameof(Tournament));
 
-            var feLink = "http://" + IpAdressProvider.GetHostAdress() + ":3000/player/register/" + request.TournamentId;
+            var feLink = "http://" + IpAdressProvider.GetHostAdress() + ":3000/player/register/" + request.TournamentId; //poprawic, bo podaje zly adres
             dto.QRCode = _qrCodeCreator.Generate(feLink);
 
             return dto;

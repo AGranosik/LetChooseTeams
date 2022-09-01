@@ -1,4 +1,5 @@
-﻿using LCT.Domain.Aggregates.TournamentAggregate.Events;
+﻿using LCT.Core.Shared.BaseTypes;
+using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
@@ -22,12 +23,20 @@ namespace LCT.Infrastructure
             services.AddSingleton<IPersistanceClient, MongoPersistanceClient>();
             services.AddSingleton(typeof(IRepository<>), typeof(AggregateRepository<>));
 
-            BsonClassMap.RegisterClassMap<TournamentCreated>();
-            BsonClassMap.RegisterClassMap<PlayerAdded>();
-            BsonClassMap.RegisterClassMap<TeamSelected>();
-            BsonClassMap.RegisterClassMap<DrawTeamEvent>();
+            RegisterDomainEvent<TournamentCreated>();
+            RegisterDomainEvent<PlayerAdded>();
+            RegisterDomainEvent<TeamSelected>();
+            RegisterDomainEvent<DrawTeamEvent>();
             return services;
         }
+
+        private static void RegisterDomainEvent<T>()
+            where T : DomainEvent
+        {
+            if (!BsonClassMap.IsClassMapRegistered(typeof(T)))
+                BsonClassMap.RegisterClassMap<T>();
+        }
+
         public static T GetOptions<T>(this IServiceCollection services, string sectionName) where T : new()
         {
             using var serviceProvider = services.BuildServiceProvider();
