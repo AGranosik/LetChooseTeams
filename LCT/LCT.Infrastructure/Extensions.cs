@@ -1,7 +1,9 @@
-﻿using LCT.Infrastructure.Persistance.Mongo;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.Events;
+using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace LCT.Infrastructure
@@ -19,6 +21,11 @@ namespace LCT.Infrastructure
             services.AddSingleton<IMongoClient>(mongoClient);
             services.AddSingleton<IPersistanceClient, MongoPersistanceClient>();
             services.AddSingleton(typeof(IRepository<>), typeof(AggregateRepository<>));
+
+            BsonClassMap.RegisterClassMap<TournamentCreated>();
+            BsonClassMap.RegisterClassMap<PlayerAdded>();
+            BsonClassMap.RegisterClassMap<TeamSelected>();
+            BsonClassMap.RegisterClassMap<DrawTeamEvent>();
             return services;
         }
         public static T GetOptions<T>(this IServiceCollection services, string sectionName) where T : new()
