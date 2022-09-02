@@ -23,11 +23,17 @@ namespace LCT.Infrastructure
             services.AddSingleton<IPersistanceClient, MongoPersistanceClient>();
             services.AddSingleton(typeof(IRepository<>), typeof(AggregateRepository<>));
 
+            RegisterDomainEvents();
+
+            return services;
+        }
+
+        private static void RegisterDomainEvents()
+        {
             RegisterDomainEvent<TournamentCreated>();
             RegisterDomainEvent<PlayerAdded>();
             RegisterDomainEvent<TeamSelected>();
             RegisterDomainEvent<DrawTeamEvent>();
-            return services;
         }
 
         private static void RegisterDomainEvent<T>()

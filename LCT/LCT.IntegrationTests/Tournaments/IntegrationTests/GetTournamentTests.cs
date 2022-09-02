@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using LCT.Application.Common;
+using LCT.Application.Common.Configs;
 using LCT.Application.Tournaments.Queries;
 using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
@@ -128,7 +129,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         private async Task<TournamentDto> GetTournamentQueryHandler(GetTournamentQuery request, IQRCodeCreator qrCodeCreator = null)
         {
             qrCodeCreator ??= _scope.ServiceProvider.GetRequiredService<IQRCodeCreator>();
-            return await new GetTournamentQueryHandler(qrCodeCreator, GetRepository()).Handle(request, new CancellationToken());
+            return await new GetTournamentQueryHandler(qrCodeCreator, GetRepository(), new FrontendConfiguration()).Handle(request, new CancellationToken());
         }
     }
 }

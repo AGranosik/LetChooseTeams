@@ -1,8 +1,11 @@
 ﻿using LCT.Application.Common;
+using LCT.Application.Common.Configs;
 using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using LCT.Infrastructure.Repositories;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 
 namespace LCT.Application.Tournaments.Queries
 {
@@ -30,10 +33,12 @@ namespace LCT.Application.Tournaments.Queries
     {
         private readonly IQRCodeCreator _qrCodeCreator;
         private readonly IRepository<Tournament> _repository;
-        public GetTournamentQueryHandler(IQRCodeCreator qRCodeCreator, IRepository<Tournament> repository)
+        private readonly FrontendConfiguration _feCfg;
+        public GetTournamentQueryHandler(IQRCodeCreator qRCodeCreator, IRepository<Tournament> repository, FrontendConfiguration feCfg)
         {
             _qrCodeCreator = qRCodeCreator;
             _repository = repository;
+            _feCfg = feCfg;
         }
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
@@ -53,15 +58,18 @@ namespace LCT.Application.Tournaments.Queries
                 }).ToList()
             };
 
-            // move it to function
-
             if (tournament == null)
                 throw new EntityDoesNotExist(nameof(Tournament));
 
-            var feLink = "http://" + IpAdressProvider.GetHostAdress() + ":3000/player/register/" + request.TournamentId; //poprawic, bo podaje zly adres
-            dto.QRCode = _qrCodeCreator.Generate(feLink);
+            dto.QRCode = GenerateQrCodeForTournament(tournament.Id);
 
             return dto;
+        }
+
+        private string GenerateQrCodeForTournament(TournamentId id)
+        {
+            var feLink = "http://" + _feCfg.ConnectionString + "/player/register/" + id.Value;
+            return _qrCodeCreator.Generate(feLink);
         }
     }
 }
