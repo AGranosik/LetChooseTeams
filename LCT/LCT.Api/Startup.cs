@@ -29,7 +29,7 @@ namespace LCT.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (!env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
@@ -42,16 +42,7 @@ namespace LCT.Api
                     .SetIsOriginAllowed((host) => true)
                     .AllowCredentials());
 
-
-            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-            Log.Logger = new LoggerConfiguration()
-                .Enrich.FromLogContext()
-                .Enrich.WithMachineName()
-                .WriteTo.Elasticsearch(ConfigureElasticSink(environment))
-                .Enrich.WithProperty("Environment", environment)
-                .ReadFrom.Configuration(_configuration)
-                .CreateLogger();
-
+            ConfigureLogger();
             //app.UseHttpsRedirection();
             app.UseSerilogRequestLogging();
             app.UseRouting();
@@ -61,6 +52,18 @@ namespace LCT.Api
                 endpoints.MapControllers();
                 endpoints.MapHub<PlayerAssignedHub>("/hubs/player");
             });
+        }
+
+        private void ConfigureLogger()
+        {
+            var environment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+            Log.Logger = new LoggerConfiguration()
+                .Enrich.FromLogContext()
+                .Enrich.WithMachineName()
+                .WriteTo.Elasticsearch(ConfigureElasticSink(environment))
+                .Enrich.WithProperty("Environment", environment)
+                .ReadFrom.Configuration(_configuration)
+                .CreateLogger();
         }
 
         private ElasticsearchSinkOptions ConfigureElasticSink(string environment)
