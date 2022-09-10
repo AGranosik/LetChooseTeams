@@ -14,19 +14,26 @@ export const options = {
         http_req_duration: ['p(95)<1500'],
     },
 }
+const ids = [];
+const tournamentsNumber = 10;
+export function setup() {
+    for(var i = 0; i < tournamentsNumber; i++){
+        group('post is success', function(){
+            const postResult = postTournament();
+            ids.push(postResult.body.split('"').join(""));
+            check(postResult, {
+                'is status 200:': (r) => r.status == 200
+            });
+        })
+    }
+    console.log(ids)
+  }
 
   export default function () {
-    var id;
-    group('post is success', function(){
-        const postResult = postTournament();
-        id = postResult.body.split('"').join("");
-        check(postResult, {
-            'is status 200:': (r) => r.status == 200
-        });
-    })
-
     group('get is ok', function(){
         const url = new URL(_baseTournamentApiUrl);
+        // console.log(ids)
+        var id = ids[Math.floor(Math.random() * tournamentsNumber)]
         url.searchParams.append('Id', id);
         const result = http.get(url.toString());
         check(result, {
