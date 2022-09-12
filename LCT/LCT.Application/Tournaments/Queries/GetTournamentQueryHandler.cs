@@ -53,13 +53,10 @@ namespace LCT.Application.Tournaments.Queries
                 {
                     Name = p.Name,
                     Surname = p.Surname,
-                    SelectedTeam = tournament.SelectedTeams.Where(st => st.Player == p).Select(st => st.TeamName).FirstOrDefault(),
-                    DrawnTeam = tournament.DrawTeams.Where(dt => dt.Player == p).Select(dt => dt.TeamName).FirstOrDefault()
+                    SelectedTeam = tournament.SelectedTeams.FirstOrDefault(st => st.Player == p)?.TeamName,
+                    DrawnTeam = tournament.DrawTeams.FirstOrDefault(dt => dt.Player == p)?.TeamName
                 }).ToList()
             };
-
-            if (tournament == null)
-                throw new EntityDoesNotExist(nameof(Tournament));
 
             dto.QRCode = GenerateQrCodeForTournament(tournament.Id);
 

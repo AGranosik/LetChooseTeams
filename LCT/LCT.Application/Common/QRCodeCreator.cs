@@ -9,13 +9,13 @@ namespace LCT.Application.Common
     }
     public class QRCodeCreator: IQRCodeCreator
     {
+        public static QRCodeGenerator _qrGenerator = new QRCodeGenerator();
         public string Generate(string url)
         {
             if(string.IsNullOrEmpty(url))
                 throw new ArgumentNullException("qrcode url");
 
-            QRCodeGenerator QrGenerator = new QRCodeGenerator();
-            QRCodeData QrCodeInfo = QrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
+            QRCodeData QrCodeInfo = _qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
             var QrCode = new QRCode(QrCodeInfo);
             Bitmap QrBitmap = QrCode.GetGraphic(60);
             byte[] BitmapArray = QrBitmap.BitmapToByteArray();
