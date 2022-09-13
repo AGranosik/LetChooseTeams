@@ -6,7 +6,8 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Services
 {
     public interface ITournamentDomainService: IDomainService
     {
-        Task TournamentUniqnessValidationAsync(Tournament tournament);
+        Task TournamentNameUniqnessValidationAsync(Tournament tournament);
+        Task PlayerTeamSelectionValidationAsync(string playerName, string playerSurname, Guid tournamentId);
         List<DrawnTeam> DrawTeamForPlayers(List<SelectedTeam> selectedTeams);
     }
 }
