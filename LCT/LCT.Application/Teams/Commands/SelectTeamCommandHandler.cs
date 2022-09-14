@@ -1,5 +1,6 @@
 ﻿using LCT.Application.Teams.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Infrastructure.Repositories
     ;
 using MediatR;
@@ -19,10 +20,13 @@ namespace LCT.Application.Teams.Commands
     {
         private readonly IMediator _mediator;
         private readonly IRepository<Tournament> _repository;
-        public SelectTeamCommandHandler(IRepository<Tournament> repository, IMediator mediator)
+        private readonly ITournamentDomainService _tournamentDomainService;
+        //remove mediator
+        public SelectTeamCommandHandler(IRepository<Tournament> repository, IMediator mediator, ITournamentDomainService tournamentDomainService)
         {
             _mediator = mediator;
             _repository = repository;
+            _tournamentDomainService = tournamentDomainService;
         }
         public async Task<Unit> Handle(SelectTeamCommand request, CancellationToken cancellationToken)
         {
@@ -32,7 +36,7 @@ namespace LCT.Application.Teams.Commands
                 throw new ArgumentException("Turniej nie istnieje.");
 
             tournament.SelectTeam(request.PlayerName, request.PlayerSurname, request.Team);
-
+            await _tournamentDomainService.PlayerTeamSelectionValidationAsync(request.Team, request.TournamentId);
             await _repository.SaveAsync(tournament);
 
             try

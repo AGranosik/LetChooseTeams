@@ -3,10 +3,12 @@ using LCT.Application.Teams.Commands;
 using LCT.Application.Teams.Events;
 using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 using LCT.IntegrationTests.Mocks;
 using MediatR;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;
@@ -95,7 +97,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
         private async Task<Unit> SelectTeamCommandHandler(Guid tournamentId, string teamName, string playerName, string playerSurname, IMediator mediatorMock)
         {
-            return await new SelectTeamCommandHandler(GetRepository(), mediatorMock).Handle(new SelectTeamCommand
+            var domainService = _scope.ServiceProvider.GetRequiredService<ITournamentDomainService>();
+            return await new SelectTeamCommandHandler(GetRepository(), mediatorMock, domainService).Handle(new SelectTeamCommand
             {
                 PlayerName = playerName,
                 PlayerSurname = playerSurname,
@@ -105,7 +108,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         }
 
         private async Task<Tournament> GetTournamentById(Guid id)
-        => await GetRepository().LoadAsync  (id);
+        => await GetRepository().LoadAsync(id);
 
         private async Task<Tournament> CreateTournamentWithPlayers(List<Player> players)
         {

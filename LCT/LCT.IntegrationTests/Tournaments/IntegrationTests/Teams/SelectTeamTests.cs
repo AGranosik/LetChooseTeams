@@ -4,11 +4,15 @@ using LCT.Application.Tournaments.Hubs;
 using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
+using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+using LCT.Infrastructure.Persistance.Mongo;
+using LCT.Infrastructure.Persistance.Mongo.UniqnessModels;
 using LCT.IntegrationTests.Mocks;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;
@@ -77,6 +81,23 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
             tournamentFromDb.SelectedTeams.Any(t => t.TeamName == TournamentTeamNames.Teams.First()).Should().BeTrue();
         }
 
+        [Test]
+        public async Task TeamSelection_ConcurrencyIsSet_ThrowsException()
+        {
+            var tournament = await CreateTournament();
+            var teamToSelect = TournamentTeamNames.Teams.First();
+
+            var playerWhoWillBeBlocked = tournament.Players.Skip(1).First();
+            var playerWhoSelectTeamFirst = tournament.Players.Last();
+
+            var teamSubmittedFunc = () => SelectTeamCommandHandlerAsync(playerWhoSelectTeamFirst.Name, playerWhoSelectTeamFirst.Surname, tournament.Id.Value, teamToSelect);
+            await teamSubmittedFunc.Should().NotThrowAsync();
+
+            var domainService = _scope.ServiceProvider.GetRequiredService<ITournamentDomainService>();
+            var uniqnessFunc = () => domainService.PlayerTeamSelectionValidationAsync(teamToSelect, tournament.Id.Value);
+            await uniqnessFunc.Should().ThrowAsync<PlayerAlreadyAssignedToTournamentException>();
+        }
+
         private async Task<Tournament> GetTournamentById(Guid id)
         => await GetRepository().LoadAsync(id);
 
@@ -86,7 +107,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
             var players = new List<Player>()
             {
                 Player.Create("1", "2"),
-                Player.Create("3", "4")
+                Player.Create("3", "4"),
+                Player.Create("5", "4")
             };
             tournament.AddPlayer(players[0].Name, players[0].Surname);
             tournament.AddPlayer(players[1].Name, players[1].Surname);
@@ -97,7 +119,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
 
         private async Task<Unit> SelectTeamCommandHandlerAsync(string playerName, string playerSurname, Guid TournamentId, string Team, IHubContext<PlayerAssignedHub> hub = null)
         {
-            return await new SelectTeamCommandHandler(GetRepository(), IMediatorMock.GetMock()).Handle(new SelectTeamCommand
+            var domainService = _scope.ServiceProvider.GetRequiredService<ITournamentDomainService>();
+            return await new SelectTeamCommandHandler(GetRepository(), IMediatorMock.GetMock(), domainService).Handle(new SelectTeamCommand
             {
                 PlayerName = playerName,
                 PlayerSurname = playerSurname,

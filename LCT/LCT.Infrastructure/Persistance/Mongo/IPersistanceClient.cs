@@ -1,10 +1,13 @@
 ﻿using LCT.Core.Shared.BaseTypes;
+using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
+using LCT.Infrastructure.Persistance.Mongo.UniqnessModels;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace LCT.Infrastructure.Persistance.Mongo
 {
+    //check if index is on stream id for faster search
     public interface IPersistanceClient
     {
         IMongoCollection<DomainEvent> GetStream(string streamName);
@@ -42,9 +45,33 @@ namespace LCT.Infrastructure.Persistance.Mongo
 
         public void Configure()
         {
-            var indexModel = new CreateIndexModel<TournamentName>(new BsonDocument("Value", 1), new CreateIndexOptions { Unique = true });
-            _mongoClient.GetDatabase(_dbName).GetCollection<TournamentName>("Tournament_TournamentName_index")
+            var mongoDatabase = _mongoClient.GetDatabase(_dbName);
+            var createIndexOptions = new CreateIndexOptions { Unique = true };
+
+            ConfigureTournamentNameUniqnes(mongoDatabase, createIndexOptions);
+            ConfigureTournamentTeamSelection(mongoDatabase, createIndexOptions);
+
+        }
+
+        private void ConfigureTournamentNameUniqnes(IMongoDatabase mongoDatabase, CreateIndexOptions indexOptions)
+        {
+            var indexModel = new CreateIndexModel<TournamentName>(new BsonDocument("Value", 1), indexOptions);
+            mongoDatabase.GetCollection<TournamentName>("Tournament_TournamentName_index")
                 .Indexes.CreateOne(indexModel);
+        }
+
+        private void ConfigureTournamentTeamSelection(IMongoDatabase mongoDatabase, CreateIndexOptions indexOptions)
+        {
+            var teamSelectionIndex = Builders<TeamSelectionUniqnessModel>.IndexKeys
+                .Ascending(l => l.Team)
+                .Ascending(l => l.TournamentId);
+
+            var indexModel2 = new CreateIndexModel<TeamSelectionUniqnessModel>(
+                teamSelectionIndex,
+                indexOptions);
+
+            mongoDatabase.GetCollection<TeamSelectionUniqnessModel>("Tournament_SelectedTeams_index")
+                .Indexes.CreateOne(indexModel2);
         }
     }
 }

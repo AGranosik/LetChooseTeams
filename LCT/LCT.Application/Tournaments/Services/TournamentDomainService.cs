@@ -1,10 +1,10 @@
-﻿using LCT.Application.Tournaments.Services.UniqnessModels;
-using LCT.Core.Extensions;
+﻿using LCT.Core.Extensions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 using LCT.Infrastructure.Persistance.Mongo;
+using LCT.Infrastructure.Persistance.Mongo.UniqnessModels;
 
 namespace LCT.Core.Entites.Tournaments.Services
 {
@@ -34,14 +34,12 @@ namespace LCT.Core.Entites.Tournaments.Services
             return result;
         }
 
-        public async Task PlayerTeamSelectionValidationAsync(string playerName, string playerSurname, Guid tournamentId)
+        public async Task PlayerTeamSelectionValidationAsync(string team,Guid tournamentId)
         {
-            var isNameUnique = await _dbContext.CheckUniqness(nameof(Tournament), nameof(Tournament.SelectedTeams), new TeamSelectionUniqnessModel
-            {
-                playerName = playerName,
-                playerSurname = playerSurname,
-                TournamentId = tournamentId
-            });
+            var isNameUnique = await _dbContext.CheckUniqness(nameof(Tournament), nameof(Tournament.SelectedTeams), new TeamSelectionUniqnessModel(team, tournamentId));
+
+            if (!isNameUnique)
+                throw new PlayerAlreadyAssignedToTournamentException();
         }
 
         public async Task TournamentNameUniqnessValidationAsync(Tournament tournament)
