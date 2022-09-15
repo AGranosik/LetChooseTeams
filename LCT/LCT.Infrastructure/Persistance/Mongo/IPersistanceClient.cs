@@ -10,7 +10,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
     //check if index is on stream id for faster search
     public interface IPersistanceClient
     {
-        IMongoCollection<DomainEvent> GetStream(string streamName);
+        IMongoCollection<T> GetCollection<T>(string streamName);
         Task<bool> CheckUniqness<T>(string entity, string fieldName, T value);
         void Configure();
     }
@@ -26,8 +26,8 @@ namespace LCT.Infrastructure.Persistance.Mongo
             Configure();
         }
 
-        public IMongoCollection<DomainEvent> GetStream(string streamName)
-            => _mongoClient.GetDatabase(_dbName).GetCollection<DomainEvent>($"{streamName}Stream");
+        public IMongoCollection<T> GetCollection<T>(string streamName) //more generic if we change from mongo into redis there will be too much to change in return types
+            => _mongoClient.GetDatabase(_dbName).GetCollection<T>($"{streamName}Stream");
 
         public async Task<bool> CheckUniqness<T>(string entity, string fieldName, T value)
         {

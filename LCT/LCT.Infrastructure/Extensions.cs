@@ -2,6 +2,7 @@
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;
+using LCT.Infrastructure.Repositories.Actions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson.Serialization;
@@ -22,6 +23,7 @@ namespace LCT.Infrastructure
             services.AddSingleton<IMongoClient>(mongoClient);
             services.AddSingleton<IPersistanceClient, MongoPersistanceClient>();
             services.AddSingleton(typeof(IRepository<>), typeof(AggregateRepository<>));
+            services.AddSingleton(typeof(ILctActionRepository<>), typeof(LctActionRepository<>));
 
             RegisterDomainEvents();
 

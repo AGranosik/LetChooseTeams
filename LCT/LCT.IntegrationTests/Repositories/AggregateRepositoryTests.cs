@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM;
 using NUnit.Framework;
 using MongoDB.Driver;
+using LCT.Core.Shared.BaseTypes;
 
 namespace LCT.IntegrationTests.Repositories
 {
@@ -30,7 +31,7 @@ namespace LCT.IntegrationTests.Repositories
             var mongoClient = _scope.ServiceProvider.GetRequiredService<IPersistanceClient>();
             var tournament = await CreateCompleteTournament(3, 3, 3);
 
-            var eventsCursor = await mongoClient.GetStream(nameof(Tournament)).FindAsync(ts => ts.StreamId == tournament.Id.Value);
+            var eventsCursor = await mongoClient.GetCollection<DomainEvent>(nameof(Tournament)).FindAsync(ts => ts.StreamId == tournament.Id.Value);
             var events = await eventsCursor.ToListAsync();
             events.Should().NotBeNull();
             events.Should().NotBeEmpty();

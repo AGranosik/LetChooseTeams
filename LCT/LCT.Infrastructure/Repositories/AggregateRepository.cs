@@ -19,7 +19,7 @@ namespace LCT.Infrastructure.Repositories
         }
         public async Task<TAggregateRoot> LoadAsync(Guid Id)
         {
-            var t = await _client.GetStream(typeof(TAggregateRoot).Name).FindAsync(ts => ts.StreamId == Id);
+            var t = await _client.GetCollection<DomainEvent>(typeof(TAggregateRoot).Name).FindAsync(ts => ts.StreamId == Id);
             var result = await t.ToListAsync();
             if (result.Count == 0)
                 throw new EntityDoesNotExist(typeof(TAggregateRoot).Name);
@@ -52,9 +52,9 @@ namespace LCT.Infrastructure.Repositories
         {
             var numberOfChanges = events.Length;
             if (numberOfChanges > 1)
-                await _client.GetStream(typeof(TAggregateRoot).Name).InsertManyAsync(events);
+                await _client.GetCollection<DomainEvent>(typeof(TAggregateRoot).Name).InsertManyAsync(events);
             else if (numberOfChanges == 1)
-                await _client.GetStream(typeof(TAggregateRoot).Name).InsertOneAsync(events.First());
+                await _client.GetCollection<DomainEvent>(typeof(TAggregateRoot).Name).InsertOneAsync(events.First());
         }
     }
 }
