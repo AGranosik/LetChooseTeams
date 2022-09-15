@@ -15,16 +15,16 @@ namespace LCT.Application.Teams.Commands
         public string Team { get; set; }
     }
 
+    //co jeśli zapis do repo nie pyknie?
+    // a nazwa już zostanie zaklepana?
+
     public record SelectTeamMessageDto(Guid playerId, string team);
     public class SelectTeamCommandHandler : IRequestHandler<SelectTeamCommand>
     {
-        private readonly IMediator _mediator;
         private readonly IRepository<Tournament> _repository;
         private readonly ITournamentDomainService _tournamentDomainService;
-        //remove mediator
-        public SelectTeamCommandHandler(IRepository<Tournament> repository, IMediator mediator, ITournamentDomainService tournamentDomainService)
+        public SelectTeamCommandHandler(IRepository<Tournament> repository, ITournamentDomainService tournamentDomainService)
         {
-            _mediator = mediator;
             _repository = repository;
             _tournamentDomainService = tournamentDomainService;
         }
@@ -38,20 +38,6 @@ namespace LCT.Application.Teams.Commands
             tournament.SelectTeam(request.PlayerName, request.PlayerSurname, request.Team);
             await _tournamentDomainService.PlayerTeamSelectionValidationAsync(request.Team, request.TournamentId);
             await _repository.SaveAsync(tournament);
-
-            try
-            {
-                await _mediator.Publish(new TeamSelectedMessageEvent
-                {
-                    PlayerSurname = request.PlayerSurname,
-                    PlayerName = request.PlayerName,
-                    Team = request.Team,
-                    TournamentId = request.TournamentId,
-                });
-            }
-            catch (Exception ex)
-            {
-            }
 
             return Unit.Value;
         }

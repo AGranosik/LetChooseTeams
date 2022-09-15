@@ -141,7 +141,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
         private async Task<Unit> SelectTeamCommandHandlerAsync(string playerName, string playerSurname, Guid TournamentId, string Team, IMediator mediatorMock = null)
         {
             var domainService = _scope.ServiceProvider.GetRequiredService<ITournamentDomainService>();
-            return await new SelectTeamCommandHandler(GetRepository(), mediatorMock ?? IMediatorMock.GetMock(), domainService).Handle(new SelectTeamCommand
+            return await new SelectTeamCommandHandler(GetRepository(), domainService).Handle(new SelectTeamCommand
             {
                 PlayerName = playerName,
                 PlayerSurname = playerSurname,
