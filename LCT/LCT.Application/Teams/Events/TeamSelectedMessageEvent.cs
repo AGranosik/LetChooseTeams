@@ -18,8 +18,8 @@ namespace LCT.Application.Teams.Events
 
     public class TeamSelectedMessageEventHandler : INotificationHandler<TeamSelected>
     {
-        private readonly IHubContext<PlayerAssignedHub> _hubContext;
-        public TeamSelectedMessageEventHandler(IHubContext<PlayerAssignedHub> hubContext)
+        private readonly IHubContext<TournamentHub> _hubContext;
+        public TeamSelectedMessageEventHandler(IHubContext<TournamentHub> hubContext)
         {
             _hubContext = hubContext;
         }
