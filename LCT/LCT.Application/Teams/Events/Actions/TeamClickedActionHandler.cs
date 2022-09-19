@@ -10,16 +10,16 @@ namespace LCT.Application.Teams.Events.Actions
     {
         public string Team { get; set; }
     }
-    public class TeamSelectedActionHandler : INotificationHandler<TeamClickedAction>
+    public class TeamClickedActionHandler : INotificationHandler<TeamClickedAction>
     {
         private readonly ILctActionRepository<TeamClickedAction> _repository;
-        public TeamSelectedActionHandler(ILctActionRepository<TeamClickedAction> repository)
+        public TeamClickedActionHandler(ILctActionRepository<TeamClickedAction> repository)
         {
             _repository = repository;
         }
         public async Task Handle(TeamClickedAction notification, CancellationToken cancellationToken)
         {
-            if (!IsTournamentNameEmpty(notification.Team))
+            if (IsTournamentNameEmpty(notification.Team))
             {
                 Log.Error("Team name cannot be empty in TeamSelectedAction");
                 return;
