@@ -32,9 +32,9 @@ namespace LCT.Application.Tournaments.Queries
     public class GetTournamentQueryHandler : IRequestHandler<GetTournamentQuery, TournamentDto>
     {
         private readonly IQRCodeCreator _qrCodeCreator;
-        private readonly IRepository<Tournament> _repository;
+        private readonly IAggregateRepository<Tournament> _repository;
         private readonly FrontendConfiguration _feCfg;
-        public GetTournamentQueryHandler(IQRCodeCreator qRCodeCreator, IRepository<Tournament> repository, FrontendConfiguration feCfg)
+        public GetTournamentQueryHandler(IQRCodeCreator qRCodeCreator, IAggregateRepository<Tournament> repository, FrontendConfiguration feCfg)
         {
             _qrCodeCreator = qRCodeCreator;
             _repository = repository;

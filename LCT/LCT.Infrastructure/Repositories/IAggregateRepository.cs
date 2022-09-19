@@ -2,7 +2,7 @@
 
 namespace LCT.Infrastructure.Repositories
 {
-    public interface IRepository<TAggregateRoot>
+    public interface IAggregateRepository<TAggregateRoot>
         where TAggregateRoot : IAgregateRoot
     {
         Task<TAggregateRoot> LoadAsync(Guid Id); // id should be generic

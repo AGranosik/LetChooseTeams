@@ -14,8 +14,8 @@ namespace LCT.Application.Tournaments.Queries
     public class DrawTeamForPlayersQueryHandler : IRequestHandler<DrawTeamForPlayersQuery, List<DrawnTeamDto>>
     {
         private readonly ITournamentDomainService _tournamentDomainService;
-        private readonly IRepository<Tournament> _repository;
-        public DrawTeamForPlayersQueryHandler(ITournamentDomainService tournamentDomainService, IRepository<Tournament> repository)
+        private readonly IAggregateRepository<Tournament> _repository;
+        public DrawTeamForPlayersQueryHandler(ITournamentDomainService tournamentDomainService, IAggregateRepository<Tournament> repository)
         {
             _tournamentDomainService = tournamentDomainService;
             _repository = repository;

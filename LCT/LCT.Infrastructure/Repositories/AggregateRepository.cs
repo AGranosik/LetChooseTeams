@@ -7,7 +7,7 @@ using Serilog;
 
 namespace LCT.Infrastructure.Repositories
 {
-    public class AggregateRepository<TAggregateRoot> : IRepository<TAggregateRoot>
+    public class AggregateRepository<TAggregateRoot> : IAggregateRepository<TAggregateRoot>
         where TAggregateRoot : IAgregateRoot, new()
     {
         private readonly IPersistanceClient _client;

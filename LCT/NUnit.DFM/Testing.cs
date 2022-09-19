@@ -80,9 +80,9 @@ namespace NUnit.DFM
             return this;
         }
 
-        protected IRepository<TModel> GetRepository()
+        protected IAggregateRepository<TModel> GetRepository()
         {
-            return _scope.ServiceProvider.GetRequiredService<IRepository<TModel>>();
+            return _scope.ServiceProvider.GetRequiredService<IAggregateRepository<TModel>>();
         }
 
         protected ITournamentDomainService GetTournamentDomainService()
@@ -93,9 +93,9 @@ namespace NUnit.DFM
         protected IMongoClient GetMongoClient()
             => _scope.ServiceProvider.GetRequiredService<IMongoClient>();
 
-        protected IRepository<TModel> GetRepository<TModel>()
+        protected IAggregateRepository<TModel> GetRepository<TModel>()
             where TModel : IAgregateRoot
-            => _scope.ServiceProvider.GetRequiredService<IRepository<TModel>>();
+            => _scope.ServiceProvider.GetRequiredService<IAggregateRepository<TModel>>();
 
         protected async Task AddAsync(TModel entity)
         {

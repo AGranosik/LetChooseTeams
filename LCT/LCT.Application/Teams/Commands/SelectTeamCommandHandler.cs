@@ -21,9 +21,9 @@ namespace LCT.Application.Teams.Commands
     public record SelectTeamMessageDto(Guid playerId, string team);
     public class SelectTeamCommandHandler : IRequestHandler<SelectTeamCommand>
     {
-        private readonly IRepository<Tournament> _repository;
+        private readonly IAggregateRepository<Tournament> _repository;
         private readonly ITournamentDomainService _tournamentDomainService;
-        public SelectTeamCommandHandler(IRepository<Tournament> repository, ITournamentDomainService tournamentDomainService)
+        public SelectTeamCommandHandler(IAggregateRepository<Tournament> repository, ITournamentDomainService tournamentDomainService)
         {
             _repository = repository;
             _tournamentDomainService = tournamentDomainService;

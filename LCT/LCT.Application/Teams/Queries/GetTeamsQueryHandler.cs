@@ -12,8 +12,8 @@ namespace LCT.Application.Teams.Queries
     }
     public class GetTeamsQueryHandler : IRequestHandler<GetTeamsQuery, List<TeamToSelectDto>>
     {
-        private readonly IRepository<Tournament> _repository;
-        public GetTeamsQueryHandler(IRepository<Tournament> repository)
+        private readonly IAggregateRepository<Tournament> _repository;
+        public GetTeamsQueryHandler(IAggregateRepository<Tournament> repository)
         {
             _repository = repository;
         }

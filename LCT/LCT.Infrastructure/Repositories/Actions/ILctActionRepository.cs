@@ -1,4 +1,6 @@
-﻿namespace LCT.Infrastructure.Repositories.Actions
+﻿using LCT.Infrastructure.Events;
+
+namespace LCT.Infrastructure.Repositories.Actions
 {
     public interface ILctActionRepository<TLctAction>
         where TLctAction : LctAction

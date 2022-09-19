@@ -50,7 +50,6 @@ namespace LCT.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                //endpoints.MapHub<PlayerAssignedHub>("/hubs/player");
                 endpoints.MapHub<TournamentHub>("/hubs/actions");
             });
         }

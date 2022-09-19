@@ -17,8 +17,8 @@ namespace LCT.Application.Players.Commands
     public class AssignPlayerToTournamentCommandHandler : IRequestHandler<AssignPlayerToTournamentCommand, Unit>
     {
         private readonly IMediator _mediator;
-        private readonly IRepository<Tournament> _repository;
-        public AssignPlayerToTournamentCommandHandler(IMediator mediator, IRepository<Tournament> reposiotry)
+        private readonly IAggregateRepository<Tournament> _repository;
+        public AssignPlayerToTournamentCommandHandler(IMediator mediator, IAggregateRepository<Tournament> reposiotry)
         {
             _mediator = mediator;
             _repository = reposiotry;

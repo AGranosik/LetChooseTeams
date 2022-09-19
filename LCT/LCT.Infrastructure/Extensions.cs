@@ -22,7 +22,7 @@ namespace LCT.Infrastructure
             services.AddSingleton(mongoConfig);
             services.AddSingleton<IMongoClient>(mongoClient);
             services.AddSingleton<IPersistanceClient, MongoPersistanceClient>();
-            services.AddSingleton(typeof(IRepository<>), typeof(AggregateRepository<>));
+            services.AddSingleton(typeof(IAggregateRepository<>), typeof(AggregateRepository<>));
             services.AddSingleton(typeof(ILctActionRepository<>), typeof(LctActionRepository<>));
 
             RegisterDomainEvents();

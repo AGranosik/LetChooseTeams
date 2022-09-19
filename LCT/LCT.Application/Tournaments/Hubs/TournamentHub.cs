@@ -1,4 +1,4 @@
-﻿using LCT.Application.Tournaments.Actions.TeamChooseAction;
+﻿using LCT.Application.Teams.Events.Actions;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 
@@ -11,7 +11,7 @@ namespace LCT.Application.Tournaments.Hubs
         {
             _mediator = mediator;
         }
-        public async Task TeamClicked(TeamSelectedAction action)
+        public async Task TeamClicked(TeamClickedAction action)
             => await _mediator.Send(action);
             
     }

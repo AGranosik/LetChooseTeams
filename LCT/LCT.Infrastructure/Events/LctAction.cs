@@ -1,8 +1,8 @@
 ﻿using MediatR;
 
-namespace LCT.Infrastructure.Repositories.Actions
+namespace LCT.Infrastructure.Events
 {
-    public abstract class LctAction<AggregateId>: LctAction, INotification
+    public abstract class LctAction<AggregateId> : LctAction, INotification
     {
         public AggregateId GroupKey { get; set; }
     }

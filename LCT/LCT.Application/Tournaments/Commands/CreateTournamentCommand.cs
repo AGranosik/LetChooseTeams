@@ -13,9 +13,9 @@ namespace LCT.Application.Tournaments.Commands
 
     public class CreateTournamentCommandHandler : IRequestHandler<CreateTournamentCommand, Guid>
     {
-        private readonly IRepository<Tournament> _repository;
+        private readonly IAggregateRepository<Tournament> _repository;
         private readonly ITournamentDomainService _tournamentService;
-        public CreateTournamentCommandHandler(IRepository<Tournament> repository, ITournamentDomainService domainService)
+        public CreateTournamentCommandHandler(IAggregateRepository<Tournament> repository, ITournamentDomainService domainService)
         {
             _repository = repository;
             _tournamentService = domainService;
