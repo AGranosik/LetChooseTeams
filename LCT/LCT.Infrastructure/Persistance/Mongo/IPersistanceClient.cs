@@ -1,6 +1,4 @@
-﻿using LCT.Core.Shared.BaseTypes;
-using LCT.Domain.Aggregates.TournamentAggregate.Entities;
-using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 using LCT.Infrastructure.Persistance.Mongo.UniqnessModels;
 using MongoDB.Bson;
 using MongoDB.Driver;

@@ -17,9 +17,9 @@ namespace LCT.Application.Players.Events
 
     public class PlayerAssignedEventHandler : INotificationHandler<PlayerAssignedEvent>
     {
-        private readonly IHubContext<PlayerAssignedHub> _hubContext;
+        private readonly IHubContext<TournamentHub> _hubContext;
 
-        public PlayerAssignedEventHandler(IHubContext<PlayerAssignedHub> hubContext)
+        public PlayerAssignedEventHandler(IHubContext<TournamentHub> hubContext)
         {
             _hubContext = hubContext;
         }
