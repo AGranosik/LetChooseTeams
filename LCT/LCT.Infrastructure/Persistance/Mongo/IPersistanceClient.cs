@@ -1,4 +1,6 @@
-﻿using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
+﻿using LCT.Core.Shared.BaseTypes;
+using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 using LCT.Infrastructure.Persistance.Mongo.UniqnessModels;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -48,7 +50,18 @@ namespace LCT.Infrastructure.Persistance.Mongo
 
             ConfigureTournamentNameUniqnes(mongoDatabase, createIndexOptions);
             ConfigureTournamentTeamSelection(mongoDatabase, createIndexOptions);
+            ConfigureDomainEventIndex(mongoDatabase);
+        }
 
+        private void ConfigureDomainEventIndex(IMongoDatabase mongoDatabase)
+        {
+            var indexModelBuilder = Builders<DomainEvent>.IndexKeys
+                .Text(e => e.StreamId);
+
+            var indexModel = new CreateIndexModel<DomainEvent>(indexModelBuilder);
+
+            mongoDatabase.GetCollection<DomainEvent>($"{nameof(Tournament)}")
+                .Indexes.CreateOne(indexModel);
         }
 
         private void ConfigureTournamentNameUniqnes(IMongoDatabase mongoDatabase, CreateIndexOptions indexOptions)
@@ -64,12 +77,12 @@ namespace LCT.Infrastructure.Persistance.Mongo
                 .Ascending(l => l.Team)
                 .Ascending(l => l.TournamentId);
 
-            var indexModel2 = new CreateIndexModel<TeamSelectionUniqnessModel>(
+            var indexModel = new CreateIndexModel<TeamSelectionUniqnessModel>(
                 teamSelectionIndex,
                 indexOptions);
 
             mongoDatabase.GetCollection<TeamSelectionUniqnessModel>("Tournament_SelectedTeams_index")
-                .Indexes.CreateOne(indexModel2);
+                .Indexes.CreateOne(indexModel);
         }
     }
 }
