@@ -9,7 +9,7 @@ namespace LCT.Infrastructure.Events
         public AggregateId GroupKey { get; set; }
     }
 
-    public abstract class LctAction
+    public abstract class LctAction 
     {
 
     }
