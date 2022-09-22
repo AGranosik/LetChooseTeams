@@ -1,8 +1,6 @@
 ﻿using LCT.Application.Common;
-using LCT.Application.Common.Configs;
 using LCT.Core.Entites.Tournaments.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
-using LCT.Infrastructure;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -16,17 +14,12 @@ namespace LCT.Application
             collection.AddSingleton<IQRCodeCreator, QRCodeCreator>();
             collection.AddSingleton<ITournamentDomainService, TournamentDomainService>();
 
-            collection.ConfigureFrontendUrl();
+            //IPersistance powinno miec metody, ktore apka chce wykonac. tzn. nie powinno byc rzadnego get collection, bo application nie obchodzi czy jest mongo pod spodem czy zapis do pliku tekstowego leci
+            //composition root
 
             return collection;
         }
 
-        private static IServiceCollection ConfigureFrontendUrl(this IServiceCollection services)
-        {
-            var fe = services.GetOptions<FrontendConfiguration>("fe");
-            services.AddSingleton(fe);
 
-            return services;
-        }
     }
 }

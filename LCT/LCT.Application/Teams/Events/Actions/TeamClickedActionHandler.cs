@@ -1,6 +1,6 @@
-﻿using LCT.Domain.Aggregates.TournamentAggregate.Types;
-using LCT.Infrastructure.Events;
-using LCT.Infrastructure.Repositories.Actions;
+﻿using LCT.Application.Common.Events;
+using LCT.Application.Common.Interfaces;
+using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using MediatR;
 using Serilog;
 

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using LCT.Application.Common.Interfaces;
 using LCT.Core.Entites.Tournaments.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;

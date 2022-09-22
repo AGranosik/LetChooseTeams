@@ -1,4 +1,4 @@
-﻿namespace LCT.Infrastructure.Events
+﻿namespace LCT.Application.Common.Events
 {
     public abstract class EventMessage
     {

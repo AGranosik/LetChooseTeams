@@ -1,8 +1,8 @@
 ﻿using LCT.Api;
+using LCT.Application.Common.Interfaces;
 using LCT.Core.Shared.BaseTypes;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
-using LCT.Infrastructure.Persistance.Mongo;
-using LCT.Infrastructure.Repositories;
+using LCT.Domain.Common.Interfaces;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;

@@ -1,6 +1,6 @@
 ﻿using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
-using LCT.Infrastructure.Repositories;
+using LCT.Domain.Common.Interfaces;
 using MediatR;
 
 namespace LCT.Application.Tournaments.Commands

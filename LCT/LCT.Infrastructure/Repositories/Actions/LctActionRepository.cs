@@ -1,5 +1,5 @@
-﻿using LCT.Infrastructure.Events;
-using LCT.Infrastructure.Persistance.Mongo;
+﻿using LCT.Application.Common.Events;
+using LCT.Application.Common.Interfaces;
 
 namespace LCT.Infrastructure.Repositories.Actions
 {

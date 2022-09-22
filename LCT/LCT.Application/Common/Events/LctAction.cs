@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace LCT.Infrastructure.Events
+namespace LCT.Application.Common.Events
 {
     public abstract class LctAction<AggregateId> : LctAction, INotification
     {
@@ -9,7 +9,7 @@ namespace LCT.Infrastructure.Events
         public AggregateId GroupKey { get; set; }
     }
 
-    public abstract class LctAction 
+    public abstract class LctAction
     {
 
     }

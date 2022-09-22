@@ -1,6 +1,6 @@
-﻿using LCT.Infrastructure.Events;
+﻿using LCT.Application.Common.Events;
 
-namespace LCT.Infrastructure.Repositories.Actions
+namespace LCT.Application.Common.Interfaces
 {
     public interface ILctActionRepository<TLctAction>
         where TLctAction : LctAction

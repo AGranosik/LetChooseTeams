@@ -1,5 +1,8 @@
-﻿using LCT.Core.Shared.BaseTypes;
+﻿using LCT.Application.Common.Configs;
+using LCT.Application.Common.Interfaces;
+using LCT.Core.Shared.BaseTypes;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
+using LCT.Domain.Common.Interfaces;
 using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;
 using LCT.Infrastructure.Repositories.Actions;
@@ -30,6 +33,7 @@ namespace LCT.Infrastructure
             services.AddSingleton(typeof(ILctActionRepository<>), typeof(LctActionRepository<>));
 
             RegisterDomainEvents();
+            services.ConfigureFrontendUrl();
 
             return services;
         }
@@ -61,6 +65,14 @@ namespace LCT.Infrastructure
             var options = new T();
             configuration.GetSection(sectionName).Bind(options);
             return options;
+        }
+
+        private static IServiceCollection ConfigureFrontendUrl(this IServiceCollection services)
+        {
+            var fe = services.GetOptions<FrontendConfiguration>("fe");
+            services.AddSingleton(fe);
+
+            return services;
         }
     }
 }

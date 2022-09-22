@@ -1,5 +1,4 @@
-﻿using LCT.Application.Players.Events;
-using MediatR;
+﻿using MediatR;
 using Moq;
 using System;
 using System.Threading;

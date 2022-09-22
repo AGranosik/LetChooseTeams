@@ -1,11 +1,9 @@
 ﻿using LCT.Application.Common;
 using LCT.Application.Common.Configs;
-using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
-using LCT.Infrastructure.Repositories;
+using LCT.Domain.Common.Interfaces;
 using MediatR;
-using Microsoft.Extensions.Configuration;
 
 namespace LCT.Application.Tournaments.Queries
 {

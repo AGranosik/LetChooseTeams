@@ -1,5 +1,5 @@
-﻿using LCT.Application.Tournaments.Hubs;
-using LCT.Infrastructure.Events;
+﻿using LCT.Application.Common.Events;
+using LCT.Application.Tournaments.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Serilog;

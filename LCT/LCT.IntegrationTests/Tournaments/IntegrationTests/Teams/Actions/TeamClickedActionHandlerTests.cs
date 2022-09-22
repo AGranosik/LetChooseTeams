@@ -3,8 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using LCT.Application.Teams.Events.Actions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
-using LCT.Infrastructure.Persistance.Mongo;
-using LCT.Infrastructure.Repositories.Actions;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM;
 using MongoDB.Driver;
@@ -13,6 +11,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using System.Linq;
+using LCT.Application.Common.Interfaces;
 
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.Actions
 {

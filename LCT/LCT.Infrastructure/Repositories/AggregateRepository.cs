@@ -1,6 +1,7 @@
-﻿using LCT.Core.Shared.BaseTypes;
+﻿using LCT.Application.Common.Interfaces;
+using LCT.Core.Shared.BaseTypes;
 using LCT.Core.Shared.Exceptions;
-using LCT.Infrastructure.Persistance.Mongo;
+using LCT.Domain.Common.Interfaces;
 using MediatR;
 using MongoDB.Driver;
 using Serilog;

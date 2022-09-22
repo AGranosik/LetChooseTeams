@@ -1,6 +1,6 @@
 ﻿using LCT.Core.Shared.BaseTypes;
 
-namespace LCT.Infrastructure.Repositories
+namespace LCT.Domain.Common.Interfaces
 {
     public interface IAggregateRepository<TAggregateRoot>
         where TAggregateRoot : IAgregateRoot

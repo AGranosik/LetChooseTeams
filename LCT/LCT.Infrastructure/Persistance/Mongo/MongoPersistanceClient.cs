@@ -1,20 +1,13 @@
-﻿using LCT.Core.Shared.BaseTypes;
+﻿using LCT.Application.Common.Interfaces;
+using LCT.Application.Common.UniqnessModels;
+using LCT.Core.Shared.BaseTypes;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
-using LCT.Infrastructure.Persistance.Mongo.UniqnessModels;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace LCT.Infrastructure.Persistance.Mongo
 {
-    //check if index is on stream id for faster search
-    public interface IPersistanceClient
-    {
-        IMongoCollection<T> GetCollection<T>(string streamName);
-        Task<bool> CheckUniqness<T>(string entity, string fieldName, T value);
-        void Configure();
-    }
-
     public class MongoPersistanceClient : IPersistanceClient
     {
         private readonly IMongoClient _mongoClient;
