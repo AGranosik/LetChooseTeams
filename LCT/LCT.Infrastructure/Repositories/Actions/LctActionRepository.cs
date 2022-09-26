@@ -13,9 +13,6 @@ namespace LCT.Infrastructure.Repositories.Actions
         }
 
         public async Task SaveAsync(TLctAction action)
-        {
-            var collection = _persistanceClient.GetCollection<LctAction>(typeof(TLctAction).Name);
-            await collection.InsertOneAsync(action);
-        }
+            => await _persistanceClient.SaveActionAsync(action);
     }
 }

@@ -1,4 +1,5 @@
-﻿using LCT.Application.Common.Interfaces;
+﻿using LCT.Application.Common.Events;
+using LCT.Application.Common.Interfaces;
 using LCT.Application.Common.UniqnessModels;
 using LCT.Core.Shared.BaseTypes;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
@@ -18,9 +19,6 @@ namespace LCT.Infrastructure.Persistance.Mongo
             _dbName = mongoSettings.DatabaseName;
             Configure();
         }
-
-        public IMongoCollection<T> GetCollection<T>(string streamName) //more generic if we change from mongo into redis there will be too much to change in return types
-            => _mongoClient.GetDatabase(_dbName).GetCollection<T>($"{streamName}Stream");
 
         public async Task<bool> CheckUniqness<T>(string entity, string fieldName, T value)
         {
@@ -46,6 +44,26 @@ namespace LCT.Infrastructure.Persistance.Mongo
             ConfigureDomainEventIndex(mongoDatabase);
         }
 
+        public async Task SaveEventAsync<TAggregateRoot>(DomainEvent domainEvent)
+            where TAggregateRoot : IAgregateRoot
+            => await GetCollection<DomainEvent>($"{typeof(TAggregateRoot).Name}Stream").InsertOneAsync(domainEvent);
+
+        public Task SaveActionAsync<T>(T action) where T : LctAction
+            => GetCollection<T>($"{typeof(T).Name}").InsertOneAsync(action);
+
+        private IMongoCollection<T> GetCollection<T>(string streamName)
+            => _mongoClient.GetDatabase(_dbName).GetCollection<T>($"{streamName}");
+
+        public async Task SaveEventsAsync<TAggregateRoot>(List<DomainEvent> domainEvents)
+            where TAggregateRoot : IAgregateRoot
+            => await GetCollection<DomainEvent>($"{typeof(TAggregateRoot).Name}Stream").InsertManyAsync(domainEvents);
+
+        public async Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId)
+            where T: IAgregateRoot
+        {
+            var cursorAsync = await GetCollection<DomainEvent>($"{typeof(T).Name}Stream").FindAsync(s => s.StreamId == streamId);
+            return await cursorAsync.ToListAsync();
+        }
         private void ConfigureDomainEventIndex(IMongoDatabase mongoDatabase)
         {
             var indexModelBuilder = Builders<DomainEvent>.IndexKeys
@@ -53,7 +71,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
 
             var indexModel = new CreateIndexModel<DomainEvent>(indexModelBuilder);
 
-            mongoDatabase.GetCollection<DomainEvent>($"{nameof(Tournament)}")
+            mongoDatabase.GetCollection<DomainEvent>($"{nameof(Tournament)}Stream")
                 .Indexes.CreateOne(indexModel);
         }
 
@@ -77,5 +95,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
             mongoDatabase.GetCollection<TeamSelectionUniqnessModel>("Tournament_SelectedTeams_index")
                 .Indexes.CreateOne(indexModel);
         }
+
+
     }
 }

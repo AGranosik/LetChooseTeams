@@ -28,10 +28,10 @@ namespace LCT.IntegrationTests.Repositories
         [Test]
         public async Task SaveAsync_Success()
         {
-            var mongoClient = _scope.ServiceProvider.GetRequiredService<IPersistanceClient>();
+            var mongoClient = _scope.ServiceProvider.GetRequiredService<IMongoClient>();
             var tournament = await CreateCompleteTournament(3, 3, 3);
 
-            var eventsCursor = await mongoClient.GetCollection<DomainEvent>(nameof(Tournament)).FindAsync(ts => ts.StreamId == tournament.Id.Value);
+            var eventsCursor = await mongoClient.GetDatabase("Lct_test").GetCollection<DomainEvent>($"{nameof(Tournament)}Stream").FindAsync(ts => ts.StreamId == tournament.Id.Value);
             var events = await eventsCursor.ToListAsync();
             events.Should().NotBeNull();
             events.Should().NotBeEmpty();

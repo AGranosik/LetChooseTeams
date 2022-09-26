@@ -80,8 +80,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.Actions
 
         private async Task<List<TeamClickedAction>> GetClicksForTournament(Guid tournamentId)
         {
-            var persistanceClient = _scope.ServiceProvider.GetRequiredService<IPersistanceClient>();
-            var resultCursor = await persistanceClient.GetCollection<TeamClickedAction>(nameof(TeamClickedAction))
+            var persistanceClient = _scope.ServiceProvider.GetRequiredService<IMongoClient>();
+            var resultCursor = await persistanceClient.GetDatabase("Lct_test").GetCollection<TeamClickedAction>(nameof(TeamClickedAction))
                 .FindAsync(a => a.GroupKey == tournamentId);
 
             return await resultCursor.ToListAsync();
