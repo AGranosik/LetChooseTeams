@@ -28,9 +28,6 @@ namespace LCT.Core.Entites.Tournaments.Services
 
             var result = playerList.Select((p, index) => DrawnTeam.Create(p, teams[index])).ToList();
 
-            if (result.Any(r => selectedTeams.Any(st => st.Player == r.Player && st.TeamName == r.TeamName)))
-                return DrawTeamForPlayers(selectedTeams);
-
             return result;
         }
 

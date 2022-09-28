@@ -164,8 +164,6 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
             tournament.DrawnTeamForPLayers(new TournamentDomainService(null));
 
             tournament.DrawTeams.Count.Should().Be(2);
-            var drawnTeam = tournament.DrawTeams.First(dt => dt.Player == player);
-            drawnTeam.TeamName.Value.Should().Be(TournamentTeamNames.Teams.First());
 
         }
 
@@ -186,12 +184,6 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests
             tournament.DrawnTeamForPLayers(new TournamentDomainService(null));
 
             tournament.DrawTeams.Count.Should().Be(count);
-
-            foreach (var selectedTeam in tournament.SelectedTeams)
-            {
-                var drawTeam = tournament.DrawTeams.First(dt => dt.Player == selectedTeam.Player);
-                drawTeam.TeamName.Value.Should().NotBe(selectedTeam.TeamName.Value);
-            }
 
         }
 
