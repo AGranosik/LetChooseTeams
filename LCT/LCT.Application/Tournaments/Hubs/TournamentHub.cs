@@ -12,7 +12,7 @@ namespace LCT.Application.Tournaments.Hubs
             _mediator = mediator;
         }
         public async Task TeamClicked(TeamClickedAction action)
-            => await _mediator.Send(action);
+            => await _mediator.Publish(action);
             
     }
 }

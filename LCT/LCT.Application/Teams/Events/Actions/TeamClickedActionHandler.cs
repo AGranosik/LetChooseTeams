@@ -1,11 +1,19 @@
 ﻿using LCT.Application.Common.Events;
 using LCT.Application.Common.Interfaces;
+using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Serilog;
 
 namespace LCT.Application.Teams.Events.Actions
 {
+    public class TeamClickedEvent : EventMessage, INotification
+    {
+        public override string Type => "TeamClicked";
+        public Guid TournamentId { get; set; }
+        public string Team { get; set; }
+    }
     public class TeamClickedAction : LctAction<Guid>
     {
         public string Team { get; set; }
@@ -13,9 +21,11 @@ namespace LCT.Application.Teams.Events.Actions
     public class TeamClickedActionHandler : INotificationHandler<TeamClickedAction>
     {
         private readonly ILctActionRepository<TeamClickedAction> _repository;
-        public TeamClickedActionHandler(ILctActionRepository<TeamClickedAction> repository)
+        private readonly IHubContext<TournamentHub> _hub;
+        public TeamClickedActionHandler(ILctActionRepository<TeamClickedAction> repository, IHubContext<TournamentHub> hub)
         {
             _repository = repository;
+            _hub = hub;
         }
         public async Task Handle(TeamClickedAction notification, CancellationToken cancellationToken)
         {
@@ -32,6 +42,14 @@ namespace LCT.Application.Teams.Events.Actions
             }
 
             await _repository.SaveAsync(notification);
+            await _hub.Clients.All.SendCoreAsync(notification.GroupKey.ToString(), new[]
+            {
+                new TeamClickedEvent
+                {
+                    Team = notification.Team,
+                    TournamentId = notification.GroupKey
+                }
+            });
         }
 
         private bool IsTournamentNameEmpty(string teamName)
