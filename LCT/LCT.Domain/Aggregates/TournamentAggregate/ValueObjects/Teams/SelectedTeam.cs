@@ -1,6 +1,5 @@
-﻿using LCT.Core.Shared.BaseTypes;
-using LCT.Domain.Aggregates.TournamentAggregate.Entities;
-using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+using LCT.Domain.Common.BaseTypes;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
 {

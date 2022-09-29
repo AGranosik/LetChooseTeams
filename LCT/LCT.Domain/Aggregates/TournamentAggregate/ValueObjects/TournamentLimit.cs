@@ -1,6 +1,6 @@
-﻿using LCT.Core.Shared.BaseTypes;
-using LCT.Core.Shared.Exceptions;
-using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
+using LCT.Domain.Common.BaseTypes;
+using LCT.Domain.Common.Exceptions;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 {

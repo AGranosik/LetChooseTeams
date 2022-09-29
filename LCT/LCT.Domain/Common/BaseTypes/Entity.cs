@@ -1,4 +1,4 @@
-﻿namespace LCT.Core.Shared.BaseTypes
+﻿namespace LCT.Domain.Common.BaseTypes
 {
     public abstract class Entity<TKey> 
         where TKey : ValueType<TKey>

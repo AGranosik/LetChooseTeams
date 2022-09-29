@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
-using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
@@ -10,8 +9,8 @@ using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM;
 using NUnit.Framework;
 using MongoDB.Driver;
-using LCT.Core.Shared.BaseTypes;
-using LCT.Application.Common.Interfaces;
+using LCT.Domain.Common.BaseTypes;
+using LCT.Domain.Common.Exceptions;
 
 namespace LCT.IntegrationTests.Repositories
 {

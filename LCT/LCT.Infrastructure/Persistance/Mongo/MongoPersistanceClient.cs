@@ -1,9 +1,9 @@
 ﻿using LCT.Application.Common.Events;
 using LCT.Application.Common.Interfaces;
 using LCT.Application.Common.UniqnessModels;
-using LCT.Core.Shared.BaseTypes;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
+using LCT.Domain.Common.BaseTypes;
 using MongoDB.Bson;
 using MongoDB.Driver;
 

@@ -92,24 +92,6 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.Services
                 .Should().BeTrue();
         }
 
-        [Test]
-        public void TeamsShuffledProperly()
-        {
-            const int numberOfPlayers = 10;
-
-            var teams = new List<SelectedTeam>();
-            var players = CreatePlayer(numberOfPlayers);
-            for (int i = 0; i < numberOfPlayers; i++)
-            {
-                teams.Add(SelectedTeam.Create(players[i], TournamentTeamNames.Teams[i]));
-            }
-
-            var result = new TournamentDomainService(GetPersistanceClient()).DrawTeamForPlayers(teams);
-            result.Any(r => teams.Any(t => t.Player == r.Player && t.TeamName == r.TeamName))
-                .Should().BeFalse();
-        }
-
-
         private List<Player> CreatePlayer(int numberOfPlayers)
         {
             var result = new List<Player>();

@@ -1,7 +1,7 @@
-﻿using LCT.Core.Shared.BaseTypes;
-using static LCT.Core.Shared.Validation.FieldValidationExtension;
+﻿using LCT.Domain.Common.BaseTypes;
+using LCT.Domain.Common.Validation;
 
-namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
+namespace LCT.Domain.Common.Aggregates.TournamentAggregate.ValueObjects
 {
     public abstract class Name: ValueType<Name>
     {
@@ -15,8 +15,8 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 
         protected virtual void Validate(string name)
         {
-            CheckIfNullOrEmpty(name, nameof(Name));
-            CheckFieldLength(name, nameof(Name));
+            FieldValidationExtension.CheckIfNullOrEmpty(name, nameof(Name));
+            FieldValidationExtension.CheckFieldLength(name, nameof(Name));
         }
 
         public static implicit operator string(Name name) => name?.Value;

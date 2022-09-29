@@ -1,4 +1,4 @@
-﻿namespace LCT.Core.Shared.Exceptions
+﻿namespace LCT.Domain.Common.Exceptions
 {
     public class EntityDoesNotExist : Exception
     {

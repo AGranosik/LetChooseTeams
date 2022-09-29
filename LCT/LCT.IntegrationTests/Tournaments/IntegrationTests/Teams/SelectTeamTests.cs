@@ -1,12 +1,12 @@
 ﻿using FluentAssertions;
 using LCT.Application.Teams.Commands;
 using LCT.Application.Teams.Events;
-using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+using LCT.Domain.Common.Exceptions;
 using LCT.IntegrationTests.Mocks;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;

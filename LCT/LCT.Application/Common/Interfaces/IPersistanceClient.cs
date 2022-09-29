@@ -1,5 +1,5 @@
 ﻿using LCT.Application.Common.Events;
-using LCT.Core.Shared.BaseTypes;
+using LCT.Domain.Common.BaseTypes;
 
 namespace LCT.Application.Common.Interfaces
 {

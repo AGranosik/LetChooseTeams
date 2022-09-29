@@ -1,6 +1,7 @@
 ﻿using LCT.Core.Shared.Exceptions;
+using LCT.Domain.Common.Exceptions;
 
-namespace LCT.Core.Shared.Validation
+namespace LCT.Domain.Common.Validation
 {
     public static class FieldValidationExtension
     {

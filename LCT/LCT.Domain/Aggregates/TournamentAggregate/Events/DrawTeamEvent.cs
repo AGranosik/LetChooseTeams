@@ -1,5 +1,5 @@
-﻿using LCT.Core.Shared.BaseTypes;
-using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+using LCT.Domain.Common.BaseTypes;
 using MongoDB.Bson.Serialization.Attributes;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.Events

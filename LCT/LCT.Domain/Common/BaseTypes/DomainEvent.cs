@@ -1,7 +1,7 @@
 ﻿using MediatR;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace LCT.Core.Shared.BaseTypes
+namespace LCT.Domain.Common.BaseTypes
 {
     [BsonIgnoreExtraElements]
     public abstract class DomainEvent : INotification

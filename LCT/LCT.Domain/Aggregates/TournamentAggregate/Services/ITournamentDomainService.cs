@@ -1,6 +1,6 @@
-﻿using LCT.Core.Shared.Interfaces;
-using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
+using LCT.Domain.Common.Interfaces;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.Services
 {

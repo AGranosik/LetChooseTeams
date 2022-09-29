@@ -1,11 +1,11 @@
-﻿using LCT.Core.Shared.BaseTypes;
-using LCT.Domain.Aggregates.TournamentAggregate.Events;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.Validators;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
+using LCT.Domain.Common.BaseTypes;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 {

@@ -6,6 +6,7 @@ using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+using LCT.Domain.Common.Exceptions;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.DFM;

@@ -1,6 +1,6 @@
 ﻿using LCT.Application.Common.Interfaces;
-using LCT.Core.Shared.BaseTypes;
-using LCT.Core.Shared.Exceptions;
+using LCT.Domain.Common.BaseTypes;
+using LCT.Domain.Common.Exceptions;
 using LCT.Domain.Common.Interfaces;
 using MediatR;
 using MongoDB.Driver;

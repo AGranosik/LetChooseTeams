@@ -1,7 +1,7 @@
 ﻿using LCT.Application.Common.Configs;
 using LCT.Application.Common.Interfaces;
-using LCT.Core.Shared.BaseTypes;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
+using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
 using LCT.Infrastructure.Persistance.Mongo;
 using LCT.Infrastructure.Repositories;

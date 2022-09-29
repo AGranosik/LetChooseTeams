@@ -1,4 +1,5 @@
 ﻿using LCT.Domain.Aggregates.TournamentAggregate.Types;
+using LCT.Domain.Common.Aggregates.TournamentAggregate.ValueObjects;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
 {

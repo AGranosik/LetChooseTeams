@@ -1,4 +1,4 @@
-﻿using LCT.Core.Shared.BaseTypes;
+﻿using LCT.Domain.Common.BaseTypes;
 
 namespace LCT.Domain.Common.Interfaces
 {

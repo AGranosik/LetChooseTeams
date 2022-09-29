@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace LCT.Core.Shared.Exceptions
+﻿namespace LCT.Domain.Common.Exceptions
 {
     public class ValueSmallerThanMinimalValueException: Exception
     {
