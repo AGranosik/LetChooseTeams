@@ -2,6 +2,7 @@
 using LCT.Application.Players.Commands;
 using LCT.Application.Players.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.IntegrationTests.Mocks;
 using MediatR;
@@ -53,7 +54,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         public async Task AssignPlayer_ReturnsPlayerIdDespiteHubException()
         {
             var tournament = await CreateTournament();
-            var result = await AssignPlayerCommandHandleAsync("name", "surname", tournament.Id.Value, IMediatorMock.GetMockWithException<PlayerAssignedEvent>());
+            var result = await AssignPlayerCommandHandleAsync("name", "surname", tournament.Id.Value, IMediatorMock.GetMockWithException<PlayerAddedDomainEvent>());
 
             result.Should().NotBeNull();
 

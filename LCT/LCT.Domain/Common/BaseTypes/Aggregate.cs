@@ -4,10 +4,7 @@
         where TKey : ValueType<TKey>
     {
         private readonly IList<DomainEvent> _changes = new List<DomainEvent>();
-        //event powinien byc wspolny dla Mediatr i tutaj
         // Zapis w repo triggeruje Event handler, ktory zarzadzi projekcję? a w przyszłości wrzuci to na kolejkę
-        // w jakich warstwach??
-        // eventy = domain
         // event handlery w application, tylko pytanie czy "domenowa obsługa" też powinno być w event handlerze czy już tylko ta applikacyjna
         protected Aggregate(TKey id) : base(id)
         {
@@ -18,7 +15,7 @@
         {
             When(@event);
 
-            _changes.Add(@event); // handle somehow domain events as well
+            _changes.Add(@event);
         }
 
         public void Load(IEnumerable<object> history)

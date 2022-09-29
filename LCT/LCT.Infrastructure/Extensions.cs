@@ -40,9 +40,9 @@ namespace LCT.Infrastructure
 
         private static void RegisterDomainEvents()
         {
-            RegisterDomainEvent<TournamentCreated>();
-            RegisterDomainEvent<PlayerAdded>();
-            RegisterDomainEvent<TeamSelected>();
+            RegisterDomainEvent<TournamentCreatedDomainEvent>();
+            RegisterDomainEvent<PlayerAddedDomainEvent>();
+            RegisterDomainEvent<TeamSelectedDomainEvent>();
             RegisterDomainEvent<DrawTeamEvent>();
         }
 

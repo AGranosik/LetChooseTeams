@@ -31,14 +31,14 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
         {
             var playerToValidate = Player.Create(name, surname);
             this.AddPlayerValidation(playerToValidate);
-            Apply(new PlayerAdded(playerToValidate.Name, playerToValidate.Surname, Id.Value));
+            Apply(new PlayerAddedDomainEvent(playerToValidate.Name, playerToValidate.Surname, Id.Value));
         }
         
         public void SelectTeam(string playerName, string playerSurname, string team)
         {
             var playerToFind = Player.Create(playerName, playerSurname);
             this.SelectTeamValidation(playerToFind, team);
-            Apply(new TeamSelected(playerToFind, team, Id.Value));
+            Apply(new TeamSelectedDomainEvent(playerToFind, team, Id.Value));
         }
 
         public void DrawnTeamForPLayers(ITournamentDomainService service)
@@ -66,7 +66,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
         public static Tournament Create(string tournamentName, int limit)
         {
             var t = new Tournament();
-            t.Apply(new TournamentCreated(tournamentName, limit, Guid.NewGuid()));
+            t.Apply(new TournamentCreatedDomainEvent(tournamentName, limit, Guid.NewGuid()));
             return t;
         }
 
@@ -74,13 +74,13 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
         {
             switch (@event)
             {
-                case TournamentCreated tc:
+                case TournamentCreatedDomainEvent tc:
                     OnCreated(tc);
                     break;
-                case PlayerAdded pa:
+                case PlayerAddedDomainEvent pa:
                     OnPlayerAdded(pa);
                     break;
-                case TeamSelected ts:
+                case TeamSelectedDomainEvent ts:
                     OnTeamSelect(ts);
                     break;
                 case DrawTeamEvent dt:
@@ -95,18 +95,18 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             _drawTeams.Add(DrawnTeam.Create(dt.Player, dt.TeamName));
         }
 
-        private void OnTeamSelect(TeamSelected ts)
+        private void OnTeamSelect(TeamSelectedDomainEvent ts)
         {
             var player = _players.FirstOrDefault(p => p == ts.Player);
             _selectedTeams.Add(SelectedTeam.Create(player, ts.TeamName));
         }
 
-        private void OnPlayerAdded(PlayerAdded pa)
+        private void OnPlayerAdded(PlayerAddedDomainEvent pa)
         {
             _players.Add(Player.Create(pa.Name, pa.Surname));
         }
 
-        private void OnCreated(TournamentCreated tc)
+        private void OnCreated(TournamentCreatedDomainEvent tc)
         {
             TournamentName = new TournamentName(tc.Name);
             Limit = tc.Limit;

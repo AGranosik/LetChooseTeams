@@ -6,12 +6,12 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Events
 {
     [BsonIgnoreExtraElements]
     [BsonDiscriminator("TeamSelected")]
-    public class TeamSelected : DomainEvent
+    public class TeamSelectedDomainEvent : DomainEvent
     {
         public string TeamName { get; set; }
         public Player Player { get; set; }
 
-        public TeamSelected(Player player, string teamName, Guid streamId) : base(streamId)
+        public TeamSelectedDomainEvent(Player player, string teamName, Guid streamId) : base(streamId)
         {
             TeamName = teamName;
             Player = player;

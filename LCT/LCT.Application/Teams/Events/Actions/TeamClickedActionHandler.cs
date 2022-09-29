@@ -8,7 +8,7 @@ using Serilog;
 
 namespace LCT.Application.Teams.Events.Actions
 {
-    public class TeamClickedEvent : EventMessage, INotification
+    public class TeamClickedEvent : HubMessage
     {
         public override string Type => "TeamClicked";
         public Guid TournamentId { get; set; }

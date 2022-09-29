@@ -7,7 +7,7 @@ using Serilog;
 
 namespace LCT.Application.Teams.Events
 {
-    public class TeamSelectedMessageEvent : EventMessage, INotification
+    public class TeamSelectedHubMessage: HubMessage
     {
         public override string Type { get => "TeamSelected"; }
         public Guid TournamentId { get; set; }
@@ -16,19 +16,19 @@ namespace LCT.Application.Teams.Events
         public string Team { get; set; }
     }
 
-    public class TeamSelectedMessageEventHandler : INotificationHandler<TeamSelected>
+    public class TeamSelectedEventHandler : INotificationHandler<TeamSelectedDomainEvent>
     {
         private readonly IHubContext<TournamentHub> _hubContext;
-        public TeamSelectedMessageEventHandler(IHubContext<TournamentHub> hubContext)
+        public TeamSelectedEventHandler(IHubContext<TournamentHub> hubContext)
         {
             _hubContext = hubContext;
         }
-        public async Task Handle(TeamSelected notification, CancellationToken cancellationToken)
+        public async Task Handle(TeamSelectedDomainEvent notification, CancellationToken cancellationToken)
         {
             try
             {
                 await _hubContext.Clients.All.SendCoreAsync(notification.StreamId.ToString(), new[] { 
-                    new TeamSelectedMessageEvent{
+                    new TeamSelectedHubMessage{
                         PlayerName = notification.Player.Name,
                         PlayerSurname = notification.Player.Surname,
                         Team = notification.TeamName,

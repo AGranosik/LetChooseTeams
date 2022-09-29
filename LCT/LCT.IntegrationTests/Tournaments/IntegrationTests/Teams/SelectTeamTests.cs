@@ -2,6 +2,7 @@
 using LCT.Application.Teams.Commands;
 using LCT.Application.Teams.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
@@ -100,7 +101,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
         {
             var tournament = await CreateTournament();
             var player = tournament.Players.Last();
-            var firstPlayerAssign = await SelectTeamCommandHandlerAsync(player.Name, player.Surname, tournament.Id.Value, TournamentTeamNames.Teams.First(), IMediatorMock.GetMockWithException<TeamSelectedMessageEvent>());
+            var firstPlayerAssign = await SelectTeamCommandHandlerAsync(player.Name, player.Surname, tournament.Id.Value, TournamentTeamNames.Teams.First(), IMediatorMock.GetMockWithException<TeamSelectedDomainEvent>());
 
             firstPlayerAssign.Should().NotBeNull();
 

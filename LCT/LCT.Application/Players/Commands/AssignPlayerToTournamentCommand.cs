@@ -29,20 +29,20 @@ namespace LCT.Application.Players.Commands
             tournament.AddPlayer(request.Name, request.Surname);
 
             await _repository.SaveAsync(tournament);
-            try
-            {
-                await _mediator.Publish(new PlayerAssignedEvent
-                {
-                    TournamentId = request.TournamentId,
-                    Name = request.Name,
-                    Surname = request.Surname
-                });
+            //try
+            //{
+            //    await _mediator.Publish(new PlayerAddedEventHandler
+            //    {
+            //        TournamentId = request.TournamentId,
+            //        Name = request.Name,
+            //        Surname = request.Surname
+            //    });
 
-            }
-            catch(Exception ex)
-            {
-                Log.Error(ex, "While publishing player assigment event...");
-            }
+            //}
+            //catch(Exception ex)
+            //{
+            //    Log.Error(ex, "While publishing player assigment event...");
+            //}
 
             return Unit.Value;
         }
