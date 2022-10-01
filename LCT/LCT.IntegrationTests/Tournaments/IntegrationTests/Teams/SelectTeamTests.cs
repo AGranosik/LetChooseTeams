@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using LCT.Application.Teams.Commands;
 using LCT.Application.Teams.Events;
+using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
@@ -10,6 +11,7 @@ using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 using LCT.Domain.Common.Exceptions;
 using LCT.IntegrationTests.Mocks;
 using MediatR;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM;
 using NUnit.Framework;
@@ -26,6 +28,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
     {
         public SelectTeamTests()
         {
+            SwapSingleton<IHubContext<TournamentHub>>(IHubContextMock.GetMockedHubContext<TournamentHub>());
             Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using LCT.Application.Tournaments.Hubs;
 using LCT.Application.Tournaments.Queries;
 using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
@@ -6,6 +7,8 @@ using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 using LCT.Domain.Common.Exceptions;
+using LCT.IntegrationTests.Mocks;
+using Microsoft.AspNetCore.SignalR;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;
@@ -21,6 +24,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
     {
         public TournamentDrawTeamTests() : base()
         {
+            SwapSingleton<IHubContext<TournamentHub>>(IHubContextMock.GetMockedHubContext<TournamentHub>());
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();

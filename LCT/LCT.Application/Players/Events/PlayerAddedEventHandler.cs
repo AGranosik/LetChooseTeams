@@ -3,7 +3,6 @@ using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using Serilog;
 
 namespace LCT.Application.Players.Events
 {
@@ -26,20 +25,13 @@ namespace LCT.Application.Players.Events
 
         public async Task Handle(PlayerAddedDomainEvent notification, CancellationToken cancellationToken)
         {
-            try
-            {
-                await _hubContext.Clients.All.SendCoreAsync(notification.StreamId.ToString(), new[] {
-                    new PlayerAddedHubMessage{
-                        TournamentId = notification.StreamId,
-                        Name  = notification.Name,
-                        Surname = notification.Surname
-                    }
-                }, cancellationToken);
-            }
-            catch (Exception ex)
-            {
-                Log.Error(ex, "Exception during signalr conntection");
-            }
+            await _hubContext.Clients.All.SendCoreAsync(notification.StreamId.ToString(), new[] {
+                new PlayerAddedHubMessage{
+                    TournamentId = notification.StreamId,
+                    Name  = notification.Name,
+                    Surname = notification.Surname
+                }
+            }, cancellationToken);
         }
     }
 }

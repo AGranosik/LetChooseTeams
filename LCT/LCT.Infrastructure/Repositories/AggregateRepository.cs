@@ -32,20 +32,22 @@ namespace LCT.Infrastructure.Repositories
         {
             var events = model.GetChanges();
             await SaveToStreamAsync(events);
-            try
-            {
-                await PublishEventsAsync(events);
-            }
-            catch(Exception ex)
-            {
-                Log.Error(ex, ex.Message);
-            }
+            await PublishEventsAsync(events);
         }
 
         private async Task PublishEventsAsync(DomainEvent[] events)
         {
             foreach (var @event in events)
-                await _mediator.Publish(@event, CancellationToken.None);
+            {
+                try
+                {
+                    await _mediator.Publish(@event, CancellationToken.None);
+                }
+                catch(Exception ex)
+                {
+                    Log.Error(ex, ex.Message);
+                }
+            }
         }
 
         private async Task SaveToStreamAsync(DomainEvent[] events)

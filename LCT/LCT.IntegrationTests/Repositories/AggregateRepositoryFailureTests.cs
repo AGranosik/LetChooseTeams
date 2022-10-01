@@ -3,9 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
 using LCT.Application.Tournaments.Commands;
+using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Common.BaseTypes;
 using LCT.IntegrationTests.Mocks;
+using Microsoft.AspNetCore.SignalR;
 using NUnit.DFM;
 using NUnit.Framework;
 
@@ -16,12 +18,13 @@ namespace LCT.IntegrationTests.Repositories
     {
         public AggregateRepositoryFailureTests()
         {
-            this.Environment("Development")
-                .ProjectName("LCT.Api")
-                .Build();
+            SwapSingleton<IHubContext<TournamentHub>>(IHubContextMock.GetMockedHubContext<TournamentHub>());
 
             var mediatorMock = IMediatorMock.GetMockWithException<DomainEvent>();
             SwapSingleton(mediatorMock);
+            this.Environment("Development")
+                .ProjectName("LCT.Api")
+                .Build();
         }
 
         [Test]

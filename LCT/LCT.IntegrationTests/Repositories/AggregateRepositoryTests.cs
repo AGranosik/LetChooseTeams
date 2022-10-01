@@ -11,6 +11,9 @@ using NUnit.Framework;
 using MongoDB.Driver;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Exceptions;
+using LCT.Application.Tournaments.Hubs;
+using LCT.IntegrationTests.Mocks;
+using Microsoft.AspNetCore.SignalR;
 
 namespace LCT.IntegrationTests.Repositories
 {
@@ -19,6 +22,7 @@ namespace LCT.IntegrationTests.Repositories
     {
         public AggregateRepositoryTests()
         {
+            SwapSingleton<IHubContext<TournamentHub>>(IHubContextMock.GetMockedHubContext<TournamentHub>());
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();
