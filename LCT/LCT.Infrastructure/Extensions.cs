@@ -30,7 +30,7 @@ namespace LCT.Infrastructure
             services.AddSingleton<IMongoClient>(mongoClient);
             services.AddSingleton<IPersistanceClient, MongoPersistanceClient>();
             services.AddSingleton(typeof(IAggregateRepository<>), typeof(AggregateRepository<>));
-            services.AddSingleton(typeof(ILctActionRepository<>), typeof(LctActionRepository<>));
+            services.AddSingleton(typeof(ILctActionRepository<,>), typeof(LctActionRepository<,>));
 
             RegisterDomainEvents();
             services.ConfigureFrontendUrl();

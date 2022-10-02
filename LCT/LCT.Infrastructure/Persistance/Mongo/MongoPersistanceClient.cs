@@ -96,6 +96,12 @@ namespace LCT.Infrastructure.Persistance.Mongo
                 .Indexes.CreateOne(indexModel);
         }
 
+        public async Task<List<T>> GetActionsAsync<T, TKey>(TKey aggregateId)
+             where T : LctAction<TKey>//create index on aggregate id
 
+        {
+            var cursorAsync = await GetCollection<T>($"{typeof(T).Name}").FindAsync(t => t.GroupKey.Equals(aggregateId));
+            return await cursorAsync.ToListAsync();
+        }
     }
 }

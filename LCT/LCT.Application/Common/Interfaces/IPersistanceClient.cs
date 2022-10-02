@@ -5,6 +5,8 @@ namespace LCT.Application.Common.Interfaces
 {
     public interface IPersistanceClient
     {
+        Task<List<T>> GetActionsAsync<T, TKey>(TKey aggregateId)
+             where T : LctAction<TKey>;
         Task SaveActionAsync<T>(T action) //move it to different interface
             where T : LctAction;
 
