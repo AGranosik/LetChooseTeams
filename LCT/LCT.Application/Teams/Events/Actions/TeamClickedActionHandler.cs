@@ -71,30 +71,16 @@ namespace LCT.Application.Teams.Events.Actions
 
         private async Task<bool> SaveAsync(TeamClickedAction action)
         {
-            if (IsTournamentNameEmpty(action.Team))
-            {
-                Log.Error("Team name cannot be empty in TeamSelectedAction");
-                return false;
-            }
-
             if (!IsTeamExist(action.Team))
             {
                 Log.Error("Clicked team does not exist.");
                 return false;
             }
-            try
-            {
-
             await _repository.SaveAsync(action);
-            }
-            catch(Exception ex)
-            {
-
-            }
             return true;
         }
 
-        private bool IsTournamentNameEmpty(string teamName)
+        private bool IsTeamNameEmpty(string teamName)
             => string.IsNullOrEmpty(teamName);
 
         private bool IsTeamExist(string teamName)
