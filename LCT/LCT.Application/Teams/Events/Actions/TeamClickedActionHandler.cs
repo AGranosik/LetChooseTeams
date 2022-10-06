@@ -65,7 +65,7 @@ namespace LCT.Application.Teams.Events.Actions
             var playerPickedTeams = tournament.SelectedTeams.Select(st => st.Player);
             var actions = await _repository.GetByGroupIdAsync(action.GroupKey);
             var grouppedByPlayer = actions
-                .Where(a => !playerPickedTeams.Any(p => (p.Name == a.Name && p.Surname == a.Surname)))
+                .Where(a => !playerPickedTeams.Any(p => p.Name == a.Name && p.Surname == a.Surname))
                 .GroupBy(a => new { a.Surname, a.Name })
                 .Select(a => new ClieckedPlayerTeam
                 {
