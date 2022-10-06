@@ -19,6 +19,7 @@ using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
+using Nest;
 using NUnit.DFM;
 using NUnit.Framework;
 
@@ -87,27 +88,19 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
         [Test]
         public async Task TeamClickedByMultiplePlayers_OnePlayerAlreadySelectedTeam_ReturnWithoutSelectedTeam()
         {
-            var tournament = await CreateCompleteTournament(3, 3, 0);
+            var tournament = await CreateCompleteTournament(3, 3);
             var actionGroupKey = tournament.Id.Value;
             var hubMocks = HubMocks();
-            var actions = new List<TeamClickedAction>();
-            for (int i = 0; i <3; i++)
-            {
-                var player = CreatePlayerForTest(i);
-                actions.Add(new TeamClickedAction()
-                {
-                    GroupKey = actionGroupKey,
-                    Team = TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 1 - i],
-                    Name = player.Name,
-                    Surname = player.Surname
-                });
-            }
+
+            var actions = CreateActions(3, actionGroupKey);
+
             for(int i = 0; i < 2; i++)
                 await ActionHandle(actions[i], hubMocks.Item2.Object);
 
             var firstPLayer = tournament.Players.First();
             tournament.SelectTeam(firstPLayer.Name, firstPLayer.Surname, TournamentTeamNames.Teams[0]);
             await AddAsync(tournament);
+
             hubMocks = HubMocks();
             await ActionHandle(actions[2], hubMocks.Item2.Object);
             var actionsFromDB = await GetSavedActions(actionGroupKey);
@@ -122,21 +115,11 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
         [Test]
         public async Task TeamClickedByMultiplePlayers_AllPlayersSelectedTeams_SendEmptyList() //refactor it 
         {
-            var tournament = await CreateCompleteTournament(3, 3, 0);
+            var tournament = await CreateCompleteTournament(3, 3);
             var actionGroupKey = tournament.Id.Value;
             var hubMocks = HubMocks();
-            var actions = new List<TeamClickedAction>();
-            for (int i = 0; i < 3; i++)
-            {
-                var player = CreatePlayerForTest(i);
-                actions.Add(new TeamClickedAction()
-                {
-                    GroupKey = actionGroupKey,
-                    Team = TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 1 - i],
-                    Name = player.Name,
-                    Surname = player.Surname
-                });
-            }
+            var actions = CreateActions(3, actionGroupKey);
+
             for (int i = 0; i < 2; i++)
             {
                 var action = actions[i];
@@ -150,11 +133,27 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
             actionsFromDB.Should().NotBeNull();
             actionsFromDB.Count.Should().Be(3);
             hubMocks.Item1.Verify(c => c.SendCoreAsync(It.IsAny<string>(), It.Is<object?[]>(x => ((TeamClickedEvent)x[0]).ClickedTeams.Count == 1 && ((TeamClickedEvent)x[0]).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 3])), CancellationToken.None));
-
-
         }
 
-        private async Task<Tournament> CreateCompleteTournament(int limit, int players, int selectedTeams) //move it to some helper method
+        private List<TeamClickedAction> CreateActions(int numberOfActions, Guid actionGroupKey)
+        {
+            var actions = new List<TeamClickedAction>();
+            for (int i = 0; i < numberOfActions; i++)
+            {
+                var player = CreatePlayerForTest(i);
+                actions.Add(new TeamClickedAction()
+                {
+                    GroupKey = actionGroupKey,
+                    Team = TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 1 - i],
+                    Name = player.Name,
+                    Surname = player.Surname
+                });
+            }
+
+            return actions;
+        }
+
+        private async Task<Tournament> CreateCompleteTournament(int limit, int players) //move it to some helper method
         {
             var tournament = Tournament.Create("test", limit);
 
@@ -162,12 +161,6 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
             {
                 var player = CreatePlayerForTest(i);
                 tournament.AddPlayer(player.Name, player.Surname);
-            }
-            for (int i = 0; i < selectedTeams; i++)
-            {
-                var player = tournament.Players.ElementAt(i);
-
-                tournament.SelectTeam(player.Name, player.Surname, TournamentTeamNames.Teams[i]);
             }
             await AddAsync(tournament);
             return tournament;
