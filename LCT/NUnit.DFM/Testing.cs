@@ -2,6 +2,7 @@
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
+using LCT.Infrastructure.Persistance.Mongo;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
@@ -15,6 +16,10 @@ namespace NUnit.DFM
     public partial class Testing<TModel>: IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
         where TModel: IAgregateRoot
     {
+        public static string tournamentTable = "TournamentStream";
+        public static string tournamentActions = "TeamClickedAction";
+
+
         protected IServiceScopeFactory _scopeFactory;
         protected IServiceScope _scope;
         private readonly IServiceCollection _services = new ServiceCollection();
@@ -22,6 +27,7 @@ namespace NUnit.DFM
         private readonly IAppConfigurationSetUp _appConfiguration;
         private readonly IConfigurationBuilderSetup _configurationSetup;
         private readonly List<string> _tableToTruncate = new List<string>();
+        private string _dbName;
 
         public Testing()
         {
@@ -43,6 +49,8 @@ namespace NUnit.DFM
 
             _scopeFactory = _services.BuildServiceProvider().GetService<IServiceScopeFactory>();
             _scope = _scopeFactory.CreateScope();
+            var mongoSettings = _scope.ServiceProvider.GetRequiredService<MongoSettings>();
+            _dbName = mongoSettings.DatabaseName;
 
         }
 
@@ -50,7 +58,7 @@ namespace NUnit.DFM
         public virtual async Task OneTimeTearDown()
         {
             var mongoClient = _services.BuildServiceProvider().GetRequiredService<IMongoClient>();
-            await mongoClient.DropDatabaseAsync("Lct_test");
+            await mongoClient.DropDatabaseAsync(_dbName);
         }
 
         [SetUp]
@@ -63,7 +71,9 @@ namespace NUnit.DFM
         public virtual async Task TearDownAsync()
         {
             var mongoClient = _scope.ServiceProvider.GetRequiredService<IMongoClient>();
-            await mongoClient.GetDatabase("Lct_test").GetCollection<DomainEvent>("TournamentStream").DeleteManyAsync(x => true);
+            foreach (var collection in _tableToTruncate)
+                mongoClient.GetDatabase(_dbName).DropCollection(collection);
+
             _scope.Dispose();
         }
 
