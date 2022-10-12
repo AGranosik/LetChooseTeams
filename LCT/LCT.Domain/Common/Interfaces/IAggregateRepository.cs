@@ -6,6 +6,6 @@ namespace LCT.Domain.Common.Interfaces
         where TAggregateRoot : IAgregateRoot
     {
         Task<TAggregateRoot> LoadAsync(Guid Id); // id should be generic
-        Task SaveAsync(TAggregateRoot model);
+        Task SaveAsync(TAggregateRoot model); 
     }
 }
