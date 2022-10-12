@@ -26,12 +26,6 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.Actions
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();
-
-            AddTablesToTruncate(new List<string>
-            {
-                tournamentActions,
-                tournamentTable
-            });
         }
 
         [Test]

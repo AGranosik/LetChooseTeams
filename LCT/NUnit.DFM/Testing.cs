@@ -16,11 +16,7 @@ namespace NUnit.DFM
     public partial class Testing<TModel>: IAppConfigurationSetUp, IConfigurationBuilderSetup, IServiceCollectionSetUp
         where TModel: IAgregateRoot
     {
-        public static string tournamentTable = "TournamentStream";
-        public static string tournamentActions = "TeamClickedAction";
-
-
-        protected IServiceScopeFactory _scopeFactory;
+        private IServiceScopeFactory _scopeFactory;
         protected IServiceScope _scope;
         private readonly IServiceCollection _services = new ServiceCollection();
         private readonly IServiceCollectionSetUp _builder;
