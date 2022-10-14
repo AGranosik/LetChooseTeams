@@ -7,7 +7,7 @@ namespace LCT.Application.Common.Interfaces
     {
         Task<List<T>> GetActionsAsync<T, TKey>(TKey aggregateId)
              where T : LctAction<TKey>;
-        Task SaveActionAsync<T>(T action) //move it to different interface
+        Task SaveActionAsync<T>(T action)
             where T : LctAction;
 
         Task SaveEventAsync<TAggregate>(DomainEvent domainEvent)

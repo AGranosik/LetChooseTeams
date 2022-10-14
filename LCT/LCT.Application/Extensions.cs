@@ -13,8 +13,6 @@ namespace LCT.Application
             collection.AddMediatR(typeof(Extensions));
             collection.AddSingleton<IQRCodeCreator, QRCodeCreator>();
             collection.AddSingleton<ITournamentDomainService, TournamentDomainService>();
-
-            //IPersistance powinno miec metody, ktore apka chce wykonac. tzn. nie powinno byc rzadnego get collection, bo application nie obchodzi czy jest mongo pod spodem czy zapis do pliku tekstowego leci
             //composition root
 
             return collection;

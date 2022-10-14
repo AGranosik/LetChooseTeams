@@ -13,8 +13,8 @@ namespace LCT.IntegrationTests.Mocks
             where T : Hub
         {
             var hubContext = new Mock<IHubContext<T>>();
-            hubClients = hubClients ?? new Mock<IHubClients>();
-            clientProxy = clientProxy ?? new Mock<IClientProxy>();
+            hubClients ??= new Mock<IHubClients>();
+            clientProxy ??= new Mock<IClientProxy>();
             if(verify is not null)
             {
                 clientProxy.Verify(c => c.SendCoreAsync(It.IsAny<string>(), It.Is<object?[]>(verify), CancellationToken.None));

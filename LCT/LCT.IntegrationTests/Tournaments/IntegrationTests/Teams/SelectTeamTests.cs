@@ -104,7 +104,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
         {
             var tournament = await CreateTournament();
             var player = tournament.Players.Last();
-            var firstPlayerAssign = await SelectTeamCommandHandlerAsync(player.Name, player.Surname, tournament.Id.Value, TournamentTeamNames.Teams.First(), IMediatorMock.GetMockWithException<TeamSelectedDomainEvent>());
+            var firstPlayerAssign = await SelectTeamCommandHandlerAsync(player.Name, player.Surname, tournament.Id.Value, TournamentTeamNames.Teams.First(), IMediatorMock.GetMockWithException<TeamSelectedDomainEvent>().Object);
 
             firstPlayerAssign.Should().NotBeNull();
 
