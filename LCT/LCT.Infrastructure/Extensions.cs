@@ -15,9 +15,6 @@ namespace LCT.Infrastructure
 {
     public static class Extensions
     {
-        // W Domain interfejs repository
-        // infrastructure implementacja tego
-        // w app do infrastructure
         //compositions root
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
             => services.ConfigureMongo();

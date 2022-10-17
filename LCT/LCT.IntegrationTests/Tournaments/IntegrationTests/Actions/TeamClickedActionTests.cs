@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Numerics;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -12,14 +10,11 @@ using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
-using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 using LCT.Domain.Common.Interfaces;
 using LCT.IntegrationTests.Mocks;
-using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
-using Nest;
 using NUnit.DFM;
 using NUnit.Framework;
 
@@ -113,7 +108,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
         }
 
         [Test]
-        public async Task TeamClickedByMultiplePlayers_AllPlayersSelectedTeams_SendEmptyList() //refactor it 
+        public async Task TeamClickedByMultiplePlayers_AllPlayersSelectedTeams_SendEmptyList()
         {
             var tournament = await CreateCompleteTournament(3, 3);
             var actionGroupKey = tournament.Id.Value;
@@ -132,7 +127,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
             var actionsFromDB = await GetSavedActions(actionGroupKey);
             actionsFromDB.Should().NotBeNull();
             actionsFromDB.Count.Should().Be(3);
-            hubMocks.Item1.Verify(c => c.SendCoreAsync(It.IsAny<string>(), It.Is<object?[]>(x => ((TeamClickedEvent)x[0]).ClickedTeams.Count == 1 && ((TeamClickedEvent)x[0]).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 3])), CancellationToken.None));
+            hubMocks.Item1.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object?[]>(x => ((TeamClickedEvent)x[0]).ClickedTeams.Count == 1 && ((TeamClickedEvent)x[0]).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 3])), CancellationToken.None));
         }
 
         private List<TeamClickedAction> CreateActions(int numberOfActions, Guid actionGroupKey)
@@ -153,7 +148,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
             return actions;
         }
 
-        private async Task<Tournament> CreateCompleteTournament(int limit, int players) //move it to some helper method
+        private async Task<Tournament> CreateCompleteTournament(int limit, int players)
         {
             var tournament = Tournament.Create("test", limit);
 

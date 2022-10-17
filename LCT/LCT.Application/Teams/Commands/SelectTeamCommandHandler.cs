@@ -13,9 +13,6 @@ namespace LCT.Application.Teams.Commands
         public string Team { get; set; }
     }
 
-    //co jeśli zapis do repo nie pyknie?
-    // a nazwa już zostanie zaklepana?
-
     public record SelectTeamMessageDto(Guid playerId, string team);
     public class SelectTeamCommandHandler : IRequestHandler<SelectTeamCommand>
     {
