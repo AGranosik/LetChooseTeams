@@ -1,9 +1,7 @@
 ﻿using FluentAssertions;
 using LCT.Application.Teams.Commands;
-using LCT.Application.Teams.Events;
 using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
-using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
@@ -21,7 +19,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
+namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTests
 {
     [TestFixture]
     public class SelectTeamTests : Testing<Tournament>
@@ -94,32 +92,11 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
             var teamSubmittedFunc = () => SelectTeamCommandHandlerAsync(playerWhoSelectTeamFirst.Name, playerWhoSelectTeamFirst.Surname, tournament.Id.Value, teamToSelect);
             await teamSubmittedFunc.Should().NotThrowAsync();
 
-            var domainService = _scope.ServiceProvider.GetRequiredService<ITournamentDomainService>();
-            var uniqnessFunc = () => domainService.PlayerTeamSelectionValidationAsync(teamToSelect, tournament.Id.Value);
-            await uniqnessFunc.Should().ThrowAsync<PlayerAlreadyAssignedToTournamentException>();
+            var teamNotSubmitted = () => SelectTeamCommandHandlerAsync(playerWhoWillBeBlocked.Name, playerWhoWillBeBlocked.Surname, tournament.Id.Value, teamToSelect);
+            await teamNotSubmitted.Should().ThrowAsync<TeamAlreadySelectedException>();
         }
 
-        [Test]
-        public async Task TeamSelectedDespiteHubException()
-        {
-            var tournament = await CreateTournament();
-            var player = tournament.Players.Last();
-            var firstPlayerAssign = await SelectTeamCommandHandlerAsync(player.Name, player.Surname, tournament.Id.Value, TournamentTeamNames.Teams.First(), IMediatorMock.GetMockWithException<TeamSelectedDomainEvent>().Object);
 
-            firstPlayerAssign.Should().NotBeNull();
-
-            var savedTournament = await GetTournamentById(tournament.Id.Value);
-            savedTournament.Should().NotBeNull();
-
-            var selectedTeams = savedTournament.SelectedTeams;
-            selectedTeams.Should().NotBeNullOrEmpty();
-
-            selectedTeams.Count.Should().Be(2);
-            var firstSelectedTeam = selectedTeams.Last();
-            firstSelectedTeam.Player.Name.Should().Be(player.Name);
-            firstSelectedTeam.Player.Surname.Should().Be(player.Surname);
-            firstSelectedTeam.TeamName.Value.Should().Be(TournamentTeamNames.Teams.First());
-        }
 
         private async Task<Tournament> GetTournamentById(Guid id)
         => await GetRepository().LoadAsync(id);
@@ -140,7 +117,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams
             return tournament;
         }
 
-        private async Task<Unit> SelectTeamCommandHandlerAsync(string playerName, string playerSurname, Guid TournamentId, string Team, IMediator mediatorMock = null)
+        private async Task<Unit> SelectTeamCommandHandlerAsync(string playerName, string playerSurname, Guid TournamentId, string Team)
         {
             var domainService = _scope.ServiceProvider.GetRequiredService<ITournamentDomainService>();
             return await new SelectTeamCommandHandler(GetRepository(), domainService).Handle(new SelectTeamCommand

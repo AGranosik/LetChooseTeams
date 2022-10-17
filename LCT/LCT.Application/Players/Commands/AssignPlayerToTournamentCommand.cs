@@ -10,7 +10,7 @@ namespace LCT.Application.Players.Commands
     {
         public string Name { get; set; }
         public string Surname { get; set; }
-        public Guid TournamentId { get; set; } //testy bez hub exception i z hub exception dzialanie apki nie powinno sie konczyc + mimo bledu jednego eventu reszta powinna sie wysylac
+        public Guid TournamentId { get; set; }
     }
 
     public record PlayerAssignedMessageDto(Guid Id, string Name, string Surname);

@@ -97,7 +97,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
         }
 
         public async Task<List<T>> GetActionsAsync<T, TKey>(TKey aggregateId)
-             where T : LctAction<TKey>//create index on aggregate id
+             where T : LctAction<TKey>
 
         {
             var cursorAsync = await GetCollection<T>($"{typeof(T).Name}").FindAsync(t => t.GroupKey.Equals(aggregateId));

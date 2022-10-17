@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using LCT.Application.Players.Commands;
 using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
-using LCT.IntegrationTests.Mocks;
 using MediatR;
 using Moq;
 using NUnit.DFM;
