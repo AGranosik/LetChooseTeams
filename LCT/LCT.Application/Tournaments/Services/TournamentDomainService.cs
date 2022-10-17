@@ -41,7 +41,9 @@ namespace LCT.Core.Entites.Tournaments.Services
 
         public async Task TournamentNameUniqnessValidationAsync(Tournament tournament)
         {
-            var isNameUnique = await _dbContext.CheckUniqness(nameof(Tournament), nameof(Tournament.TournamentName), tournament.TournamentName);
+            var isNameUnique = await _dbContext.CheckUniqness(nameof(Tournament), nameof(Tournament.TournamentName), tournament.TournamentName); // check uniqness change name to -> reserve name... and add failure callback
+            // check if in another tournament register player with the same name it will pass
+            // same for selected team
             if (!isNameUnique)
                 throw new TournamentNameNotUniqueException();
         }
