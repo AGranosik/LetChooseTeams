@@ -18,11 +18,11 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             TournamentName = tournamentName;
         }
         public TournamentName TournamentName { get; private set; }
-        private List<Player> _players = new List<Player>();
+        private List<Player> _players = new();
         public IReadOnlyCollection<Player> Players => _players.AsReadOnly();
-        private List<SelectedTeam> _selectedTeams = new List<SelectedTeam>();
+        private List<SelectedTeam> _selectedTeams = new();
         public virtual IReadOnlyCollection<SelectedTeam> SelectedTeams => _selectedTeams.AsReadOnly();
-        private List<DrawnTeam> _drawTeams = new List<DrawnTeam>();
+        private List<DrawnTeam> _drawTeams = new();
         public virtual IReadOnlyCollection<DrawnTeam> DrawTeams => _drawTeams.AsReadOnly();
         public TournamentLimit Limit { get; private set; }
         public int NumberOfPlayers => _players.Count;
@@ -55,7 +55,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             if (SelectedTeams.Count() == 0 || SelectedTeams.Count() != Limit.Limit)
                 throw new NotAllPlayersSelectedTeamException();
 
-            if (_drawTeams is null || _drawTeams.Count() == 0)
+            if (_drawTeams is null || _drawTeams.Count == 0)
             {
                 var result = service.DrawTeamForPlayers(_selectedTeams);
                 foreach (var @event in result)

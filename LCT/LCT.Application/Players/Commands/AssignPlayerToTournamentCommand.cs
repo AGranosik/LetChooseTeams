@@ -25,7 +25,6 @@ namespace LCT.Application.Players.Commands
         {
             var tournament = await _repository.LoadAsync(request.TournamentId);
             tournament.AddPlayer(request.Name, request.Surname);
-
             await _repository.SaveAsync(tournament);
 
             return Unit.Value;

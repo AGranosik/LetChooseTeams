@@ -81,7 +81,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
         }
 
         [Test]
-        public async Task TeamSelection_ConcurrencyIsSet_ThrowsException()
+        public async Task TeamSelection_IndexIsSet_ThrowsException()
         {
             var tournament = await CreateTournament();
             var teamToSelect = TournamentTeamNames.Teams.First();
@@ -96,6 +96,21 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
             await teamNotSubmitted.Should().ThrowAsync<TeamAlreadySelectedException>();
         }
 
+
+        [Test]
+        public async Task TeamSelection_SameTeamInDifferentTournament_Success()
+        {
+            var tournament1 = await CreateTournament();
+            var tournament2 = await CreateTournament();
+
+            var newTeamToSelect = TournamentTeamNames.Teams.First();
+            var player1 = tournament1.Players.Last();
+            var firstTournamentSubmit = () => SelectTeamCommandHandlerAsync(player1.Name, player1.Surname, tournament1.Id.Value, newTeamToSelect);
+            await firstTournamentSubmit.Should().NotThrowAsync();
+
+            var secondTournamentSubmit = () => SelectTeamCommandHandlerAsync(player1.Name, player1.Surname, tournament2.Id.Value, newTeamToSelect);
+            await secondTournamentSubmit.Should().NotThrowAsync();
+        }
 
 
         private async Task<Tournament> GetTournamentById(Guid id)
