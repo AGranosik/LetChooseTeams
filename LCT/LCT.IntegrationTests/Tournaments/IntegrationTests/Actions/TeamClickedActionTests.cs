@@ -127,7 +127,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
             var actionsFromDB = await GetSavedActions(actionGroupKey);
             actionsFromDB.Should().NotBeNull();
             actionsFromDB.Count.Should().Be(3);
-            hubMocks.Item1.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object?[]>(x => ((TeamClickedEvent)x[0]).ClickedTeams.Count == 1 && ((TeamClickedEvent)x[0]).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 3])), CancellationToken.None));
+            hubMocks.Item1.Verify(c => c.SendCoreAsync(It.IsAny<string>(), It.Is<object?[]>(x => ((TeamClickedEvent)x[0]).ClickedTeams.Count == 1 && ((TeamClickedEvent)x[0]).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 3])), CancellationToken.None));
         }
 
         private List<TeamClickedAction> CreateActions(int numberOfActions, Guid actionGroupKey)

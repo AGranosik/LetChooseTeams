@@ -75,7 +75,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
             result.Should().NotBeNull();
             var tournamentFromDb = await GetTournamentById(tournament.Id.Value);
             tournamentFromDb.Should().NotBeNull();
-            tournamentFromDb.Players.Count().Should().Be(2);
+            tournamentFromDb.Players.Count().Should().Be(3);
             tournamentFromDb.SelectedTeams.Count().Should().Be(2);
             tournamentFromDb.SelectedTeams.Any(t => t.TeamName == TournamentTeamNames.Teams.First()).Should().BeTrue();
         }
@@ -127,6 +127,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
             };
             tournament.AddPlayer(players[0].Name, players[0].Surname);
             tournament.AddPlayer(players[1].Name, players[1].Surname);
+            tournament.AddPlayer(players[2].Name, players[2].Surname);
             tournament.SelectTeam(players[0].Name, players[0].Surname, TournamentTeamNames.Teams.Last());
             await AddAsync(tournament);
             return tournament;

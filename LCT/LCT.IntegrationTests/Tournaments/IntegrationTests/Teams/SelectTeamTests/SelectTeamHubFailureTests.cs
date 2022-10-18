@@ -56,7 +56,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
             firstSelectedTeam.TeamName.Value.Should().Be(TournamentTeamNames.Teams.First());
 
 
-            _hubContextMock.Verify(hc => hc.Clients, Times.Once());
+            _hubContextMock.Verify(hc => hc.Clients, Times.AtLeast(4));
         }
 
 
