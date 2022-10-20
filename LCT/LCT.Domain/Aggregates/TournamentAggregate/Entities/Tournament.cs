@@ -9,7 +9,7 @@ using LCT.Domain.Common.BaseTypes;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 {
-    public class Tournament : Aggregate<TournamentId>
+    public class Tournament : Aggregate<TournamentId>, IVersionable<int>
     {
         public Tournament() : base(null) { }
         private Tournament(TournamentName tournamentName, TournamentLimit limit) : base(TournamentId.Create())
@@ -26,6 +26,9 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
         public virtual IReadOnlyCollection<DrawnTeam> DrawTeams => _drawTeams.AsReadOnly();
         public TournamentLimit Limit { get; private set; }
         public int NumberOfPlayers => _players.Count;
+
+        private int _version = 0;
+        public int Version => _version;
 
         public void AddPlayer(string name, string surname)
         {
@@ -112,5 +115,8 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             Limit = tc.Limit;
             Id = TournamentId.Create(tc.StreamId);
         }
+
+        public void Incerement()
+            => _version++;
     }
 }
