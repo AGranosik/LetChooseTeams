@@ -14,6 +14,7 @@ namespace LCT.Application.Tournaments.Queries
         public List<PlayerDto> Players { get; set; }
         public string QRCode { get; set; }
         public int PlayerLimit { get; set; }
+        public int Version { get; set; }
     }
 
     public class PlayerDto
@@ -47,6 +48,8 @@ namespace LCT.Application.Tournaments.Queries
                 Id = tournament.Id.Value,
                 TournamentName = tournament.TournamentName,
                 PlayerLimit = tournament.Limit.Limit,
+                QRCode = GenerateQrCodeForTournament(tournament.Id),
+                Version = tournament.Version,
                 Players = tournament.Players.Select(p => new PlayerDto
                 {
                     Name = p.Name,
@@ -55,8 +58,6 @@ namespace LCT.Application.Tournaments.Queries
                     DrawnTeam = tournament.DrawTeams.FirstOrDefault(dt => dt.Player == p)?.TeamName
                 }).ToList()
             };
-
-            dto.QRCode = GenerateQrCodeForTournament(tournament.Id);
 
             return dto;
         }

@@ -31,7 +31,8 @@
             .ToArray();
     }
 
-    public interface IAgregateRoot {
+    public interface IAgregateRoot
+    {
         void Load(IEnumerable<object> history);
 
         DomainEvent[] GetChanges();
