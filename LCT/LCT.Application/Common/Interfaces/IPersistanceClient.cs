@@ -13,9 +13,6 @@ namespace LCT.Application.Common.Interfaces
         Task SaveEventAsync<TAggregate>(DomainEvent domainEvent)
             where TAggregate : IAgregateRoot;
 
-        Task SaveEventsAsync<TAggregate>(List<DomainEvent> domainEvents)
-            where TAggregate : IAgregateRoot;
-
         Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId)
             where T: IAgregateRoot;
 

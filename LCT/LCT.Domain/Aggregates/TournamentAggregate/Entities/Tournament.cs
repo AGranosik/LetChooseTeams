@@ -69,7 +69,9 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
         public static Tournament Create(string tournamentName, int limit)
         {
             var t = new Tournament();
-            t.Apply(new TournamentCreatedDomainEvent(tournamentName, limit, Guid.NewGuid()));
+            var streamId = Guid.NewGuid();
+            t.Apply(new TournamentCreatedDomainEvent(tournamentName, limit, streamId));
+            t.Apply(new SetTournamentNameEvent(tournamentName, streamId));
             return t;
         }
 
@@ -89,8 +91,15 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
                 case DrawTeamEvent dt:
                     OnTeamDrawn(dt);
                     break;
-
+                case SetTournamentNameEvent tn:
+                    OnSetTournamentName(tn);
+                    break;
             }
+        }
+
+        private void OnSetTournamentName(SetTournamentNameEvent tn)
+        {
+            TournamentName = new TournamentName(tn.Name);
         }
 
         private void OnTeamDrawn(DrawTeamEvent dt)
@@ -111,7 +120,6 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 
         private void OnCreated(TournamentCreatedDomainEvent tc)
         {
-            TournamentName = new TournamentName(tc.Name);
             Limit = tc.Limit;
             Id = TournamentId.Create(tc.StreamId);
         }

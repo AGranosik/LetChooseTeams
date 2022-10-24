@@ -5,13 +5,11 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Events
 {
     [BsonIgnoreExtraElements]
     [BsonDiscriminator("TournamentCreated")]
-    public class TournamentCreatedDomainEvent : DomainEvent, IVersionable
+    public class TournamentCreatedDomainEvent : DomainEvent
     {
-        public string Name { get; set; }
         public int Limit { get; set; }
         public TournamentCreatedDomainEvent(string tournamentName, int limit, Guid streamId): base(streamId)
         {
-            Name = tournamentName;
             Limit = limit;
         }
     }

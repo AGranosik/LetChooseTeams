@@ -52,11 +52,9 @@ namespace LCT.Infrastructure.Repositories
 
         private async Task SaveToStreamAsync(DomainEvent[] events)
         {
-            var numberOfChanges = events.Length;
-            if (numberOfChanges > 1)
-                await _client.SaveEventsAsync<TAggregateRoot>(events.ToList());
-            else if (numberOfChanges == 1)
-                await _client.SaveEventAsync<TAggregateRoot>(events.First());
+            // check uniqness in transactions
+            foreach(var @event in events)
+                await _client.SaveEventAsync<TAggregateRoot>(@event);
         }
     }
 }
