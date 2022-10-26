@@ -8,7 +8,7 @@ using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 
 namespace LCT.Core.Entites.Tournaments.Services
 {
-    public class TournamentDomainService : ITournamentDomainService
+    public class TournamentDomainService : ITournamentDomainService //infrastructure?? 
     {
         private readonly IPersistanceClient _dbContext;
         public TournamentDomainService(IPersistanceClient dbContext)
@@ -31,7 +31,7 @@ namespace LCT.Core.Entites.Tournaments.Services
             return result;
         }
 
-        public async Task PlayerTeamSelectionValidationAsync(string team,Guid tournamentId)
+        public async Task PlayerTeamSelectionValidationAsync(string team, Guid tournamentId)
         {
             var isNameUnique = await _dbContext.CheckUniqness(nameof(Tournament), nameof(Tournament.SelectedTeams), new TeamSelectionUniqnessModel(team, tournamentId));
 
@@ -41,9 +41,8 @@ namespace LCT.Core.Entites.Tournaments.Services
 
         public async Task TournamentNameUniqnessValidationAsync(Tournament tournament)
         {
-            var isNameUnique = await _dbContext.CheckUniqness(nameof(Tournament), nameof(Tournament.TournamentName), tournament.TournamentName); // check uniqness change name to -> reserve name... and add failure callback
-            // check if in another tournament register player with the same name it will pass
-            // same for selected team
+            var isNameUnique = await _dbContext.CheckUniqness(nameof(Tournament), nameof(Tournament.TournamentName), tournament.TournamentName);
+            // check uniqness change name to -> reserve name... and add failure callback
             if (!isNameUnique)
                 throw new TournamentNameNotUniqueException();
         }

@@ -28,10 +28,10 @@ namespace LCT.Infrastructure.Repositories
             return aggregate;
         }
 
-        public async Task SaveAsync(TAggregateRoot model)
+        public async Task SaveAsync(TAggregateRoot model, int version = 0)
         {
             var events = model.GetChanges();
-            await SaveToStreamAsync(events);
+            await SaveToStreamAsync(events, model.AggregateId(), version);
             await PublishEventsAsync(events);
         }
 
@@ -50,11 +50,10 @@ namespace LCT.Infrastructure.Repositories
             }
         }
 
-        private async Task SaveToStreamAsync(DomainEvent[] events)
+        private async Task SaveToStreamAsync(DomainEvent[] events, string aggregateId, int version = 0)
         {
-            // check uniqness in transactions
             foreach(var @event in events)
-                await _client.SaveEventAsync<TAggregateRoot>(@event);
+                await _client.SaveEventAsync<TAggregateRoot>(@event, aggregateId, version);
         }
     }
 }

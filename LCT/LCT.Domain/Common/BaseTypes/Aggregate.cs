@@ -29,6 +29,9 @@
             .Where(c => c.Id == Guid.Empty)
             .OrderBy(c => c.TimeStamp)
             .ToArray();
+
+        public string AggregateId()
+            => Id.ToString();
     }
 
     public interface IAgregateRoot
@@ -36,6 +39,8 @@
         void Load(IEnumerable<object> history);
 
         DomainEvent[] GetChanges();
+
+        string AggregateId();
     }
 
 }

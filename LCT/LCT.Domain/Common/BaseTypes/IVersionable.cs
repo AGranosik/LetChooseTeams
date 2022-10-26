@@ -2,7 +2,7 @@
 {
     public interface IVersionable<TVersion> : IVersionable
     {
-        TVersion Version { get; }
+        int Version { get; }
         void Incerement();
     }
 

@@ -100,6 +100,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
         private void OnSetTournamentName(SetTournamentNameEvent tn)
         {
             TournamentName = new TournamentName(tn.Name);
+            Incerement();
         }
 
         private void OnTeamDrawn(DrawTeamEvent dt)

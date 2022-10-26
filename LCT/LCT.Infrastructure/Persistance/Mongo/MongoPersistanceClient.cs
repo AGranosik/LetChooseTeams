@@ -45,12 +45,30 @@ namespace LCT.Infrastructure.Persistance.Mongo
             ConfigureTournamentVersion(uniqueIndexOptions);
         }
 
-        public async Task SaveEventAsync<TAggregateRoot>(DomainEvent domainEvent)
+        public async Task SaveEventAsync<TAggregateRoot>(DomainEvent domainEvent, string aggregateId = "", int version = 0) // more generic?
             where TAggregateRoot : IAgregateRoot
-            => await GetCollection<DomainEvent>($"{typeof(TAggregateRoot).Name}Stream").InsertOneAsync(domainEvent);
+        {
+            var aggregateName = typeof(TAggregateRoot).Name;
+            using var session = await _mongoClient.StartSessionAsync();
+            session.StartTransaction();
+
+            if(domainEvent is IVersionable)
+            {
+                await Versioning(aggregateName, aggregateId, version, session);
+            }
+
+            await GetCollection<DomainEvent>($"{aggregateName}Stream").InsertOneAsync(session, domainEvent);
+            await session.CommitTransactionAsync();
+        }
 
         public Task SaveActionAsync<T>(T action) where T : LctAction
             => GetCollection<T>($"{typeof(T).Name}").InsertOneAsync(action);
+
+        private async Task Versioning(string aggregateName, string aggregateId, int version, IClientSessionHandle session)
+        {
+            await GetCollection<AggregateVersionModel>(aggregateName)
+                .InsertOneAsync(session, new AggregateVersionModel(aggregateId, version));
+        }
 
         private IMongoCollection<T> GetCollection<T>(string streamName)
             => _database.GetCollection<T>($"{streamName}");
@@ -85,15 +103,15 @@ namespace LCT.Infrastructure.Persistance.Mongo
 
         private void ConfigureTournamentVersion(CreateIndexOptions indexOptions)
         {
-            var teamSelectionIndex = Builders<TournamentVersionModel>.IndexKeys
-                .Ascending(l => l.TournamentId)
+            var teamSelectionIndex = Builders<AggregateVersionModel>.IndexKeys
+                .Ascending(l => l.AggregateId)
                 .Ascending(l => l.Version);
 
-            var indexModel = new CreateIndexModel<TournamentVersionModel>(
+            var indexModel = new CreateIndexModel<AggregateVersionModel>(
                 teamSelectionIndex,
                 indexOptions);
 
-            _database.GetCollection<TournamentVersionModel>("Tournament_Version_index")
+            _database.GetCollection<AggregateVersionModel>("Tournament_Version_index")
                 .Indexes.CreateOne(indexModel);
         }
 

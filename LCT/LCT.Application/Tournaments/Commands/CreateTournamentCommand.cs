@@ -25,7 +25,7 @@ namespace LCT.Application.Tournaments.Commands
         {
             var tournament = Tournament.Create(request.Name, request.PlayerLimit);
             await _tournamentService.TournamentNameUniqnessValidationAsync(tournament); 
-            await _repository.SaveAsync(tournament);
+            await _repository.SaveAsync(tournament, tournament.Version);
             return tournament.Id.Value;
         }
     }
