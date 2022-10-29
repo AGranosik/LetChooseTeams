@@ -1,12 +1,5 @@
 version: "3.7"
 services: 
-    lct-db:
-        image: "mcr.microsoft.com/mssql/server"
-        ports:
-        - 1433:1433
-        environment:
-            SA_PASSWORD: "MyPassword001"
-            ACCEPT_EULA: "Y"
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:6.3.0
         container_name: elasticsearch
@@ -18,30 +11,89 @@ services:
         volumes:
             - esdata:/usr/share/elasticsearch/data
         networks:
-            - esnetwork
+            - mongors-network
     kibana:
         image: docker.elastic.co/kibana/kibana:6.3.0
         ports:
             - "5601:5601"
         networks:
-            - esnetwork
+            - mongors-network
         depends_on:
             - elasticsearch
-    mongodb:
-        image: mongo:latest
-        ports:
-          - 27017:27017
+    mongo1:
+        container_name: mongo1
+        image: mongo:4.4
         volumes:
-          - ~/apps/mongo:/data/db
-        environment:
-          - MONGO_INITDB_ROOT_USERNAME=citizix
-          - MONGO_INITDB_ROOT_PASSWORD=S3cret
-
+          - ~/mongors/data1:/data/db
+        networks:
+          - mongors-network
+        ports:
+          - 27021:27017
+        links:
+          - mongo2
+          - mongo3
+        restart: always
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+    mongo2:
+        container_name: mongo2
+        image: mongo:4.4
+        volumes:
+          - ~/mongors/data2:/data/db
+        networks:
+          - mongors-network
+        ports:
+          - 27022:27017
+        restart: always
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+    mongo3:
+        container_name: mongo3
+        image: mongo:4.4
+        volumes:
+          - ~/mongors/data3:/data/db
+        networks:
+          - mongors-network
+        ports:
+          - 27023:27017
+        restart: always
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+    mongoinit:
+        image: mongo
+        # this container will exit after executing the command
+        restart: "no"
+        depends_on:
+          - mongo1
+          - mongo2
+          - mongo3
+        command: > 
+            mongo --host mongo1:2017 --eval
+            '
+            var config = {
+                "_id": "dbrs",
+                "version": 1,
+                "members": [
+                    {
+                        "_id": 1,
+                        "host": "mongo1:27017",
+                        "priority": 3
+                    },
+                    {
+                        "_id": 2,
+                        "host": "mongo2:27017",
+                        "priority": 2
+                    },
+                    {
+                        "_id": 3,
+                        "host": "mongo3:27017",
+                        "priority": 1
+                    }
+                ]
+            };
+            rs.initiate(config, { force: true });
+            rs.status();
+            ' 
 volumes:
-    eventstore-volume-data:
-    eventstore-volume-logs:
     esdata:
         driver: local
 networks:
-    esnetwork:
-        driver: bridge
+  mongors-network:
+    driver: bridge
