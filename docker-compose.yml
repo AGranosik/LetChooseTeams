@@ -25,6 +25,7 @@ services:
         image: mongo:4.4
         volumes:
           - ~/mongors/data1:/data/db
+          - ./init.sh:/init.sh
         networks:
           - mongors-network
         ports:
@@ -33,6 +34,9 @@ services:
           - mongo2
           - mongo3
         restart: always
+        depends_on:
+            - mongo2
+            - mongo3
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
     mongo2:
         container_name: mongo2
@@ -56,41 +60,6 @@ services:
           - 27023:27017
         restart: always
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
-    mongoinit:
-        image: mongo
-        # this container will exit after executing the command
-        restart: "no"
-        depends_on:
-          - mongo1
-          - mongo2
-          - mongo3
-        command: > 
-            mongo --host mongo1:2017 --eval
-            '
-            var config = {
-                "_id": "dbrs",
-                "version": 1,
-                "members": [
-                    {
-                        "_id": 1,
-                        "host": "mongo1:27017",
-                        "priority": 3
-                    },
-                    {
-                        "_id": 2,
-                        "host": "mongo2:27017",
-                        "priority": 2
-                    },
-                    {
-                        "_id": 3,
-                        "host": "mongo3:27017",
-                        "priority": 1
-                    }
-                ]
-            };
-            rs.initiate(config, { force: true });
-            rs.status();
-            ' 
 volumes:
     esdata:
         driver: local
