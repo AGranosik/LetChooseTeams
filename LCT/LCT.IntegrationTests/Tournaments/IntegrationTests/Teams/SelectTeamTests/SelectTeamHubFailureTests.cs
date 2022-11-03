@@ -75,7 +75,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
             tournament.AddPlayer(players[0].Name, players[0].Surname);
             tournament.AddPlayer(players[1].Name, players[1].Surname);
             tournament.SelectTeam(players[0].Name, players[0].Surname, TournamentTeamNames.Teams.Last());
-            await AddAsync(tournament);
+            await SaveAsync(tournament);
             return tournament;
         }
 

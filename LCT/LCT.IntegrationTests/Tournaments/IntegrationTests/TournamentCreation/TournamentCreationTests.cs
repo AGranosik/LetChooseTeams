@@ -15,6 +15,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.TournamentCreation
     {
         public TournamentCreationTests() : base()
         {
+            AddTableToTruncate("TournamentStream");
+            AddTableToTruncate("Tournament_TournamentName_index");
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();

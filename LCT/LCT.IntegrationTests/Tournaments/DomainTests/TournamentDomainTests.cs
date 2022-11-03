@@ -2,6 +2,7 @@
 using System.Linq;
 using FluentAssertions;
 using LCT.Core.Entites.Tournaments.Services;
+using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
@@ -10,8 +11,30 @@ using NUnit.Framework;
 
 namespace LCT.IntegrationTests.Tournaments.DomainTests
 {
+    [TestFixture]
     public class TournamentDomainTests
     {
+        [Test]
+        public void Tournament_CannotBeSameAsBefore_ThrowsException()
+        {
+            var tournamentName = "hehe";
+            var tournament = Tournament.Create(tournamentName, 2);
+            var func = () => tournament.SetName(tournamentName);
+            func.Should().Throw<InvalidFieldException>();
+        }
+
+        [Test]
+        public void Tournament_SetName_Success()
+        {
+            var tournamentName = "hehe";
+            var newTournamentName = tournamentName + "h";
+            var tournament = Tournament.Create(tournamentName, 2);
+            var func = () => tournament.SetName(newTournamentName);
+            func.Should().NotThrow();
+
+            tournament.TournamentName.Value.Should().Be(newTournamentName);
+        }
+
         [Test]
         public void Tournament_CanAddPlayer_Success()
         {

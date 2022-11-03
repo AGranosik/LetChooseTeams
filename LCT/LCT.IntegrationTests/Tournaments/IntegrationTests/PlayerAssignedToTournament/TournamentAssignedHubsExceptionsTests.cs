@@ -51,7 +51,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.PlayerAssignedToTour
         private async Task<Tournament> CreateTournament()
         {
             var tournament = Tournament.Create("test", 3);
-            await AddAsync(tournament);
+            await SaveAsync(tournament);
             return tournament;
         }
     }

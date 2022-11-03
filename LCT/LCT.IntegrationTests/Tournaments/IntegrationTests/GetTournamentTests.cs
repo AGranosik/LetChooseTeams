@@ -109,7 +109,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             {
                 var tournament = Tournament.Create("name" + i, 2);
                 list.Add(tournament);
-                await AddAsync(tournament);
+                await SaveAsync(tournament);
             }
             return list;
         }
@@ -125,7 +125,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
                 tournament.AddPlayer(player.Name, player.Surname);
                 tournament.SelectTeam(player.Name, player.Surname, TournamentTeamNames.Teams[i]);
                 list.Add(tournament);
-                await AddAsync(tournament);
+                await SaveAsync(tournament);
             }
 
             return list;

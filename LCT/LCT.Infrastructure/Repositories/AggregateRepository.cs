@@ -28,6 +28,7 @@ namespace LCT.Infrastructure.Repositories
         }
 
         public async Task SaveAsync(TAggregateRoot model, int version = 0)
+            //2 methods one with Iversionable restriction??
         {
             var events = model.GetChanges();
             await SaveToStreamAsync(events, model.AggregateId(), version);

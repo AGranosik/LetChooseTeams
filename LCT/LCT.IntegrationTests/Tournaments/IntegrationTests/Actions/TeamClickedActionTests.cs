@@ -94,7 +94,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
 
             var firstPLayer = tournament.Players.First();
             tournament.SelectTeam(firstPLayer.Name, firstPLayer.Surname, TournamentTeamNames.Teams[0]);
-            await AddAsync(tournament);
+            await SaveAsync(tournament);
 
             hubMocks = HubMocks();
             await ActionHandle(actions[2], hubMocks.Item2.Object);
@@ -121,7 +121,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
                 await ActionHandle(action, hubMocks.Item2.Object);
                 tournament.SelectTeam(action.Name, action.Surname, TournamentTeamNames.Teams[i]);
             }
-            await AddAsync(tournament);
+            await SaveAsync(tournament);
             hubMocks = HubMocks();
             await ActionHandle(actions[2], hubMocks.Item2.Object);
             var actionsFromDB = await GetSavedActions(actionGroupKey);
@@ -157,7 +157,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
                 var player = CreatePlayerForTest(i);
                 tournament.AddPlayer(player.Name, player.Surname);
             }
-            await AddAsync(tournament);
+            await SaveAsync(tournament);
             return tournament;
         }
 

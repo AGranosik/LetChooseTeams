@@ -1,4 +1,5 @@
-﻿using LCT.Domain.Aggregates.TournamentAggregate.Events;
+﻿using LCT.Core.Shared.Exceptions;
+using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.Validators;
@@ -29,6 +30,13 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 
         private int _version = 0;
         public int Version => _version;
+
+        public void SetName(string tournamentName)
+        {
+            if (tournamentName == TournamentName)
+                throw new InvalidFieldException(nameof(TournamentName));
+            Apply(new SetTournamentNameEvent(tournamentName, Id.Value));
+        }
 
         public void AddPlayer(string name, string surname)
         {
