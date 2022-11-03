@@ -8,7 +8,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace LCT.IntegrationTests.Tournaments.IntegrationTests
+namespace LCT.IntegrationTests.Tournaments.IntegrationTests.TournamentCreation
 {
     [TestFixture]
     public class TournamentCreationTests : Testing<Tournament>
@@ -51,6 +51,20 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             });
 
             await action.Should().ThrowAsync<TournamentNameNotUniqueException>();
+        }
+
+        [Test]
+        public async Task Tournament_Versioning_Success()
+        {
+            var id = await CreateTournamenCommandHander(new CreateTournamentCommand
+            {
+                Name = "unique",
+                PlayerLimit = 10
+            });
+
+            var tournament = await GetTournament(id);
+            tournament.Should().NotBeNull();
+            tournament.Version.Should().Be(1);
         }
 
         private async Task<Guid> CreateTournamenCommandHander(CreateTournamentCommand request)

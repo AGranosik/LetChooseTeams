@@ -3,7 +3,6 @@ using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Exceptions;
 using LCT.Domain.Common.Interfaces;
 using MediatR;
-using MongoDB.Driver;
 using Serilog;
 
 namespace LCT.Infrastructure.Repositories
