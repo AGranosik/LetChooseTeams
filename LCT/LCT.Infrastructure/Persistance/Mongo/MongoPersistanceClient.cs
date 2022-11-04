@@ -1,6 +1,7 @@
 ﻿using LCT.Application.Common.Events;
 using LCT.Application.Common.Interfaces;
 using LCT.Application.Common.UniqnessModels;
+using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 using LCT.Domain.Common.BaseTypes;
 using MongoDB.Bson;
@@ -36,28 +37,22 @@ namespace LCT.Infrastructure.Persistance.Mongo
             }
         }
 
-        public void Configure()
-        {
-            var uniqueIndexOptions = new CreateIndexOptions { Unique = true };
-
-            ConfigureTournamentNameUniqnes(uniqueIndexOptions);
-            ConfigureTournamentTeamSelection(uniqueIndexOptions);
-            ConfigureTournamentVersion(uniqueIndexOptions);
-        }
-
-        public async Task SaveEventAsync<TAggregateRoot>(DomainEvent domainEvent, string aggregateId = "", int version = 0) // more generic?
+        public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, string aggregateId = "", int version = 0) // more generic?
             where TAggregateRoot : IAgregateRoot
         {
             var aggregateName = typeof(TAggregateRoot).Name;
             using var session = await _mongoClient.StartSessionAsync();
             session.StartTransaction();
 
-            if(domainEvent is IVersionable)
+            foreach(var domainEvent in domainEvents)
             {
-                await Versioning($"{aggregateName}_Version_index", aggregateId, version, session);
-            }
+                if(domainEvent is IVersionable)
+                {
+                    await Versioning($"{aggregateName}_Version_index", aggregateId, version, session);
+                }
 
-            await GetCollection<DomainEvent>($"{aggregateName}Stream").InsertOneAsync(session, domainEvent);
+                await GetCollection<DomainEvent>($"{aggregateName}Stream").InsertOneAsync(session, domainEvent);
+            }
             await session.CommitTransactionAsync();
         }
 
@@ -80,10 +75,19 @@ namespace LCT.Infrastructure.Persistance.Mongo
             return await cursorAsync.ToListAsync();
         }
 
-        private void ConfigureTournamentNameUniqnes(CreateIndexOptions indexOptions)
+        private void Configure()
         {
-            var indexModel = new CreateIndexModel<TournamentName>(new BsonDocument("Value", 1), indexOptions);
-            _database.GetCollection<TournamentName>("Tournament_TournamentName_index")
+            var uniqueIndexOptions = new CreateIndexOptions { Unique = true };
+
+            ConfigureFieldUniqness<Tournament, TournamentName>(uniqueIndexOptions);
+            ConfigureTournamentTeamSelection(uniqueIndexOptions);
+            ConfigureAggregateVersion<Tournament>(uniqueIndexOptions);
+        }
+
+        private void ConfigureFieldUniqness<TAggregate, TField>(CreateIndexOptions indexOptions)
+        {
+            var indexModel = new CreateIndexModel<TField>(new BsonDocument("Value", 1), indexOptions);
+            _database.GetCollection<TField>($"{typeof(TAggregate).Name}_{typeof(TField).Name}_index")
                 .Indexes.CreateOne(indexModel);
         }
 
@@ -101,7 +105,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
                 .Indexes.CreateOne(indexModel);
         }
 
-        private void ConfigureTournamentVersion(CreateIndexOptions indexOptions)
+        private void ConfigureAggregateVersion<TAggregate>(CreateIndexOptions indexOptions)
         {
             var teamSelectionIndex = Builders<AggregateVersionModel>.IndexKeys
                 .Ascending(l => l.AggregateId)
@@ -111,7 +115,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
                 teamSelectionIndex,
                 indexOptions);
 
-            _database.GetCollection<AggregateVersionModel>("Tournament_Version_index") // get rid of magic 
+            _database.GetCollection<AggregateVersionModel>($"{typeof(TAggregate).Name}_Version_index") // get rid of magic 
                 .Indexes.CreateOne(indexModel);
         }
 
