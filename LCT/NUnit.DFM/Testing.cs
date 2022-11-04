@@ -102,10 +102,10 @@ namespace NUnit.DFM
             where TModel : IAgregateRoot
             => _scope.ServiceProvider.GetRequiredService<IAggregateRepository<TModel>>();
 
-        protected async Task SaveAsync(TModel entity)
+        protected async Task SaveAsync(TModel entity, int version = 0)
         {
             var dbContext = GetRepository();
-            await dbContext.SaveAsync(entity);
+            await dbContext.SaveAsync(entity, version);
         }
 
     }

@@ -13,5 +13,10 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 
         public static TournamentId Create(Guid id)
             => new(id);
+
+        public override string ToString()
+        {
+            return Value.ToString();
+        }
     }
 }

@@ -54,7 +54,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
 
             if(domainEvent is IVersionable)
             {
-                await Versioning(aggregateName, aggregateId, version, session);
+                await Versioning($"{aggregateName}_Version_index", aggregateId, version, session);
             }
 
             await GetCollection<DomainEvent>($"{aggregateName}Stream").InsertOneAsync(session, domainEvent);
@@ -111,7 +111,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
                 teamSelectionIndex,
                 indexOptions);
 
-            _database.GetCollection<AggregateVersionModel>("Tournament_Version_index")
+            _database.GetCollection<AggregateVersionModel>("Tournament_Version_index") // get rid of magic 
                 .Indexes.CreateOne(indexModel);
         }
 
