@@ -1,4 +1,7 @@
-﻿using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+﻿using LCT.Application.Common.Interfaces;
+using LCT.Application.Common.UniqnessModels;
+using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Common.Interfaces;
 using MediatR;
@@ -17,21 +20,29 @@ namespace LCT.Application.Teams.Commands
     public class SelectTeamCommandHandler : IRequestHandler<SelectTeamCommand>
     {
         private readonly IAggregateRepository<Tournament> _repository;
-        private readonly ITournamentDomainService _tournamentDomainService;
-        public SelectTeamCommandHandler(IAggregateRepository<Tournament> repository, ITournamentDomainService tournamentDomainService)
+        private readonly IPersistanceClient _dbContext;
+        public SelectTeamCommandHandler(IAggregateRepository<Tournament> repository, IPersistanceClient dbContext)
         {
             _repository = repository;
-            _tournamentDomainService = tournamentDomainService;
+            _dbContext = dbContext;
         }
         public async Task<Unit> Handle(SelectTeamCommand request, CancellationToken cancellationToken)
         {
             var tournament = await _repository.LoadAsync(request.TournamentId);
             tournament.SelectTeam(request.PlayerName, request.PlayerSurname, request.Team);
 
-            await _tournamentDomainService.PlayerTeamSelectionValidationAsync(request.Team, request.TournamentId);
+            await PlayerTeamSelectionValidationAsync(request.Team, tournament.Id.Value);
             await _repository.SaveAsync(tournament);
 
             return Unit.Value;
+        }
+
+        private async Task PlayerTeamSelectionValidationAsync(string team, Guid tournamentId)
+        {
+            var isNameUnique = await _dbContext.CheckUniqness(nameof(Tournament), nameof(Tournament.SelectedTeams), new TeamSelectionUniqnessModel(team, tournamentId));
+
+            if (!isNameUnique)
+                throw new PlayerAlreadyAssignedToTournamentException();
         }
     }
 }

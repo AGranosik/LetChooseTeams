@@ -71,7 +71,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.TournamentCreation
 
         private async Task<Guid> CreateTournamenCommandHander(CreateTournamentCommand request)
         {
-            return await new CreateTournamentCommandHandler(GetRepository(), GetTournamentDomainService()).Handle(request, new CancellationToken());
+            return await new CreateTournamentCommandHandler(GetRepository(), GetPersistanceClient()).Handle(request, new CancellationToken());
         }
 
         private async Task<Tournament> GetTournament(Guid id)

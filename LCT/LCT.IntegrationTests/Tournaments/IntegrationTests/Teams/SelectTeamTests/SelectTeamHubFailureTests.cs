@@ -81,8 +81,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
 
         private async Task<Unit> SelectTeamCommandHandlerAsync(string playerName, string playerSurname, Guid TournamentId, string Team)
         {
-            var domainService = _scope.ServiceProvider.GetRequiredService<ITournamentDomainService>();
-            return await new SelectTeamCommandHandler(GetRepository(), domainService).Handle(new SelectTeamCommand
+            return await new SelectTeamCommandHandler(GetRepository(), GetPersistanceClient()).Handle(new SelectTeamCommand
             {
                 PlayerName = playerName,
                 PlayerSurname = playerSurname,

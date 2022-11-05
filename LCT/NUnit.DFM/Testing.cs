@@ -1,4 +1,5 @@
 ﻿using LCT.Api;
+using LCT.Application.Common.Interfaces;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
@@ -88,6 +89,11 @@ namespace NUnit.DFM
         protected IAggregateRepository<TModel> GetRepository()
         {
             return _scope.ServiceProvider.GetRequiredService<IAggregateRepository<TModel>>();
+        }
+
+        protected IPersistanceClient GetPersistanceClient()
+        {
+            return _scope.ServiceProvider.GetRequiredService<IPersistanceClient>();
         }
 
         protected ITournamentDomainService GetTournamentDomainService()
