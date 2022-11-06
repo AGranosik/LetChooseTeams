@@ -1,8 +1,5 @@
 ﻿using LCT.Application.Common.Interfaces;
-using LCT.Application.Common.UniqnessModels;
 using LCT.Core.Extensions;
-using LCT.Domain.Aggregates.TournamentAggregate.Entities;
-using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 

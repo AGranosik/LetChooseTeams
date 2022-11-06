@@ -4,6 +4,7 @@ using LCT.Application.Common.UniqnessModels;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 using LCT.Domain.Common.BaseTypes;
+using LCT.Domain.Common.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -51,6 +52,10 @@ namespace LCT.Infrastructure.Persistance.Mongo
                     await Versioning($"{aggregateName}_Version_index", aggregateId, version, session);
                 }
 
+                if(domainEvent is IUniqness<>)
+                {
+
+                }
                 await GetCollection<DomainEvent>($"{aggregateName}Stream").InsertOneAsync(session, domainEvent);
             }
             await session.CommitTransactionAsync();
@@ -115,7 +120,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
                 teamSelectionIndex,
                 indexOptions);
 
-            _database.GetCollection<AggregateVersionModel>($"{typeof(TAggregate).Name}_Version_index") // get rid of magic 
+            _database.GetCollection<AggregateVersionModel>($"{typeof(TAggregate).Name}_Version_index") //fucntion for that names
                 .Indexes.CreateOne(indexModel);
         }
 

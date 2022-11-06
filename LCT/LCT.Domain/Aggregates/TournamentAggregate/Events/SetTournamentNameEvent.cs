@@ -1,4 +1,5 @@
 ﻿using LCT.Domain.Common.BaseTypes;
+using LCT.Domain.Common.Interfaces;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.Events
 {

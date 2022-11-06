@@ -1,4 +1,4 @@
-﻿namespace LCT.Domain.Common.BaseTypes
+﻿namespace LCT.Domain.Common.Interfaces
 {
     public interface IVersionable<TVersion> : IVersionable
     {
