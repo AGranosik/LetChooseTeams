@@ -1,7 +1,8 @@
 ﻿namespace LCT.Domain.Common.Interfaces
 {
-    public interface IUniqness<TValue>
+    public interface IUniqness
     {
-        public TValue Value { get; set; }
+        public string UniqueValue { get; }
+
     }
 }

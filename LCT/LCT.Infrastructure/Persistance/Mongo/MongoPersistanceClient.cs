@@ -2,9 +2,11 @@
 using LCT.Application.Common.Interfaces;
 using LCT.Application.Common.UniqnessModels;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
+using LCT.Infrastructure.Persistance.Mongo.UniqnessFactories;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
@@ -49,12 +51,12 @@ namespace LCT.Infrastructure.Persistance.Mongo
             {
                 if(domainEvent is IVersionable)
                 {
-                    await Versioning($"{aggregateName}_Version_index", aggregateId, version, session);
+                    await Versioning($"{aggregateName}_Version_index", aggregateId, version, session); //multiple versioning events
                 }
 
-                if(domainEvent is IUniqness<>)
+                if(domainEvent is IUniqness)
                 {
-
+                    //fakcttory for uniqnue colelctions?
                 }
                 await GetCollection<DomainEvent>($"{aggregateName}Stream").InsertOneAsync(session, domainEvent);
             }
@@ -84,16 +86,21 @@ namespace LCT.Infrastructure.Persistance.Mongo
         {
             var uniqueIndexOptions = new CreateIndexOptions { Unique = true };
 
-            ConfigureFieldUniqness<Tournament, TournamentName>(uniqueIndexOptions);
+            ConfigureFieldUniqness<Tournament, SetTournamentNameEvent>(uniqueIndexOptions);
             ConfigureTournamentTeamSelection(uniqueIndexOptions);
             ConfigureAggregateVersion<Tournament>(uniqueIndexOptions);
         }
 
-        private void ConfigureFieldUniqness<TAggregate, TField>(CreateIndexOptions indexOptions)
+        private void ConfigureFieldUniqness<TAggregate, TEventUniqueField>(CreateIndexOptions indexOptions)
+            where TEventUniqueField : IUniqness
         {
-            var indexModel = new CreateIndexModel<TField>(new BsonDocument("Value", 1), indexOptions);
-            _database.GetCollection<TField>($"{typeof(TAggregate).Name}_{typeof(TField).Name}_index")
-                .Indexes.CreateOne(indexModel);
+            var ss = new UniqnessIndexExecutor()
+                .RegisterUniqnessForEvent<TournamentName, TEventUniqueField>(typeof(TAggregate).Name, _database);
+
+            ss.ExcecuteAsync(_database, null, new SetTournamentNameEvent("gege", Guid.NewGuid())).Wait();
+            //var indexModel = new CreateIndexModel<TEventUniqueField>(new BsonDocument("UniqueValue", 1), indexOptions);
+            //_database.GetCollection<TEventUniqueField>($"{typeof(TAggregate).Name}_{typeof(TEventUniqueField).Name}_index")
+            //    .Indexes.CreateOne(indexModel);
         }
 
         private void ConfigureTournamentTeamSelection(CreateIndexOptions indexOptions)
