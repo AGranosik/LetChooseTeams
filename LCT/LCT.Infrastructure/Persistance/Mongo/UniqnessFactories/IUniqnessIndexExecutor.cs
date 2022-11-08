@@ -6,33 +6,37 @@ using MongoDB.Driver;
 
 namespace LCT.Infrastructure.Persistance.Mongo.UniqnessFactories
 {
-    internal interface IUniqnessIndexExecutor //register prop name & event?
+    public interface IUniqnessIndexExecutor //register prop name & event?
     {
         Task ExcecuteAsync(IMongoDatabase database, IClientSessionHandle session, DomainEvent domainEvent);
-        IUniqnessIndexExecutor RegisterUniqnessForEvent<TPropertyName, TEvent>(string aggregateName, IMongoDatabase database)
+        IUniqnessIndexExecutor RegisterUniqnessForEvent<TEvent>(string aggregateName, IMongoDatabase database)
             where TEvent : IUniqness;
     }
 
-    internal class UniqnessIndexExecutor : IUniqnessIndexExecutor
+    public class UniqnessIndexExecutor : IUniqnessIndexExecutor
     {
         private readonly CreateIndexOptions _uniqueIndexOptions = new CreateIndexOptions { Unique = true };
-        private Dictionary<string, IMongoCollection<IUniqness>> _uniqnessCollections = new Dictionary<string, IMongoCollection<IUniqness>>();
+        private Dictionary<string, Func<IClientSessionHandle, IUniqness, Task>> _uniqnessCollections = new();
         public async Task ExcecuteAsync(IMongoDatabase database, IClientSessionHandle session, DomainEvent domainEvent)
         {
-            var eventName = typeof(DomainEvent).Name;
-            //var collection = _uniqnessCollections
+            var eventName = domainEvent.GetType().Name;
+            var func = _uniqnessCollections[eventName];
+
+            await func.Invoke(session, (IUniqness)domainEvent);
         }
 
-        public IUniqnessIndexExecutor RegisterUniqnessForEvent<TPropertyName, TEvent>(string aggregateName, IMongoDatabase database)
+        public IUniqnessIndexExecutor RegisterUniqnessForEvent<TEvent>(string aggregateName, IMongoDatabase database)
             where TEvent : IUniqness
         {
-            var indexModel = new CreateIndexModel<TEvent>(new BsonDocument("UniqueValue", 1), _uniqueIndexOptions);
+            var indexModel = new CreateIndexModel<IUniqness>(new BsonDocument("UniqueValue", 1), _uniqueIndexOptions);
             var eventName = typeof(TEvent).Name;
-            var collection = database.GetCollection<TEvent>($"{aggregateName}_{eventName}_index");
+            var collection = database.GetCollection<IUniqness>($"{aggregateName}_{eventName}_index");
             collection
                 .Indexes.CreateOne(indexModel);
 
-            _uniqnessCollections.Add(eventName, (IMongoCollection<IUniqness>)collection); // store as func?
+            Func<IClientSessionHandle, IUniqness, Task> func =
+                (session, @event) => new ConcreteUniqnessExecutor<TEvent>().ExcecuteAsync(collection, session, @event);
+            _uniqnessCollections.Add(eventName, func);
 
             return this;
         }

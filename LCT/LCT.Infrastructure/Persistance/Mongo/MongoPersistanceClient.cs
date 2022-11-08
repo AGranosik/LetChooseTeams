@@ -17,11 +17,13 @@ namespace LCT.Infrastructure.Persistance.Mongo
         private readonly IMongoClient _mongoClient;
         private readonly string _dbName;
         private readonly IMongoDatabase _database;
-        public MongoPersistanceClient(IMongoClient mongoClient, MongoSettings mongoSettings)
+        private readonly IUniqnessIndexExecutor _uniqnessExecutor;
+        public MongoPersistanceClient(IMongoClient mongoClient, MongoSettings mongoSettings, IUniqnessIndexExecutor uniqnessExecutor)
         {
             _mongoClient = mongoClient;
             _dbName = mongoSettings.DatabaseName;
             _database = _mongoClient.GetDatabase(_dbName);
+            _uniqnessExecutor = uniqnessExecutor;
             Configure();
         }
 
@@ -56,7 +58,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
 
                 if(domainEvent is IUniqness)
                 {
-                    //fakcttory for uniqnue colelctions?
+                    await _uniqnessExecutor.ExcecuteAsync(_database, session, domainEvent);
                 }
                 await GetCollection<DomainEvent>($"{aggregateName}Stream").InsertOneAsync(session, domainEvent);
             }
@@ -94,13 +96,8 @@ namespace LCT.Infrastructure.Persistance.Mongo
         private void ConfigureFieldUniqness<TAggregate, TEventUniqueField>(CreateIndexOptions indexOptions)
             where TEventUniqueField : IUniqness
         {
-            var ss = new UniqnessIndexExecutor()
-                .RegisterUniqnessForEvent<TournamentName, TEventUniqueField>(typeof(TAggregate).Name, _database);
-
-            ss.ExcecuteAsync(_database, null, new SetTournamentNameEvent("gege", Guid.NewGuid())).Wait();
-            //var indexModel = new CreateIndexModel<TEventUniqueField>(new BsonDocument("UniqueValue", 1), indexOptions);
-            //_database.GetCollection<TEventUniqueField>($"{typeof(TAggregate).Name}_{typeof(TEventUniqueField).Name}_index")
-            //    .Indexes.CreateOne(indexModel);
+            _uniqnessExecutor
+                .RegisterUniqnessForEvent<TEventUniqueField>(typeof(TAggregate).Name, _database);
         }
 
         private void ConfigureTournamentTeamSelection(CreateIndexOptions indexOptions)

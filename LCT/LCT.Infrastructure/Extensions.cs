@@ -4,6 +4,7 @@ using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
 using LCT.Infrastructure.Persistance.Mongo;
+using LCT.Infrastructure.Persistance.Mongo.UniqnessFactories;
 using LCT.Infrastructure.Repositories;
 using LCT.Infrastructure.Repositories.Actions;
 using Microsoft.Extensions.Configuration;
@@ -29,6 +30,7 @@ namespace LCT.Infrastructure
             services.AddSingleton(typeof(IAggregateRepository<>), typeof(AggregateRepository<>));
             services.AddSingleton(typeof(ILctActionRepository<,>), typeof(LctActionRepository<,>));
 
+            services.AddSingleton<IUniqnessIndexExecutor, UniqnessIndexExecutor>();
             RegisterDomainEvents();
             services.ConfigureFrontendUrl();
 
