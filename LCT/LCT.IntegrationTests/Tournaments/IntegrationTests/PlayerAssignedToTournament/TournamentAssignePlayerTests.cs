@@ -24,6 +24,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.PlayerAssignedToTour
         private Mock<IMediator> _mediatorMock = IMediatorMock.GetMock();
         public TournamentAssignePlayerTests()
         {
+            AddTableToTruncate("TournamentStream");
+            AddTableToTruncate("Tournament_SetTournamentNameEvent_index");
             SwapSingleton(IHubContextMock.GetMockedHubContext<TournamentHub>());
             SwapSingleton(_mediatorMock.Object);
             Environment("Development")

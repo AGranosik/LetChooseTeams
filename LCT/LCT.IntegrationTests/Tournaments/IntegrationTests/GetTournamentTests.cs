@@ -26,6 +26,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
     {
         public GetTournamentTests() : base()
         {
+            AddTableToTruncate("TournamentStream");
+            AddTableToTruncate("Tournament_SetTournamentNameEvent_index");
             SwapSingleton<IHubContext<TournamentHub>>(IHubContextMock.GetMockedHubContext<TournamentHub>());
             this.Environment("Development")
                 .ProjectName("LCT.Api")

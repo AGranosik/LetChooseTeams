@@ -26,6 +26,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
     {
         public SelectTeamTests()
         {
+            AddTableToTruncate("TournamentStream");
+            AddTableToTruncate("Tournament_SetTournamentNameEvent_index");
             SwapSingleton<IHubContext<TournamentHub>>(IHubContextMock.GetMockedHubContext<TournamentHub>());
             Environment("Development")
                 .ProjectName("LCT.Api")
@@ -135,7 +137,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
 
         private async Task<Unit> SelectTeamCommandHandlerAsync(string playerName, string playerSurname, Guid TournamentId, string Team)
         {
-            return await new SelectTeamCommandHandler(GetRepository(), GetPersistanceClient()).Handle(new SelectTeamCommand
+            return await new SelectTeamCommandHandler(GetRepository()).Handle(new SelectTeamCommand
             {
                 PlayerName = playerName,
                 PlayerSurname = playerSurname,

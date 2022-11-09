@@ -16,6 +16,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.SetTournamentNameTes
     {
         public SetTournamentNameVersioningTests()
         {
+            AddTableToTruncate("TournamentStream");
+            AddTableToTruncate("Tournament_SetTournamentNameEvent_index");
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();
@@ -45,7 +47,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.SetTournamentNameTes
         {
             var notSavedName = "not sabved name";
             var tournament = await CreateTournament();
-            var dbTournament = await GetTournamentById(tournament.Id.Value); //same versions...
+            var dbTournament = await GetTournamentById(tournament.Id.Value);
             var newName = "hehe";
             await SetTournamentName(new SetTournamentNameCommand
             {
@@ -60,7 +62,34 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.SetTournamentNameTes
             dbTournament = await GetTournamentById(tournament.Id.Value);
             dbTournament.Version.Should().Be(2);
             dbTournament.TournamentName.Value.Should().Be(newName);
+        }
 
+        [Test]
+        public async Task SetName_SecondUpdateToTheFirstName_Success()
+        {
+            var tournament = await CreateTournament();
+            var oldName = tournament.TournamentName.Value;
+            var newName = oldName + oldName;
+            await SetTournamentName(new SetTournamentNameCommand
+            {
+                Name = newName,
+                TournamentId = tournament.Id.Value
+            });
+
+            var dbTournament = await GetTournamentById(tournament.Id.Value);
+            dbTournament.TournamentName.Value.Should().Be(newName);
+
+            var func = () => SetTournamentName(new SetTournamentNameCommand
+            {
+                Name = oldName,
+                TournamentId = tournament.Id.Value
+            });
+
+            await func.Should().NotThrowAsync();
+
+
+            dbTournament = await GetTournamentById(tournament.Id.Value);
+            dbTournament.TournamentName.Value.Should().Be(oldName);
         }
 
         private async Task<Tournament> CreateTournament()

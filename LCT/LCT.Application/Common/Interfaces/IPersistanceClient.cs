@@ -15,8 +15,6 @@ namespace LCT.Application.Common.Interfaces
 
         Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId)
             where T: IAgregateRoot;
-
-        Task<bool> CheckUniqness<T>(string entity, string fieldName, T value);
     }
 
 

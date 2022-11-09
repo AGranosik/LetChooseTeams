@@ -20,29 +20,18 @@ namespace LCT.Application.Teams.Commands
     public class SelectTeamCommandHandler : IRequestHandler<SelectTeamCommand>
     {
         private readonly IAggregateRepository<Tournament> _repository;
-        private readonly IPersistanceClient _dbContext;
-        public SelectTeamCommandHandler(IAggregateRepository<Tournament> repository, IPersistanceClient dbContext)
+        public SelectTeamCommandHandler(IAggregateRepository<Tournament> repository)
         {
             _repository = repository;
-            _dbContext = dbContext;
         }
         public async Task<Unit> Handle(SelectTeamCommand request, CancellationToken cancellationToken)
         {
             var tournament = await _repository.LoadAsync(request.TournamentId);
             tournament.SelectTeam(request.PlayerName, request.PlayerSurname, request.Team);
 
-            await PlayerTeamSelectionValidationAsync(request.Team, tournament.Id.Value);
             await _repository.SaveAsync(tournament);
 
             return Unit.Value;
-        }
-
-        private async Task PlayerTeamSelectionValidationAsync(string team, Guid tournamentId)
-        {
-            var isNameUnique = await _dbContext.CheckUniqness(nameof(Tournament), nameof(Tournament.SelectedTeams), new TeamSelectionUniqnessModel(team, tournamentId));
-
-            if (!isNameUnique)
-                throw new PlayerAlreadyAssignedToTournamentException();
         }
     }
 }

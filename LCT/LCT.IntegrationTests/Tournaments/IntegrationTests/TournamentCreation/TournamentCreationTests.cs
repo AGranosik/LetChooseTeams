@@ -1,7 +1,7 @@
 using FluentAssertions;
 using LCT.Application.Tournaments.Commands;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
-using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
+using MongoDB.Driver;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;
@@ -16,7 +16,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.TournamentCreation
         public TournamentCreationTests() : base()
         {
             AddTableToTruncate("TournamentStream");
-            AddTableToTruncate("Tournament_TournamentName_index");
+            AddTableToTruncate("Tournament_SetTournamentNameEvent_index");
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();
@@ -52,7 +52,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.TournamentCreation
                 PlayerLimit = 10
             });
 
-            await action.Should().ThrowAsync<TournamentNameNotUniqueException>();
+            await action.Should().ThrowAsync<MongoWriteException>();
         }
 
         [Test]

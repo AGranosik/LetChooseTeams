@@ -27,21 +27,6 @@ namespace LCT.Infrastructure.Persistance.Mongo
             Configure();
         }
 
-        public async Task<bool> CheckUniqness<T>(string entity, string fieldName, T value)
-        {
-            //create index here? instead of splitting it up in different files
-            var collection = _database.GetCollection<T>($"{entity}_{fieldName}_index");
-            try
-            {
-                await collection.InsertOneAsync(value);
-                return true;
-            }
-            catch (Exception ex)
-            {
-                return false;
-            }
-        }
-
         public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, string aggregateId = "", int version = 0) // more generic?
             where TAggregateRoot : IAgregateRoot
         {
@@ -117,7 +102,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
         private void ConfigureAggregateVersion<TAggregate>(CreateIndexOptions indexOptions)
         {
             var teamSelectionIndex = Builders<AggregateVersionModel>.IndexKeys
-                .Ascending(l => l.AggregateId)
+                .Ascending(l => l.AggregateId) //sprawdzic czt dziala....
                 .Ascending(l => l.Version);
 
             var indexModel = new CreateIndexModel<AggregateVersionModel>(
