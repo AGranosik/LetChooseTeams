@@ -28,11 +28,9 @@ namespace LCT.Infrastructure.Repositories
         }
 
         public async Task SaveAsync(TAggregateRoot model, int version = 0)
-            //2 methods one with Iversionable restriction??
-            // uniqness in transaction?
         {
             var events = model.GetChanges();
-            await _client.SaveEventAsync<TAggregateRoot>(events, model.AggregateId(), version);
+            await _client.SaveEventAsync<TAggregateRoot>(events, version);
             await PublishEventsAsync(events);
         }
 

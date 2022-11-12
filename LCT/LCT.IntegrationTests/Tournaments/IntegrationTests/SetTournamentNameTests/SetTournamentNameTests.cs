@@ -12,9 +12,9 @@ using NUnit.Framework;
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests.SetTournamentNameTests
 {
     [TestFixture]
-    public class SetTournamentNameVersioningTests : Testing<Tournament>
+    public class SetTournamentNameTests : Testing<Tournament>
     {
-        public SetTournamentNameVersioningTests()
+        public SetTournamentNameTests()
         {
             AddTableToTruncate("TournamentStream");
             AddTableToTruncate("Tournament_SetTournamentNameEvent_index");
@@ -90,6 +90,19 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.SetTournamentNameTes
 
             dbTournament = await GetTournamentById(tournament.Id.Value);
             dbTournament.TournamentName.Value.Should().Be(oldName);
+        }
+
+        [Test]
+        public async Task SetName_Multiple_VersionedCorrectly()
+        {
+            var tournament = await CreateTournament();
+            var repo = GetRepository();
+
+            tournament.SetName("hehehe");
+            tournament.SetName("hehehe2222");
+
+            var func = () => repo.SaveAsync(tournament, tournament.Version);
+            await func.Should().NotThrowAsync();
         }
 
         private async Task<Tournament> CreateTournament()

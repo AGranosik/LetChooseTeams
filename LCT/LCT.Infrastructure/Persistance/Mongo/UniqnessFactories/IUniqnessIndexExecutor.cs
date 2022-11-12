@@ -6,9 +6,9 @@ using MongoDB.Driver;
 
 namespace LCT.Infrastructure.Persistance.Mongo.UniqnessFactories
 {
-    public interface IUniqnessIndexExecutor //register prop name & event?
+    public interface IUniqnessIndexExecutor
     {
-        Task ExcecuteAsync(IMongoDatabase database, IClientSessionHandle session, DomainEvent domainEvent);
+        Task ExcecuteAsync(IClientSessionHandle session, DomainEvent domainEvent);
         IUniqnessIndexExecutor RegisterUniqnessForEvent<TEvent>(string aggregateName, IMongoDatabase database)
             where TEvent : IUniqness;
     }
@@ -17,7 +17,7 @@ namespace LCT.Infrastructure.Persistance.Mongo.UniqnessFactories
     {
         private readonly CreateIndexOptions _uniqueIndexOptions = new CreateIndexOptions { Unique = true };
         private Dictionary<string, Func<IClientSessionHandle, UniqnessModel, Task>> _uniqnessCollections = new();
-        public async Task ExcecuteAsync(IMongoDatabase database, IClientSessionHandle session, DomainEvent domainEvent)
+        public async Task ExcecuteAsync(IClientSessionHandle session, DomainEvent domainEvent)
         {
             var eventName = domainEvent.GetType().Name;
             var func = _uniqnessCollections[eventName];

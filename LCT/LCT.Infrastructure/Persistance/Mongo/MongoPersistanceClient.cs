@@ -27,26 +27,30 @@ namespace LCT.Infrastructure.Persistance.Mongo
             Configure();
         }
 
-        public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, string aggregateId = "", int version = 0) // more generic?
+        public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, int version = 0) // more generic?
             where TAggregateRoot : IAgregateRoot
         {
             var aggregateName = typeof(TAggregateRoot).Name;
             using var session = await _mongoClient.StartSessionAsync();
             session.StartTransaction();
+            bool isVersionable = false;
+            var aggregateId = domainEvents[0].StreamId.ToString();
 
             foreach(var domainEvent in domainEvents)
             {
                 if(domainEvent is IVersionable)
-                {
-                    await Versioning($"{aggregateName}_Version_index", aggregateId, version, session); //multiple versioning events
-                }
+                    isVersionable = true;
 
                 if(domainEvent is IUniqness)
                 {
-                    await _uniqnessExecutor.ExcecuteAsync(_database, session, domainEvent);
+                    await _uniqnessExecutor.ExcecuteAsync(session, domainEvent);
                 }
                 await GetCollection<DomainEvent>($"{aggregateName}Stream").InsertOneAsync(session, domainEvent);
             }
+
+            if (isVersionable)
+                await Versioning($"{aggregateName}_Version_index", aggregateId, version, session);
+
             await session.CommitTransactionAsync();
         }
 
