@@ -3,11 +3,10 @@ using LCT.Application.Common.Interfaces;
 using LCT.Application.Common.UniqnessModels;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
-using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
 using LCT.Infrastructure.Persistance.Mongo.UniqnessFactories;
-using MongoDB.Bson;
+using LCT.Infrastructure.Persistance.Mongo.UniqnessFactories.Models;
 using MongoDB.Driver;
 
 namespace LCT.Infrastructure.Persistance.Mongo
@@ -27,7 +26,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
             Configure();
         }
 
-        public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, int version = 0) // more generic?
+        public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, int version = 0)
             where TAggregateRoot : IAgregateRoot
         {
             var aggregateName = typeof(TAggregateRoot).Name;
@@ -45,17 +44,25 @@ namespace LCT.Infrastructure.Persistance.Mongo
                 {
                     await _uniqnessExecutor.ExcecuteAsync(session, domainEvent);
                 }
-                await GetCollection<DomainEvent>($"{aggregateName}Stream").InsertOneAsync(session, domainEvent);
+                await GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>()).InsertOneAsync(session, domainEvent);
             }
 
             if (isVersionable)
-                await Versioning($"{aggregateName}_Version_index", aggregateId, version, session);
+                await Versioning(GetVersionIndex<TAggregateRoot>(), aggregateId, version, session);
 
             await session.CommitTransactionAsync();
         }
 
         public Task SaveActionAsync<T>(T action) where T : LctAction
             => GetCollection<T>($"{typeof(T).Name}").InsertOneAsync(action);
+
+        public static string GetStreamName<TAggregate>()
+            where TAggregate : IAgregateRoot
+            => $"{typeof(TAggregate).Name}_Stream";
+
+        public static string GetVersionIndex<TAggregate>()
+            where TAggregate : IAgregateRoot
+            => $"{typeof(TAggregate).Name}_Version_index";
 
         private async Task Versioning(string aggregateName, string aggregateId, int version, IClientSessionHandle session)
         {
@@ -69,7 +76,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
         public async Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId)
             where T: IAgregateRoot
         {
-            var cursorAsync = await GetCollection<DomainEvent>($"{typeof(T).Name}Stream").FindAsync(s => s.StreamId == streamId);
+            var cursorAsync = await GetCollection<DomainEvent>(GetStreamName<T>()).FindAsync(s => s.StreamId == streamId);
             return await cursorAsync.ToListAsync();
         }
 
@@ -104,16 +111,17 @@ namespace LCT.Infrastructure.Persistance.Mongo
         }
 
         private void ConfigureAggregateVersion<TAggregate>(CreateIndexOptions indexOptions)
+            where TAggregate : IAgregateRoot
         {
             var teamSelectionIndex = Builders<AggregateVersionModel>.IndexKeys
-                .Ascending(l => l.AggregateId) //sprawdzic czt dziala....
+                .Ascending(l => l.AggregateId)
                 .Ascending(l => l.Version);
 
             var indexModel = new CreateIndexModel<AggregateVersionModel>(
                 teamSelectionIndex,
                 indexOptions);
 
-            _database.GetCollection<AggregateVersionModel>($"{typeof(TAggregate).Name}_Version_index") //fucntion for that names
+            _database.GetCollection<AggregateVersionModel>(GetVersionIndex<TAggregate>())
                 .Indexes.CreateOne(indexModel);
         }
 

@@ -4,8 +4,6 @@
         where TKey : ValueType<TKey>
     {
         private readonly IList<DomainEvent> _changes = new List<DomainEvent>();
-        // Zapis w repo triggeruje Event handler, ktory zarzadzi projekcję? a w przyszłości wrzuci to na kolejkę
-        // event handlery w application, tylko pytanie czy "domenowa obsługa" też powinno być w event handlerze czy już tylko ta applikacyjna
         protected Aggregate(TKey id) : base(id)
         {
         }

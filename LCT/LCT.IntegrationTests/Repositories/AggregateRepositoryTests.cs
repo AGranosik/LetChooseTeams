@@ -14,15 +14,17 @@ using LCT.Domain.Common.Exceptions;
 using LCT.Application.Tournaments.Hubs;
 using LCT.IntegrationTests.Mocks;
 using Microsoft.AspNetCore.SignalR;
+using LCT.Infrastructure.Persistance.Mongo;
 
 namespace LCT.IntegrationTests.Repositories
 {
     [TestFixture]
     public class AggregateRepositoryTests : Testing<Tournament>
     {
+        private readonly string tournamentStream = MongoPersistanceClient.GetStreamName<Tournament>();
         public AggregateRepositoryTests()
         {
-            AddTableToTruncate("TournamentStream");
+            AddTableToTruncate(tournamentStream);
             AddTableToTruncate("Tournament_SetTournamentNameEvent_index");
             SwapSingleton<IHubContext<TournamentHub>>(IHubContextMock.GetMockedHubContext<TournamentHub>());
             this.Environment("Development")
@@ -36,7 +38,7 @@ namespace LCT.IntegrationTests.Repositories
             var mongoClient = _scope.ServiceProvider.GetRequiredService<IMongoClient>();
             var tournament = await CreateCompleteTournament(3, 3, 3);
 
-            var eventsCursor = await mongoClient.GetDatabase("Lct_test").GetCollection<DomainEvent>($"{nameof(Tournament)}Stream").FindAsync(ts => ts.StreamId == tournament.Id.Value);
+            var eventsCursor = await mongoClient.GetDatabase("Lct_test").GetCollection<DomainEvent>(tournamentStream).FindAsync(ts => ts.StreamId == tournament.Id.Value);
             var events = await eventsCursor.ToListAsync();
             events.Should().NotBeNull();
             events.Should().NotBeEmpty();

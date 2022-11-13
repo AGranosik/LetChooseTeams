@@ -8,7 +8,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Events
         public string TournamentName { get; set; }
         public string UniqueValue { get => TournamentName; }
 
-        public SetTournamentNameEvent(string tournamentName, Guid streamId) : base(streamId) // shouldnt be of type TOurnamentName??
+        public SetTournamentNameEvent(string tournamentName, Guid streamId) : base(streamId)
         {
             TournamentName = tournamentName;
         }
