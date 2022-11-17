@@ -12,7 +12,6 @@
         public void Apply(DomainEvent @event)
         {
             When(@event);
-
             _changes.Add(@event);
         }
 

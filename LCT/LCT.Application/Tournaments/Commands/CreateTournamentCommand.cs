@@ -1,7 +1,4 @@
-﻿using LCT.Application.Common.Interfaces;
-using LCT.Domain.Aggregates.TournamentAggregate.Entities;
-using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
-using LCT.Domain.Aggregates.TournamentAggregate.Services;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Common.Interfaces;
 using MediatR;
 
@@ -16,7 +13,7 @@ namespace LCT.Application.Tournaments.Commands
     public class CreateTournamentCommandHandler : IRequestHandler<CreateTournamentCommand, Guid>
     {
         private readonly IAggregateRepository<Tournament> _repository;
-        public CreateTournamentCommandHandler(IAggregateRepository<Tournament> repository, IPersistanceClient dbContext)
+        public CreateTournamentCommandHandler(IAggregateRepository<Tournament> repository)
         {
             _repository = repository;
         }
