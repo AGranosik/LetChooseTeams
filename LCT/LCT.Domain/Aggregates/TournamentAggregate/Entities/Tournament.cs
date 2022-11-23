@@ -64,7 +64,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             if (NumberOfPlayers != Limit.Limit)
                 throw new NotAllPlayersRegisteredException();
 
-            if (SelectedTeams.Count() == 0 || SelectedTeams.Count() != Limit.Limit)
+            if (SelectedTeams.Count == 0 || SelectedTeams.Count != Limit.Limit)
                 throw new NotAllPlayersSelectedTeamException();
 
             if (_drawTeams is null || _drawTeams.Count == 0)

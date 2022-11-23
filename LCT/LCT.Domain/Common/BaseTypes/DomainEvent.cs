@@ -14,5 +14,6 @@ namespace LCT.Domain.Common.BaseTypes
         public Guid Id { get; init; }
         public Guid StreamId { get; init; }
         public DateTime TimeStamp { get; init; } = DateTime.UtcNow;
+        public int? EventNumber { get; set; } = null;
     }
 }

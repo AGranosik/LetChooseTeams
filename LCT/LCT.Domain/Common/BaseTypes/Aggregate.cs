@@ -4,6 +4,7 @@
         where TKey : ValueType<TKey>
     {
         private readonly IList<DomainEvent> _changes = new List<DomainEvent>();
+        private int? _lastEventNumber = null;
         protected Aggregate(TKey id) : base(id)
         {
         }
@@ -12,6 +13,7 @@
         public void Apply(DomainEvent @event)
         {
             When(@event);
+            SetEventNumber(@event);
             _changes.Add(@event);
         }
 
@@ -29,6 +31,19 @@
 
         public string AggregateId()
             => Id.ToString();
+
+        private void SetEventNumber(DomainEvent @event)
+        {
+            if (!@event.EventNumber.HasValue && !_lastEventNumber.HasValue)
+            {
+                _lastEventNumber = _changes.Max(e => e.EventNumber) ?? 0;
+            }
+            else
+            {
+                _lastEventNumber++;
+            }
+            @event.EventNumber = _lastEventNumber;
+        }
     }
 
     public interface IAgregateRoot
