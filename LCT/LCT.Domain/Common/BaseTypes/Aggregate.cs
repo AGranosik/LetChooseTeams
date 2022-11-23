@@ -17,8 +17,9 @@
             _changes.Add(@event);
         }
 
-        public void Load(IEnumerable<object> history)
+        public void Load(IEnumerable<DomainEvent> history)
         {
+            _lastEventNumber = history.Max(d => d.EventNumber);
             foreach (var item in history)
             {
                 When(item);
@@ -48,7 +49,7 @@
 
     public interface IAgregateRoot
     {
-        void Load(IEnumerable<object> history);
+        void Load(IEnumerable<DomainEvent> history);
 
         DomainEvent[] GetChanges();
 

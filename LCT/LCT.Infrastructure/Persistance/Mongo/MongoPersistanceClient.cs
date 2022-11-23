@@ -29,7 +29,6 @@ namespace LCT.Infrastructure.Persistance.Mongo
         public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, int version = 0)
             where TAggregateRoot : IAgregateRoot
         {
-            var aggregateName = typeof(TAggregateRoot).Name;
             using var session = await _mongoClient.StartSessionAsync();
             session.StartTransaction();
             bool isVersionable = false;
