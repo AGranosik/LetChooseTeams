@@ -32,10 +32,14 @@ namespace LCT.Infrastructure.Persistance.Mongo
             using var session = await _mongoClient.StartSessionAsync();
             session.StartTransaction();
             bool isVersionable = false;
+            bool createSnapshot = false;
             var aggregateId = domainEvents[0].StreamId.ToString();
 
             foreach(var domainEvent in domainEvents)
             {
+                if(domainEvent.EventNumber % 5 == 0)
+                    createSnapshot = true;
+
                 if(domainEvent is IVersionable)
                     isVersionable = true;
 
@@ -48,6 +52,9 @@ namespace LCT.Infrastructure.Persistance.Mongo
 
             if (isVersionable)
                 await Versioning(GetVersionIndex<TAggregateRoot>(), aggregateId, version, session);
+
+            if (createSnapshot)
+                await CreateSnapshot<TAggregateRoot>(aggregateId);
 
             await session.CommitTransactionAsync();
         }
@@ -67,6 +74,12 @@ namespace LCT.Infrastructure.Persistance.Mongo
         {
             await GetCollection<AggregateVersionModel>(aggregateName)
                 .InsertOneAsync(session, new AggregateVersionModel(aggregateId, version));
+        }
+
+        private async Task CreateSnapshot<TAggregateRoot>(string aggregateId, IClientSessionHandle session)
+            where TAggregateRoot : IAgregateRoot
+        {
+
         }
 
         private IMongoCollection<T> GetCollection<T>(string streamName)
