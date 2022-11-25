@@ -8,6 +8,8 @@ using LCT.Domain.Common.Interfaces;
 using LCT.Infrastructure.Persistance.Mongo.UniqnessFactories;
 using LCT.Infrastructure.Persistance.Mongo.UniqnessFactories.Models;
 using MongoDB.Driver;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace LCT.Infrastructure.Persistance.Mongo
 {
@@ -27,7 +29,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
         }
 
         public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, int version = 0)
-            where TAggregateRoot : IAgregateRoot
+            where TAggregateRoot : IAgregateRoot, new()
         {
             using var session = await _mongoClient.StartSessionAsync();
             session.StartTransaction();
@@ -47,20 +49,22 @@ namespace LCT.Infrastructure.Persistance.Mongo
                 {
                     await _uniqnessExecutor.ExcecuteAsync(session, domainEvent);
                 }
-                await GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>()).InsertOneAsync(session, domainEvent);
+                await GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>())
+                    .InsertOneAsync(session, domainEvent);
             }
 
             if (isVersionable)
                 await Versioning(GetVersionIndex<TAggregateRoot>(), aggregateId, version, session);
 
             if (createSnapshot)
-                await CreateSnapshot<TAggregateRoot>(aggregateId);
+                await CreateSnapshot<TAggregateRoot>(aggregateId, domainEvents, session); //it should be somewhere else
 
             await session.CommitTransactionAsync();
         }
 
         public Task SaveActionAsync<T>(T action) where T : LctAction
             => GetCollection<T>($"{typeof(T).Name}").InsertOneAsync(action);
+        // as interface because action can be stored in different databse
 
         public static string GetStreamName<TAggregate>()
             where TAggregate : IAgregateRoot
@@ -70,23 +74,40 @@ namespace LCT.Infrastructure.Persistance.Mongo
             where TAggregate : IAgregateRoot
             => $"{typeof(TAggregate).Name}_Version_index";
 
+        public static string GetSnapshotName<TAggregate>()
+            where TAggregate : IAgregateRoot
+            => $"{typeof(TAggregate).Name}_Snapshot";
         private async Task Versioning(string aggregateName, string aggregateId, int version, IClientSessionHandle session)
         {
             await GetCollection<AggregateVersionModel>(aggregateName)
                 .InsertOneAsync(session, new AggregateVersionModel(aggregateId, version));
         }
 
-        private async Task CreateSnapshot<TAggregateRoot>(string aggregateId, IClientSessionHandle session)
-            where TAggregateRoot : IAgregateRoot
+        private async Task CreateSnapshot<TAggregateRoot>(string aggregateId, DomainEvent[] domainEvents, IClientSessionHandle session)
+            where TAggregateRoot : IAgregateRoot, new()
         {
+            var aggregate = await GetLatestSnapshot<TAggregateRoot>(aggregateId);
+            aggregate.Load(domainEvents);
+            await GetCollection<object>(GetSnapshotName<TAggregateRoot>())
+                .InsertOneAsync(session, JsonSerializer.Serialize(aggregate));
+        }
 
+        private async Task<TAggregateRoot> GetLatestSnapshot<TAggregateRoot>(string aggregateId)
+            where TAggregateRoot : IAgregateRoot, new()
+        {
+            //load last snapshot
+            var aggregate = new TAggregateRoot();
+            var events = await GetEventsAsync<TAggregateRoot>(Guid.Parse(aggregateId));
+
+            aggregate.Load(events);
+            return aggregate;
         }
 
         private IMongoCollection<T> GetCollection<T>(string streamName)
             => _database.GetCollection<T>($"{streamName}");
 
-        public async Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId)
-            where T: IAgregateRoot
+        public async Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId) // event date filter
+            where T: IAgregateRoot, new()
         {
             var cursorAsync = await GetCollection<DomainEvent>(GetStreamName<T>()).FindAsync(s => s.StreamId == streamId);
             return await cursorAsync.ToListAsync();

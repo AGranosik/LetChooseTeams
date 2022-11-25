@@ -11,10 +11,10 @@ namespace LCT.Application.Common.Interfaces
             where T : LctAction;
 
         Task SaveEventAsync<TAggregate>(DomainEvent[] domainEvent, int version = 0)
-            where TAggregate : IAgregateRoot;
+            where TAggregate : IAgregateRoot, new();
 
         Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId)
-            where T: IAgregateRoot;
+            where T: IAgregateRoot, new();
     }
 
 
