@@ -1,5 +1,5 @@
 ﻿
-namespace LCT.Infrastructure.Persistance.Mongo
+namespace LCT.Infrastructure.Persistance.EventsStorage
 {
     public class MongoSettings
     {

@@ -5,7 +5,7 @@ using LCT.Application.Common.Interfaces;
 using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
-using LCT.Infrastructure.Persistance.Mongo;
+using LCT.Infrastructure.Persistance.EventsStorage;
 using LCT.IntegrationTests.Mocks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;

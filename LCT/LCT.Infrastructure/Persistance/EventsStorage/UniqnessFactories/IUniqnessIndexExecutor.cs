@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
 using MongoDB.Driver;
 
-namespace LCT.Infrastructure.Persistance.Mongo.UniqnessFactories
+namespace LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories
 {
     public interface IUniqnessIndexExecutor
     {

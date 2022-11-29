@@ -2,7 +2,7 @@
 using LCT.Domain.Common.Interfaces;
 using MongoDB.Driver;
 
-namespace LCT.Infrastructure.Persistance.Mongo.UniqnessFactories
+namespace LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories
 {
     public interface IConcreteUniqnessExecutor<TEvent>
         where TEvent : IUniqness

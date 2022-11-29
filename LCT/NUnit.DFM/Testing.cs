@@ -3,7 +3,7 @@ using LCT.Application.Common.Interfaces;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
-using LCT.Infrastructure.Persistance.Mongo;
+using LCT.Infrastructure.Persistance.EventsStorage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;

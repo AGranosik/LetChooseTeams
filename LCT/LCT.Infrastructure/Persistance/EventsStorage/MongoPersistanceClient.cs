@@ -1,18 +1,18 @@
 ﻿using LCT.Application.Common.Events;
 using LCT.Application.Common.Interfaces;
-using LCT.Application.Common.UniqnessModels;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
-using LCT.Infrastructure.Persistance.Mongo.UniqnessFactories;
-using LCT.Infrastructure.Persistance.Mongo.UniqnessFactories.Models;
+using LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories;
+using LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories.Models;
+using LCT.Infrastructure.Persistance.SnapshotsStorage;
 using MongoDB.Driver;
-using System.Text.Json;
-using System.Text.Json.Serialization;
 
-namespace LCT.Infrastructure.Persistance.Mongo
+namespace LCT.Infrastructure.Persistance.EventsStorage
 {
+    // split into mongo persistance & Events storage which gonna use ISnapshot storage
+
     public class MongoPersistanceClient : IPersistanceClient
     {
         private readonly IMongoClient _mongoClient;
@@ -36,7 +36,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
             bool isVersionable = false;
             bool createSnapshot = false;
             var aggregateId = domainEvents[0].StreamId.ToString();
-
+            int latestEventNumber
             foreach(var domainEvent in domainEvents)
             {
                 if(domainEvent.EventNumber % 5 == 0)
@@ -57,7 +57,7 @@ namespace LCT.Infrastructure.Persistance.Mongo
                 await Versioning(GetVersionIndex<TAggregateRoot>(), aggregateId, version, session);
 
             if (createSnapshot)
-                await CreateSnapshot<TAggregateRoot>(aggregateId, domainEvents, session); //it should be somewhere else
+                await CreateSnapshot<TAggregateRoot>(domainEvents[0].StreamId, version); //it should be somewhere else
 
             await session.CommitTransactionAsync();
         }
@@ -83,21 +83,33 @@ namespace LCT.Infrastructure.Persistance.Mongo
                 .InsertOneAsync(session, new AggregateVersionModel(aggregateId, version));
         }
 
-        private async Task CreateSnapshot<TAggregateRoot>(string aggregateId, DomainEvent[] domainEvents, IClientSessionHandle session)
+        private async Task CreateSnapshot<TAggregateRoot>(Guid streamId, int version)
             where TAggregateRoot : IAgregateRoot, new()
         {
-            var aggregate = await GetLatestSnapshot<TAggregateRoot>(aggregateId);
-            aggregate.Load(domainEvents);
-            await GetCollection<object>(GetSnapshotName<TAggregateRoot>())
-                .InsertOneAsync(session, JsonSerializer.Serialize(aggregate));
+            var aggregate = await GetLatestSnapshot<TAggregateRoot>(streamId, version);
+            var snapshot = new AggregateSnapshot<TAggregateRoot>(version, aggregate, streamId);
+            await GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())
+                .ReplaceOneAsync(a => a.StreamId == streamId, snapshot); // albo podmieniac, albo dodwac z jakims innym idkiem
         }
 
-        private async Task<TAggregateRoot> GetLatestSnapshot<TAggregateRoot>(string aggregateId)
+        private async Task<TAggregateRoot> GetLatestSnapshot<TAggregateRoot>(Guid streamId, int version)
             where TAggregateRoot : IAgregateRoot, new()
         {
-            //load last snapshot
-            var aggregate = new TAggregateRoot();
-            var events = await GetEventsAsync<TAggregateRoot>(Guid.Parse(aggregateId));
+            var latestsSnapshotCursor = await GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())
+                .FindAsync(a => a.EventNumber == version);
+
+            var latestSnapshot = await latestsSnapshotCursor.SingleOrDefaultAsync();
+            List<DomainEvent> events;
+
+            if(latestSnapshot is null)
+            {
+                events = await GetEventsAsync<TAggregateRoot>(streamId);
+            }
+            else
+            {
+                var eventsCursor = await GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>()).FindAsync(s => s.StreamId == streamId);
+
+            }
 
             aggregate.Load(events);
             return aggregate;

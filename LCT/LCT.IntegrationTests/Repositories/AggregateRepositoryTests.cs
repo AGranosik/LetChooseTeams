@@ -14,7 +14,7 @@ using LCT.Domain.Common.Exceptions;
 using LCT.Application.Tournaments.Hubs;
 using LCT.IntegrationTests.Mocks;
 using Microsoft.AspNetCore.SignalR;
-using LCT.Infrastructure.Persistance.Mongo;
+using LCT.Infrastructure.Persistance.EventsStorage;
 
 namespace LCT.IntegrationTests.Repositories
 {
