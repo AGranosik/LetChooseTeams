@@ -55,7 +55,7 @@ namespace LCT.Application.Teams.Events.Actions
 
         private async Task<TeamClickedEvent> GetLatesClickedTeams(TeamClickedAction action)
         {
-            Tournament tournament = new Tournament();
+            Tournament tournament = new();
             try
             {
                 tournament = await _aggregateRepository.LoadAsync(action.GroupKey);

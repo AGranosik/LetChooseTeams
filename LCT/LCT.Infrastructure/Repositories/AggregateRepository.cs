@@ -19,11 +19,9 @@ namespace LCT.Infrastructure.Repositories
         }
         public async Task<TAggregateRoot> LoadAsync(Guid Id)
         {
-            var result = await _client.GetEventsAsync<TAggregateRoot>(Id);
-            if (result.Count == 0)
-                throw new EntityDoesNotExist(typeof(TAggregateRoot).Name);
-            var aggregate = new TAggregateRoot();
-            aggregate.Load(result);
+            var aggregate = await _client.GetAggregate<TAggregateRoot>(Id);
+            if (aggregate is null)
+                throw new EntityDoesNotExist(nameof(TAggregateRoot));
             return aggregate;
         }
 

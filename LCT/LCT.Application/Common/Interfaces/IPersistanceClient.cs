@@ -15,6 +15,9 @@ namespace LCT.Application.Common.Interfaces
 
         Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId)
             where T: IAgregateRoot, new();
+
+        Task<TAggregateRoot> GetAggregate<TAggregateRoot>(Guid streamId)
+            where TAggregateRoot : IAgregateRoot, new();
     }
 
 

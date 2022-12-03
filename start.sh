@@ -1,5 +1,4 @@
 #!/bin/bash
-echo hello
 docker-compose up -d
 
 sleep 2

@@ -3,6 +3,7 @@ using LCT.Application.Common.Interfaces;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Common.BaseTypes;
+using LCT.Domain.Common.Exceptions;
 using LCT.Domain.Common.Interfaces;
 using LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories;
 using LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories.Models;
@@ -36,10 +37,11 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             bool isVersionable = false;
             bool createSnapshot = false;
             var aggregateId = domainEvents[0].StreamId.ToString();
-            int latestEventNumber
+            int latestEventNumber = 0;
             foreach(var domainEvent in domainEvents)
             {
-                if(domainEvent.EventNumber % 5 == 0)
+                latestEventNumber = domainEvent.EventNumber.Value;
+                if(latestEventNumber % 5 == 0)
                     createSnapshot = true;
 
                 if(domainEvent is IVersionable)
@@ -57,7 +59,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
                 await Versioning(GetVersionIndex<TAggregateRoot>(), aggregateId, version, session);
 
             if (createSnapshot)
-                await CreateSnapshot<TAggregateRoot>(domainEvents[0].StreamId, version); //it should be somewhere else
+                await CreateSnapshot<TAggregateRoot>(domainEvents[0].StreamId, latestEventNumber); //it should be somewhere else
 
             await session.CommitTransactionAsync();
         }
@@ -83,35 +85,39 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
                 .InsertOneAsync(session, new AggregateVersionModel(aggregateId, version));
         }
 
-        private async Task CreateSnapshot<TAggregateRoot>(Guid streamId, int version)
+        private async Task CreateSnapshot<TAggregateRoot>(Guid streamId, int eventNumber)
             where TAggregateRoot : IAgregateRoot, new()
         {
-            var aggregate = await GetLatestSnapshot<TAggregateRoot>(streamId, version);
-            var snapshot = new AggregateSnapshot<TAggregateRoot>(version, aggregate, streamId);
+            var aggregate = await GetAggregate<TAggregateRoot>(streamId);
+            var snapshot = new AggregateSnapshot<TAggregateRoot>(eventNumber, aggregate, streamId);
             await GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())
                 .ReplaceOneAsync(a => a.StreamId == streamId, snapshot); // albo podmieniac, albo dodwac z jakims innym idkiem
         }
 
-        private async Task<TAggregateRoot> GetLatestSnapshot<TAggregateRoot>(Guid streamId, int version)
+        public async Task<TAggregateRoot> GetAggregate<TAggregateRoot>(Guid streamId)
             where TAggregateRoot : IAgregateRoot, new()
         {
             var latestsSnapshotCursor = await GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())
-                .FindAsync(a => a.EventNumber == version);
+                .FindAsync(a => a.StreamId == streamId);
 
             var latestSnapshot = await latestsSnapshotCursor.SingleOrDefaultAsync();
             List<DomainEvent> events;
-
-            if(latestSnapshot is null)
+            var snapshotExists = latestSnapshot is not null;
+            if (!snapshotExists)
             {
                 events = await GetEventsAsync<TAggregateRoot>(streamId);
             }
             else
             {
-                var eventsCursor = await GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>()).FindAsync(s => s.StreamId == streamId);
-
+                var eventsCursor = await GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>()).FindAsync(s => s.StreamId == streamId && s.EventNumber > latestSnapshot.EventNumber);
+                events = await eventsCursor.ToListAsync();
             }
 
+            if (!snapshotExists && events.Count == 0)
+                return default;
+            var aggregate = latestSnapshot is null ? new TAggregateRoot() : latestSnapshot.Aggregate;
             aggregate.Load(events);
+
             return aggregate;
         }
 
