@@ -6,9 +6,9 @@ export const options = {
         shared_scenario:{
             executor: 'shared-iterations',
             startTime: 0,
-            vus: 100,
-            iterations: 2000,
-            maxDuration: '20s'
+            vus: 50,
+            iterations: 1000,
+            maxDuration: '40s'
         },
         per_vu_iter_scernario:{
             executor: 'per-vu-iterations',
