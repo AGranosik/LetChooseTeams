@@ -32,12 +32,12 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
         public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, int version = 0)
             where TAggregateRoot : IAgregateRoot, new()
         {
-            using var session = await _mongoClient.StartSessionAsync();
-            session.StartTransaction();
             bool isVersionable = false;
             bool createSnapshot = false;
             var aggregateId = domainEvents[0].StreamId.ToString();
             int latestEventNumber = 0;
+            using var session = await _mongoClient.StartSessionAsync();
+            session.StartTransaction();
             foreach(var domainEvent in domainEvents)
             {
                 latestEventNumber = domainEvent.EventNumber.Value;
@@ -51,8 +51,6 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
                 {
                     await _uniqnessExecutor.ExcecuteAsync(session, domainEvent);
                 }
-                await GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>())
-                    .InsertOneAsync(session, domainEvent);
             }
 
             if (isVersionable)
@@ -61,6 +59,8 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             if (createSnapshot)
                 await CreateSnapshot<TAggregateRoot>(domainEvents[0].StreamId, latestEventNumber); //it should be somewhere else
 
+            await GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>())
+                .InsertManyAsync(session, domainEvents);
             await session.CommitTransactionAsync();
         }
 
@@ -100,7 +100,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             var latestsSnapshotCursor = await GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())
                 .FindAsync(a => a.StreamId == streamId);
 
-            var latestSnapshot = await latestsSnapshotCursor.SingleOrDefaultAsync();
+            var latestSnapshot = await latestsSnapshotCursor.FirstOrDefaultAsync();
             List<DomainEvent> events;
             var snapshotExists = latestSnapshot is not null;
             if (!snapshotExists)
