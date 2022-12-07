@@ -36,32 +36,35 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             bool createSnapshot = false;
             var aggregateId = domainEvents[0].StreamId.ToString();
             int latestEventNumber = 0;
+            var tasks = new List<Task>();
             using var session = await _mongoClient.StartSessionAsync();
             session.StartTransaction();
-            foreach(var domainEvent in domainEvents)
+            foreach (var domainEvent in domainEvents)
             {
                 latestEventNumber = domainEvent.EventNumber.Value;
-                if(latestEventNumber % 5 == 0)
+                if (latestEventNumber % 5 == 0)
                     createSnapshot = true;
 
-                if(domainEvent is IVersionable)
+                if (domainEvent is IVersionable)
                     isVersionable = true;
 
-                if(domainEvent is IUniqness)
+                if (domainEvent is IUniqness)
                 {
                     await _uniqnessExecutor.ExcecuteAsync(session, domainEvent);
                 }
             }
 
             if (isVersionable)
-                await Versioning(GetVersionIndex<TAggregateRoot>(), aggregateId, version, session);
+                tasks.Add(Versioning(GetVersionIndex<TAggregateRoot>(), aggregateId, version, session));
 
+
+            tasks.Add(GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>())
+                .InsertManyAsync(session, domainEvents));
+
+            await Task.WhenAll(tasks.ToArray());
+            await session.CommitTransactionAsync();
             if (createSnapshot)
                 await CreateSnapshot<TAggregateRoot>(domainEvents[0].StreamId, latestEventNumber); //it should be somewhere else
-
-            await GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>())
-                .InsertManyAsync(session, domainEvents);
-            await session.CommitTransactionAsync();
         }
 
         public Task SaveActionAsync<T>(T action) where T : LctAction
