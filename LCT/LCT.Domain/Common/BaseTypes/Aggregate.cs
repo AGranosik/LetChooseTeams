@@ -37,7 +37,7 @@
         {
             if (!@event.EventNumber.HasValue && !_lastEventNumber.HasValue)
             {
-                _lastEventNumber = _changes.Max(e => e.EventNumber) ?? 0;
+                _lastEventNumber = _changes.Max(e => e.EventNumber) ?? 1;
             }
             else
             {

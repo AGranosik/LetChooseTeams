@@ -38,7 +38,7 @@ export const options = {
         }
     },
     thresholds: {
-        http_req_duration: ['p(90)<2000'],
+        http_req_duration: [' avg < 2000'],
     },
 };
 
