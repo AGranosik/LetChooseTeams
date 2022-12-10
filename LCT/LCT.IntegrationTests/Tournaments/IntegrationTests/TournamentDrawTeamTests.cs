@@ -102,7 +102,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
 
                 tournament.SelectTeam(player.Name, player.Surname, TournamentTeamNames.Teams[i]);
             }
-            await SaveAsync(tournament);
+            await SaveAsync(tournament, tournament.Version);
             return tournament;
         }
 

@@ -43,12 +43,12 @@ namespace LCT.Application.Tournaments.Queries
         {
             var tournament = await _repository.LoadAsync(request.TournamentId);
 
-            var dto = new TournamentDto
+            return new TournamentDto
             {
                 Id = tournament.Id.Value,
                 TournamentName = tournament.TournamentName,
                 PlayerLimit = tournament.Limit.Limit,
-                QRCode = GenerateQrCodeForTournament(tournament.Id),
+                QRCode = await GenerateQrCodeForTournament(tournament.Id),
                 Version = tournament.Version,
                 Players = tournament.Players.Select(p => new PlayerDto
                 {
@@ -58,14 +58,15 @@ namespace LCT.Application.Tournaments.Queries
                     DrawnTeam = tournament.DrawTeams.FirstOrDefault(dt => dt.Player == p)?.TeamName
                 }).ToList()
             };
-
-            return dto;
         }
 
-        private string GenerateQrCodeForTournament(TournamentId id)
+        private async Task<string> GenerateQrCodeForTournament(TournamentId id)
         {
-            var feLink = "http://" + _feCfg.ConnectionString + "/player/register/" + id.Value;
-            return _qrCodeCreator.Generate(feLink);
+            return await Task.Run(() =>
+            {
+                var feLink = "http://" + _feCfg.ConnectionString + "/player/register/" + id.Value;
+                return _qrCodeCreator.Generate(feLink);
+            });
         }
     }
 }

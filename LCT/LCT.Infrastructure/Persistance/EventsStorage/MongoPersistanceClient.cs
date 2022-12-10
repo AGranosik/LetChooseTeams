@@ -93,8 +93,19 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
         {
             var aggregate = await GetAggregate<TAggregateRoot>(streamId);
             var snapshot = new AggregateSnapshot<TAggregateRoot>(eventNumber, aggregate, streamId);
-            await GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())
-                .ReplaceOneAsync(a => a.StreamId == streamId, snapshot); // albo podmieniac, albo dodwac z jakims innym idkiem
+            var snapshotCollection = GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>());
+
+            var snapshotExist = await snapshotCollection
+                .FindAsync(a => a.StreamId == streamId);
+
+            if(await snapshotExist.AnyAsync())
+            {
+                await snapshotCollection.ReplaceOneAsync<AggregateSnapshot<TAggregateRoot>>(a => a.StreamId == streamId, snapshot);
+            }
+            else
+            {
+                await snapshotCollection.InsertOneAsync(snapshot); //serialize somehow
+            }
         }
 
         public async Task<TAggregateRoot> GetAggregate<TAggregateRoot>(Guid streamId)

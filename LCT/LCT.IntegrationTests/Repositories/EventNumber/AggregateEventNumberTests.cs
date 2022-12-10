@@ -52,10 +52,10 @@ namespace LCT.IntegrationTests.Repositories.EventNumber
             events.All(e => e.EventNumber.HasValue)
                 .Should().BeTrue();
 
-            events.Any(e => e.EventNumber == 0)
+            events.Any(e => e.EventNumber == 1)
                 .Should().BeTrue();
 
-            events.Any(e => e.EventNumber == 1)
+            events.Any(e => e.EventNumber == 2)
                 .Should().BeTrue();
         }
 
@@ -83,7 +83,7 @@ namespace LCT.IntegrationTests.Repositories.EventNumber
                 .Should().BeTrue();
 
             var addPlayerEvent = events.Single(e => e is PlayerAddedDomainEvent);
-            addPlayerEvent.EventNumber.Should().Be(2);
+            addPlayerEvent.EventNumber.Should().Be(3);
         }
     }
 }

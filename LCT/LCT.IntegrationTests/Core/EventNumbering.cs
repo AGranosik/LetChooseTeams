@@ -27,8 +27,8 @@ namespace LCT.IntegrationTests.Core
             uniqueNumbers.Should().NotBeEmpty();
             uniqueNumbers.Should().HaveCount(2);
 
-            uniqueNumbers.Any(e => e.Value == 0).Should().BeTrue();
             uniqueNumbers.Any(e => e.Value == 1).Should().BeTrue();
+            uniqueNumbers.Any(e => e.Value == 2).Should().BeTrue();
         }
 
         [Test]
@@ -48,8 +48,8 @@ namespace LCT.IntegrationTests.Core
             uniqueNumbers.Should().NotBeEmpty();
             uniqueNumbers.Should().HaveCount(6);
 
-            uniqueNumbers.Min().Should().Be(0);
-            uniqueNumbers.Max().Should().Be(5);
+            uniqueNumbers.Min().Should().Be(1);
+            uniqueNumbers.Max().Should().Be(6);
         }
     }
 }

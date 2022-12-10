@@ -6,13 +6,13 @@ import { postTournament } from "./common.js";
 
 export const options = {
     stages: [
-        { duration: '30s', target: 50 }, // simulate ramp-up of traffic from 1 to 100 users over 30s.
-        { duration: '30s', target: 100 }, // simulate ramp-up of traffic from 1 to 100 users over 30s.
-        { duration: '30s', target: 100 }, // stay at 100 users for 10 minutes
-        { duration: '40s', target: 0 }, // ramp-down to 0 users
+        { duration: '30s', target: 50 },
+        { duration: '30s', target: 100 }, 
+        { duration: '30s', target: 100 },
+        { duration: '40s', target: 0 },
     ],
     thresholds: {
-        http_req_duration: ['p(90)<2000'],
+        'group_duration{group:::get is ok}': ['avg < 2000'],
     },
 }
   export default function () {
@@ -21,9 +21,9 @@ export const options = {
         const postResult = postTournament();
         id = postResult.body.split('"').join("");
     })
+    const url = new URL(_baseTournamentApiUrl);
+    url.searchParams.append('Id', id);
     group('get is ok', function(){
-        const url = new URL(_baseTournamentApiUrl);
-        url.searchParams.append('Id', id);
         const result = http.get(url.toString());
         check(result, {
             'is status 200:': (r) => r.status == 200
