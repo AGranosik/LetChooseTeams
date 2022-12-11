@@ -20,29 +20,22 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             Limit = limit;
             TournamentName = tournamentName;
         }
-        [JsonInclude]
         public TournamentName TournamentName { get; private set; }
+
         private List<Player> _players = new();
-        
-        [JsonInclude]
         public List<Player> Players => _players;
+
         private List<SelectedTeam> _selectedTeams = new();
-
-        [JsonInclude]
         public IReadOnlyCollection<SelectedTeam> SelectedTeams => _selectedTeams.AsReadOnly();
-        private List<DrawnTeam> _drawTeams = new();
 
-        [JsonInclude]
+        private List<DrawnTeam> _drawTeams = new();
         public IReadOnlyCollection<DrawnTeam> DrawTeams => _drawTeams.AsReadOnly();
 
-        [JsonInclude]
         public TournamentLimit Limit { get; private set; }
 
-        [JsonInclude]
         public int NumberOfPlayers => _players.Count;
 
         private int _version = 0;
-        [JsonInclude]
         public int Version => _version;
 
         public void SetName(string tournamentName)
