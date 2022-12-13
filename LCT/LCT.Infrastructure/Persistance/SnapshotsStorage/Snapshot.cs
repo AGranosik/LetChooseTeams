@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Nodes;
 using LCT.Domain.Common.BaseTypes;
 using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
 
 namespace LCT.Infrastructure.Persistance.SnapshotsStorage
 {
@@ -12,7 +12,7 @@ namespace LCT.Infrastructure.Persistance.SnapshotsStorage
         public AggregateSnapshot(int version, TAgregateRoot aggregate, Guid streamId)
         {
             EventNumber = version;
-            SerializedAggregate = JsonSerializer.Serialize(aggregate);
+            SerializedAggregate = JsonConvert.SerializeObject(aggregate);
             StreamId = streamId;
         }
 
@@ -23,7 +23,7 @@ namespace LCT.Infrastructure.Persistance.SnapshotsStorage
 
         public string SerializedAggregate { get; init; }
         public TAgregateRoot Aggregate
-            => JsonSerializer.Deserialize<TAgregateRoot>(SerializedAggregate);
+            => JsonConvert.DeserializeObject<TAgregateRoot>(SerializedAggregate);
 
     }
 

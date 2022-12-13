@@ -4,9 +4,13 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
 {
     public class TournamentName : Name
     {
-        public TournamentName(string name) : base(name)
+        TournamentName(): base() { }
+        private TournamentName(string name) : base(name)
         {
         }
+
+        public static TournamentName Create(string name)
+            => new (name);
     }
 
 

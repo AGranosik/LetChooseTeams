@@ -100,7 +100,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
 
             if(await snapshotExist.AnyAsync())
             {
-                await snapshotCollection.ReplaceOneAsync<AggregateSnapshot<TAggregateRoot>>(a => a.StreamId == streamId, snapshot);
+                await snapshotCollection.ReplaceOneAsync(a => a.StreamId == streamId, snapshot);
             }
             else
             {

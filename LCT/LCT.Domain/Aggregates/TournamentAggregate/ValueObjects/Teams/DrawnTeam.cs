@@ -1,15 +1,16 @@
 ﻿using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+using LCT.Domain.Common.Aggregates.TournamentAggregate.ValueObjects;
 using LCT.Domain.Common.BaseTypes;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
 {
     public class DrawnTeam : ValueType<DrawnTeam>
     {
-        private DrawnTeam() { }
+        DrawnTeam() { }
         private DrawnTeam(Player player, string teamName)
         {
             Player = player;
-            TeamName = new TeamName(teamName);
+            TeamName = TeamName.Create(teamName);
         }
 
         public static DrawnTeam Create(Player player, string teamName)
@@ -21,7 +22,12 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
 
         public override bool Equals(object obj)
         {
-            throw new NotImplementedException();
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+
+            DrawnTeam other = obj as DrawnTeam;
+            if (other == null) return false;
+            return Player == other.Player && TeamName == other.TeamName;
         }
 
         public Player Player { get; init; }

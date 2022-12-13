@@ -5,6 +5,7 @@ namespace LCT.Domain.Common.Aggregates.TournamentAggregate.ValueObjects
 {
     public abstract class Name: ValueType<Name>
     {
+        protected Name() { }
         public Name(string name)
         {
             Validate(name);

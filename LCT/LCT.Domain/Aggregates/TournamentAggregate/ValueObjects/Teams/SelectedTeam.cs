@@ -1,5 +1,7 @@
 ﻿using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+using LCT.Domain.Common.Aggregates.TournamentAggregate.ValueObjects;
 using LCT.Domain.Common.BaseTypes;
+using Newtonsoft.Json;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
 {
@@ -9,7 +11,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
         private SelectedTeam(Player player, string teamName)
         {
             Player = player;
-            TeamName = new TeamName(teamName);
+            TeamName = TeamName.Create(teamName);
         }
 
         public static SelectedTeam Create(Player player, string teamName)
@@ -18,8 +20,9 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
                 throw new ArgumentNullException(nameof(player));
             return new SelectedTeam(player, teamName);
         }
-
+        [JsonProperty]
         public Player Player { get; private set; }
+        [JsonProperty]
         public TeamName TeamName { get; private set; }
 
         public bool IsAlreadyPicked(SelectedTeam team)
@@ -29,7 +32,12 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
 
         public override bool Equals(object obj)
         {
-            throw new NotImplementedException();
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+
+            SelectedTeam other = obj as SelectedTeam;
+            if (other == null) return false;
+            return Player == other.Player && TeamName == other.TeamName;
         }
     }
 }

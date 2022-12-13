@@ -3,6 +3,7 @@
     public abstract class BaseId<TKey, TType> : ValueType<TKey>
         where TKey : ValueType<TKey>
     {
+        protected BaseId() { }
         protected BaseId(TType id)
         {
             Value = id;

@@ -4,6 +4,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects
 {
     public class TournamentId : BaseId<TournamentId, Guid>
     {
+        TournamentId(): base(){}
         private TournamentId(Guid id) : base(id)
         {
         }

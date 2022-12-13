@@ -12,21 +12,21 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.ValueTypes
         [Test]
         public void TournamentName_CannotBeNull_ThrowsException()
         {
-            var func = () => new TournamentName(null);
+            var func = () => TournamentName.Create(null);
             func.Should().Throw<FieldCannotBeEmptyException>();
         }
 
         [Test]
         public void TournamentName_CannotBeEmpty_ThrowsException()
         {
-            var func = () => new TournamentName(string.Empty);
+            var func = () => TournamentName.Create(string.Empty);
             func.Should().Throw<InvalidFieldException>();
         }
 
         [Test]
         public void TournamentName_CreationSuccess()
         {
-            var func = () => new TournamentName("hehe");
+            var func = () => TournamentName.Create("hehe");
             func.Should().NotThrow<InvalidFieldException>();
         }
 
@@ -41,7 +41,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.ValueTypes
         [Test]
         public void TournamentName_OneIsNull_False()
         {
-            TournamentName name = new TournamentName("hehe");
+            TournamentName name = TournamentName.Create("hehe");
             TournamentName nullName = null;
             (name == nullName).Should().BeFalse();
             (name != nullName).Should().BeTrue();
@@ -52,8 +52,8 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.ValueTypes
         [Test]
         public void TournamentName_DiffValues_NotEqual()
         {
-            var name = new TournamentName("hehe");
-            var name2 = new TournamentName("fiu fiu");
+            var name = TournamentName.Create("hehe");
+            var name2 = TournamentName.Create("fiu fiu");
 
             (name == name2).Should().BeFalse();
             (name != name2).Should().BeTrue();
@@ -62,8 +62,8 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.ValueTypes
         [Test]
         public void TournamentName_SameValues_Equal()
         {
-            var name = new TournamentName("hehe");
-            var name2 = new TournamentName("hehe");
+            var name = TournamentName.Create("hehe");
+            var name2 = TournamentName.Create("hehe");
 
             (name == name2).Should().BeTrue();
             (name != name2).Should().BeFalse();

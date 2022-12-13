@@ -1,5 +1,4 @@
-﻿using System.Text.Json.Serialization;
-using LCT.Core.Shared.Exceptions;
+﻿using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
@@ -9,9 +8,11 @@ using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
+using Newtonsoft.Json;
 
 namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class Tournament : Aggregate<TournamentId>, IVersionable<int>
     {
         public Tournament() : base(null) { }
@@ -20,21 +21,27 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             Limit = limit;
             TournamentName = tournamentName;
         }
+        [JsonProperty]
         public TournamentName TournamentName { get; private set; }
 
+        [JsonProperty]
         private List<Player> _players = new();
         public List<Player> Players => _players;
 
+        [JsonProperty]
         private List<SelectedTeam> _selectedTeams = new();
         public IReadOnlyCollection<SelectedTeam> SelectedTeams => _selectedTeams.AsReadOnly();
 
+        [JsonProperty]
         private List<DrawnTeam> _drawTeams = new();
         public IReadOnlyCollection<DrawnTeam> DrawTeams => _drawTeams.AsReadOnly();
 
+        [JsonProperty]
         public TournamentLimit Limit { get; private set; }
 
         public int NumberOfPlayers => _players.Count;
 
+        [JsonProperty]
         private int _version = 0;
         public int Version => _version;
 
@@ -114,7 +121,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
 
         private void OnSetTournamentName(SetTournamentNameEvent tn)
         {
-            TournamentName = new TournamentName(tn.TournamentName);
+            TournamentName = TournamentName.Create(tn.TournamentName);
             Incerement();
         }
 

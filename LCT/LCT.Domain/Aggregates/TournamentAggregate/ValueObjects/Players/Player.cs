@@ -4,14 +4,18 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players
 {
     public class Player : ValueType<Player>
     {
+        Player()
+        {
+
+        }
         public static Player Create(string name, string surname)
             => new(name, surname);
         public PlayerName Name { get; init; }
         public PlayerSurname Surname { get; init; }
         private Player(string name, string surname)
         {
-            Name = new PlayerName(name);
-            Surname = new PlayerSurname(surname);
+            Name = PlayerName.Create(name);
+            Surname = PlayerSurname.Create(surname);
         }
 
         public override bool Equals(object obj)

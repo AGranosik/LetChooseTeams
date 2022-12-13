@@ -13,28 +13,28 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.ValueTypes
         [Test]
         public void TeamName_CannotBeEmpty_ThrowsException()
         {
-            var func = () => new TeamName(string.Empty);
+            var func = () => TeamName.Create(string.Empty);
             func.Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void TeamName_NotFromAvailableTeam_ThrowsException()
         {
-            var func = () => new TeamName("sss");
+            var func = () => TeamName.Create("sss");
             func.Should().Throw<ArgumentNullException>();
         }
 
         [Test]
         public void TeamName_SelectedFromAvailableTeams_Success()
         {
-            var func = () => new TeamName(TournamentTeamNames.Teams.First());
+            var func = () => TeamName.Create(TournamentTeamNames.Teams.First());
             func.Should().NotThrow<ArgumentNullException>();
         }
 
         [Test]
         public void TeamName_SameEntityComparision_True()
         {
-            var name = new TeamName(TournamentTeamNames.Teams.First());
+            var name = TeamName.Create(TournamentTeamNames.Teams.First());
             (name == name).Should().BeTrue();
         }
 
@@ -51,7 +51,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.ValueTypes
         [Test]
         public void TeamName_OneIsNull_False()
         {
-            TeamName name1 = new TeamName(TournamentTeamNames.Teams.First());
+            TeamName name1 = TeamName.Create(TournamentTeamNames.Teams.First());
             TeamName name2 = null;
 
             (name1 == name2).Should().BeFalse();
@@ -64,16 +64,16 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.ValueTypes
         [Test]
         public void TeamName_SameNameComparision_True()
         {
-            var name = new TeamName(TournamentTeamNames.Teams.First());
-            var name2 = new TeamName(TournamentTeamNames.Teams.First());
+            var name = TeamName.Create(TournamentTeamNames.Teams.First());
+            var name2 = TeamName.Create(TournamentTeamNames.Teams.First());
             (name == name2).Should().BeTrue();
         }
 
         [Test]
         public void TeamName_DiffrentNameComparision_False()
         {
-            var name = new TeamName(TournamentTeamNames.Teams.First());
-            var name2 = new TeamName(TournamentTeamNames.Teams.Last());
+            var name = TeamName.Create(TournamentTeamNames.Teams.First());
+            var name2 = TeamName.Create(TournamentTeamNames.Teams.Last());
             (name == name2).Should().BeFalse();
         }
     }

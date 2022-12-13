@@ -5,9 +5,13 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams
 {
     public class TeamName : Name
     {
-        public TeamName(string name) : base(name)
+        TeamName(): base() { }
+        private TeamName(string name) : base(name)
         {
         }
+
+        public static TeamName Create(string name)
+            => new TeamName(name);
 
         protected override void Validate(string name)
         {

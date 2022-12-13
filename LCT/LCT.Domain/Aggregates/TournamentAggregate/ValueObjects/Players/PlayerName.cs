@@ -4,8 +4,12 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players
 {
     public class PlayerName : Name
     {
-        public PlayerName(string name) : base(name)
+        PlayerName() { }
+        private PlayerName(string name) : base(name)
         {
         }
+
+        public static PlayerName Create(string name)
+            => new PlayerName(name);
     }
 }
