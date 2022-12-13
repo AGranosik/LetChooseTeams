@@ -1,4 +1,6 @@
-﻿namespace LCT.Domain.Common.BaseTypes
+﻿using Newtonsoft.Json;
+
+namespace LCT.Domain.Common.BaseTypes
 {
     public abstract class BaseId<TKey, TType> : ValueType<TKey>
         where TKey : ValueType<TKey>
@@ -8,6 +10,7 @@
         {
             Value = id;
         }
+        [JsonProperty]
         public TType Value { get; private set; }
         public override bool Equals(object obj)
         {

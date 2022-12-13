@@ -2,6 +2,7 @@
 
 namespace LCT.Domain.Common.BaseTypes
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public abstract class Entity<TKey> 
         where TKey : ValueType<TKey>
     {

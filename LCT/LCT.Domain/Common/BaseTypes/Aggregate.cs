@@ -1,9 +1,13 @@
-﻿namespace LCT.Domain.Common.BaseTypes
+﻿using Newtonsoft.Json;
+
+namespace LCT.Domain.Common.BaseTypes
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public abstract class Aggregate<TKey> : Entity<TKey>, IAgregateRoot
         where TKey : ValueType<TKey>
     {
         private readonly IList<DomainEvent> _changes = new List<DomainEvent>();
+        [JsonProperty]
         private int? _lastEventNumber = null;
         protected Aggregate(TKey id) : base(id)
         {
@@ -17,12 +21,13 @@
             _changes.Add(@event);
         }
 
-        public void Load(IEnumerable<DomainEvent> history)
+        public void Load(IEnumerable<DomainEvent> events)
         {
-            _lastEventNumber = history.Max(d => d.EventNumber);
-            foreach (var item in history)
+            _lastEventNumber ??= events.Max(d => d.EventNumber);
+            foreach (var item in events)
             {
                 When(item);
+                SetEventNumber(item);
             }
         }
         public DomainEvent[] GetChanges() => _changes
@@ -35,6 +40,11 @@
 
         private void SetEventNumber(DomainEvent @event)
         {
+            if(@event.EventNumber.HasValue)
+            {
+                _lastEventNumber = @event.EventNumber.Value > _lastEventNumber ? @event.EventNumber.Value : _lastEventNumber;
+                return;
+            }    // find smarter way to do that
             if (!@event.EventNumber.HasValue && !_lastEventNumber.HasValue)
             {
                 _lastEventNumber = _changes.Max(e => e.EventNumber) ?? 1;
