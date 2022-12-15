@@ -1,21 +1,22 @@
 ﻿using LCT.Application.Common.Events;
 using LCT.Application.Common.Interfaces;
+using LCT.Infrastructure.Persistance.ActionsStorage;
 
 namespace LCT.Infrastructure.Repositories.Actions
 {
     public class LctActionRepository<TLctAction, TKey> : ILctActionRepository<TLctAction, TKey>
         where TLctAction : LctAction<TKey>
     {
-        private readonly IPersistanceClient _persistanceClient;
-        public LctActionRepository(IPersistanceClient persistanceClient)
+        private readonly IActionStorageClient _actionPersistanceClient;
+        public LctActionRepository(IActionStorageClient actionPersistanceClient)
         {
-            _persistanceClient = persistanceClient;
+            _actionPersistanceClient = actionPersistanceClient;
         }
 
         public async Task<List<TLctAction>> GetByGroupIdAsync(TKey aggregateId)
-            => await _persistanceClient.GetActionsAsync<TLctAction, TKey>(aggregateId);
+            => await _actionPersistanceClient.GetActionsAsync<TLctAction, TKey>(aggregateId);
 
         public async Task SaveAsync(TLctAction action)
-            => await _persistanceClient.SaveActionAsync(action);
+            => await _actionPersistanceClient.SaveActionAsync(action);
     }
 }

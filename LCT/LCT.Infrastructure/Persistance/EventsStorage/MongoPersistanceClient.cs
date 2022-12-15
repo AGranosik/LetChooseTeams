@@ -3,7 +3,6 @@ using LCT.Application.Common.Interfaces;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Common.BaseTypes;
-using LCT.Domain.Common.Exceptions;
 using LCT.Domain.Common.Interfaces;
 using LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories;
 using LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories.Models;
@@ -64,12 +63,8 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             await Task.WhenAll(tasks.ToArray());
             await session.CommitTransactionAsync();
             if (createSnapshot)
-                await CreateSnapshot<TAggregateRoot>(domainEvents[0].StreamId, latestEventNumber); //it should be somewhere else
+                await CreateSnapshot<TAggregateRoot>(domainEvents[0].StreamId, latestEventNumber);
         }
-
-        public Task SaveActionAsync<T>(T action) where T : LctAction
-            => GetCollection<T>($"{typeof(T).Name}").InsertOneAsync(action);
-        // as interface because action can be stored in different databse
 
         public static string GetStreamName<TAggregate>()
             where TAggregate : IAgregateRoot
@@ -104,7 +99,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             }
             else
             {
-                await snapshotCollection.InsertOneAsync(snapshot); //serialize somehow
+                await snapshotCollection.InsertOneAsync(snapshot);
             }
         }
 
@@ -188,13 +183,6 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
 
             _database.GetCollection<AggregateVersionModel>(GetVersionIndex<TAggregate>())
                 .Indexes.CreateOne(indexModel);
-        }
-
-        public async Task<List<T>> GetActionsAsync<T, TKey>(TKey aggregateId)
-             where T : LctAction<TKey>
-        {
-            var cursorAsync = await GetCollection<T>($"{typeof(T).Name}").FindAsync(t => t.GroupKey.Equals(aggregateId));
-            return await cursorAsync.ToListAsync();
         }
     }
 }

@@ -3,6 +3,7 @@ using LCT.Application.Common.Interfaces;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
+using LCT.Infrastructure.Persistance.ActionsStorage;
 using LCT.Infrastructure.Persistance.EventsStorage;
 using LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories;
 using LCT.Infrastructure.Repositories;
@@ -29,7 +30,7 @@ namespace LCT.Infrastructure
             services.AddSingleton<IPersistanceClient, MongoPersistanceClient>();
             services.AddSingleton(typeof(IAggregateRepository<>), typeof(AggregateRepository<>));
             services.AddSingleton(typeof(ILctActionRepository<,>), typeof(LctActionRepository<,>));
-
+            services.AddSingleton<IActionStorageClient, MongoActionStorageClient>();
             services.AddSingleton<IUniqnessIndexExecutor, UniqnessIndexExecutor>();
             RegisterDomainEvents();
             services.ConfigureFrontendUrl();

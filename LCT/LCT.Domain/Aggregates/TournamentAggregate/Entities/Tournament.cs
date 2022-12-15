@@ -21,7 +21,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             Limit = limit;
             TournamentName = tournamentName;
         }
-        [JsonProperty] // try to get rid of that somehow
+        [JsonProperty]
         public TournamentName TournamentName { get; private set; }
 
         [JsonProperty]

@@ -40,12 +40,13 @@ namespace LCT.Domain.Common.BaseTypes
 
         private void SetEventNumber(DomainEvent @event)
         {
-            if(@event.EventNumber.HasValue)
+            var eventhasNumber = @event.EventNumber.HasValue;
+            if (eventhasNumber)
             {
                 _lastEventNumber = @event.EventNumber.Value > _lastEventNumber ? @event.EventNumber.Value : _lastEventNumber;
                 return;
-            }    // find smarter way to do that
-            if (!@event.EventNumber.HasValue && !_lastEventNumber.HasValue)
+            }
+            if (!_lastEventNumber.HasValue)
             {
                 _lastEventNumber = _changes.Max(e => e.EventNumber) ?? 1;
             }
