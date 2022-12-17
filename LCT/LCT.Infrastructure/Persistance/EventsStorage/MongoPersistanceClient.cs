@@ -1,4 +1,4 @@
-﻿using LCT.Application.Common.Events;
+﻿using System.Linq.Expressions;
 using LCT.Application.Common.Interfaces;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
@@ -118,8 +118,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             }
             else
             {
-                var eventsCursor = await GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>()).FindAsync(s => s.StreamId == streamId && s.EventNumber > latestSnapshot.EventNumber);
-                events = await eventsCursor.ToListAsync();
+                events = await GetEventsAsync<TAggregateRoot>(streamId, latestSnapshot.EventNumber);
             }
 
             if (!snapshotExists && events.Count == 0)
@@ -133,10 +132,14 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
         private IMongoCollection<T> GetCollection<T>(string streamName)
             => _database.GetCollection<T>($"{streamName}");
 
-        public async Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId) // event date filter
+        private async Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId, int? eventNumber = null)
             where T: IAgregateRoot, new()
         {
-            var cursorAsync = await GetCollection<DomainEvent>(GetStreamName<T>()).FindAsync(s => s.StreamId == streamId);
+            Expression<Func<DomainEvent, bool>> expression = s => s.StreamId == streamId;
+            if (eventNumber.HasValue)
+                expression = s => s.StreamId == streamId && s.EventNumber > eventNumber.Value;
+
+            var cursorAsync = await GetCollection<DomainEvent>(GetStreamName<T>()).FindAsync(expression);
             return await cursorAsync.ToListAsync();
         }
 

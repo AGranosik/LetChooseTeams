@@ -33,7 +33,7 @@ namespace LCT.IntegrationTests.Repositories.EventNumber
         {
             AddTableToTruncate(tournamentStream);
             AddTableToTruncate("Tournament_SetTournamentNameEvent_index");
-            SwapSingleton<IHubContext<TournamentHub>>(IHubContextMock.GetMockedHubContext<TournamentHub>());
+            SwapSingleton(IHubContextMock.GetMockedHubContext<TournamentHub>());
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();
@@ -44,7 +44,8 @@ namespace LCT.IntegrationTests.Repositories.EventNumber
         {
             await SaveAsync(_tournament);
 
-            var events = await _client.GetEventsAsync<Tournament>(_tournament.Id.Value);
+            var tournament = await _client.GetAggregate<Tournament>(_tournament.Id.Value);
+            var events = tournament.GetEvents();
             events.Should().NotBeNull()
                 .And.NotBeEmpty();
 
@@ -74,7 +75,8 @@ namespace LCT.IntegrationTests.Repositories.EventNumber
             aggregateFromDb.SetName("fiu fiu");
             await SaveAsync(aggregateFromDb, aggregateFromDb.Version);
 
-            var events = await _client.GetEventsAsync<Tournament>(_tournament.Id.Value);
+            var tournament = await _client.GetAggregate<Tournament>(_tournament.Id.Value);
+            var events = tournament.GetEvents();
             events.Should().NotBeNull()
                 .And.NotBeEmpty();
 

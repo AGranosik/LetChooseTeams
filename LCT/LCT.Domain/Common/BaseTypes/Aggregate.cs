@@ -6,7 +6,7 @@ namespace LCT.Domain.Common.BaseTypes
     public abstract class Aggregate<TKey> : Entity<TKey>, IAgregateRoot
         where TKey : ValueType<TKey>
     {
-        private readonly IList<DomainEvent> _changes = new List<DomainEvent>();
+        private readonly List<DomainEvent> _changes = new List<DomainEvent>();
         [JsonProperty]
         private int? _lastEventNumber = null;
         protected Aggregate(TKey id) : base(id)
@@ -26,10 +26,14 @@ namespace LCT.Domain.Common.BaseTypes
             _lastEventNumber ??= events.Max(d => d.EventNumber);
             foreach (var item in events)
             {
-                When(item);
+                Apply(item);
                 SetEventNumber(item);
             }
         }
+
+        public IReadOnlyCollection<DomainEvent> GetEvents()
+            => _changes.AsReadOnly();
+
         public DomainEvent[] GetChanges() => _changes
             .Where(c => c.Id == Guid.Empty)
             .OrderBy(c => c.TimeStamp)

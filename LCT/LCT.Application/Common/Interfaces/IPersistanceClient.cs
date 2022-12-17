@@ -1,4 +1,4 @@
-﻿using LCT.Application.Common.Events;
+﻿using System.Linq.Expressions;
 using LCT.Domain.Common.BaseTypes;
 
 namespace LCT.Application.Common.Interfaces
@@ -7,9 +7,6 @@ namespace LCT.Application.Common.Interfaces
     {
         Task SaveEventAsync<TAggregate>(DomainEvent[] domainEvent, int version = 0)
             where TAggregate : IAgregateRoot, new();
-
-        Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId)
-            where T: IAgregateRoot, new();
 
         Task<TAggregateRoot> GetAggregate<TAggregateRoot>(Guid streamId)
             where TAggregateRoot : IAgregateRoot, new();

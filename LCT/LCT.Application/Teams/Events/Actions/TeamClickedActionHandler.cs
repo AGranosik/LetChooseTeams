@@ -93,9 +93,6 @@ namespace LCT.Application.Teams.Events.Actions
             return true;
         }
 
-        private bool IsTeamNameEmpty(string teamName)
-            => string.IsNullOrEmpty(teamName);
-
         private bool IsTeamExist(string teamName)
             => TournamentTeamNames.Teams.Any(t => teamName == t);
 
