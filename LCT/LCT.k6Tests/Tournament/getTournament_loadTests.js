@@ -12,7 +12,7 @@ export const options = {
         { duration: '40s', target: 0 },
     ],
     thresholds: {
-        'group_duration{group:::get is ok}': ['avg < 2000'],
+        'group_duration{group:::get is ok}': ['avg < 4000'],
     },
 }
   export default function () {

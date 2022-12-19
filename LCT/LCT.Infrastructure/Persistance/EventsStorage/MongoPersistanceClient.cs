@@ -35,7 +35,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             bool createSnapshot = false;
             var aggregateId = domainEvents[0].StreamId.ToString();
             int latestEventNumber = 0;
-            var tasks = new List<Task>();
+            var tasks = new List<Task>(2);
             using var session = await _mongoClient.StartSessionAsync();
             session.StartTransaction();
             foreach (var domainEvent in domainEvents)

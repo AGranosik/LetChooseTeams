@@ -48,7 +48,7 @@ namespace LCT.Application.Tournaments.Queries
                 Id = tournament.Id.Value,
                 TournamentName = tournament.TournamentName,
                 PlayerLimit = tournament.Limit.Limit,
-                QRCode = await GenerateQrCodeForTournament(tournament.Id),
+                //QRCode = await GenerateQrCodeForTournament(tournament.Id),
                 Version = tournament.Version,
                 Players = tournament.Players.Select(p => new PlayerDto
                 {
