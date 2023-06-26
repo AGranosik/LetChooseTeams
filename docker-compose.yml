@@ -71,7 +71,7 @@ services:
             - Mongo__ConnectionString=mongodb://mongo1
             - Mongo__DatabaseName=Lct_Dev
             - fe__ConnectionString:192.168.1.11:3000
-            - ElasticConfiguration__Uri=http://elasticsearch
+            - ElasticConfiguration__Uri=http://elasticsearch:9200
         ports:
             - 6008:80
 volumes:
