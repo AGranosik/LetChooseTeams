@@ -23,6 +23,7 @@ namespace LCT.Infrastructure
 
         private static IServiceCollection ConfigureMongo(this IServiceCollection services)
         {
+            //storage of events and indexes
             var mongoConfig = services.GetOptions<MongoSettings>("mongo");
             var mongoClient = new MongoClient(mongoConfig.ConnectionString);
             services.AddSingleton(mongoConfig);
@@ -69,6 +70,7 @@ namespace LCT.Infrastructure
 
         private static IServiceCollection ConfigureFrontendUrl(this IServiceCollection services)
         {
+            // generate based on who send request?
             var fe = services.GetOptions<FrontendConfiguration>("fe");
             services.AddSingleton(fe);
 

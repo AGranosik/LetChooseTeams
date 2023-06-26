@@ -25,6 +25,7 @@ namespace LCT.Application.Players.Events
 
         public async Task Handle(PlayerAddedDomainEvent notification, CancellationToken cancellationToken)
         {
+            // difne clients??
             await _hubContext.Clients.All.SendCoreAsync(notification.StreamId.ToString(), new[] {
                 new PlayerAddedHubMessage{
                     TournamentId = notification.StreamId,

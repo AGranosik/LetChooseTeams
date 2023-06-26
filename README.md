@@ -21,3 +21,9 @@ Core architecture of system.
 
 Frontent communicate with Backend via http requests.
 WebSockets added for better responsivness & User experience
+
+
+[] docker
+[] k8s
+[] k6 tests
+[] azure

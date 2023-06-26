@@ -60,6 +60,7 @@ namespace LCT.Api
             Log.Logger = new LoggerConfiguration()
                 .Enrich.FromLogContext()
                 .Enrich.WithMachineName()
+                .WriteTo.Console()
                 .WriteTo.Elasticsearch(ConfigureElasticSink(environment))
                 .Enrich.WithProperty("Environment", environment)
                 .ReadFrom.Configuration(_configuration)
@@ -68,7 +69,7 @@ namespace LCT.Api
 
         private ElasticsearchSinkOptions ConfigureElasticSink(string environment)
         {
-            return new ElasticsearchSinkOptions(new Uri(_configuration["ElasticConfiguration:Uri"]))
+            return new ElasticsearchSinkOptions(new Uri (_configuration["ElasticConfiguration:Uri"]))
             {
                 AutoRegisterTemplate = true,
                 IndexFormat = $"{Assembly.GetExecutingAssembly().GetName().Name.ToLower().Replace(".", "-")}-{environment?.ToLower().Replace(".", "-")}-{DateTime.UtcNow:yyyy-MM}"

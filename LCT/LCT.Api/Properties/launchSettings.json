@@ -1,4 +1,35 @@
-﻿{
+{
+  "profiles": {
+    "Development": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "SNAPSHOT_FRQUENCY": "5"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "https://localhost:6008;http://localhost:5008;"
+    },
+    "Test": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "launchUrl": "swagger",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Test",
+        "SNAPSHOT_FRQUENCY": "5"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://192.168.0.152;http://localhost:5008;"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "publishAllPorts": true,
+      "useSSL": true
+    }
+  },
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "iisSettings": {
     "windowsAuthentication": false,
@@ -6,30 +37,6 @@
     "iisExpress": {
       "applicationUrl": "http://localhost:2821",
       "sslPort": 44302
-    }
-  },
-  "profiles": {
-    "Development": {
-        "commandName": "Project",
-        "dotnetRunMessages": true,
-        "launchBrowser": true,
-        "launchUrl": "swagger",
-        "applicationUrl": "https://localhost:6008;http://localhost:5008;",
-        "environmentVariables": {
-            "ASPNETCORE_ENVIRONMENT": "Development",
-            "SNAPSHOT_FRQUENCY": "5"
-        }
-    },
-    "Test": {
-        "commandName": "Project",
-        "dotnetRunMessages": true,
-        "launchBrowser": true,
-        "launchUrl": "swagger",
-        "applicationUrl": "http://192.168.0.152;http://localhost:5008;",
-        "environmentVariables": {
-            "ASPNETCORE_ENVIRONMENT": "Test",
-            "SNAPSHOT_FRQUENCY": "5"
-        }
     }
   }
 }

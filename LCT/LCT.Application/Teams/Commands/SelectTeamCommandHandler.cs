@@ -12,7 +12,7 @@ namespace LCT.Application.Teams.Commands
         public string Team { get; set; }
     }
 
-    public record SelectTeamMessageDto(Guid playerId, string team);
+    public record SelectTeamMessageDto(Guid PlayerId, string Team);
     public class SelectTeamCommandHandler : IRequestHandler<SelectTeamCommand>
     {
         private readonly IAggregateRepository<Tournament> _repository;
