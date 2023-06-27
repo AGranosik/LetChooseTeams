@@ -37,7 +37,7 @@ namespace LCT.Application.Teams.Events
                 }, cancellationToken);
             }
             catch (Exception ex)
-            {
+            { 
                 Log.Error(ex.Message);
             }
         }
