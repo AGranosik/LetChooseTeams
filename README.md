@@ -1,6 +1,20 @@
 # LetChooseTeams
 
 
+
+#V2
+
+Working on local docker registry
+
+`docker run -d -p 7000:5000 --restart=always --name registry registry:2`
+
+To 'push' to registry
+
+`docker build . -t localhost:7000/my-image`
+
+
+#V1
+
 ##To run project:
 `docker-compose up -d`
 Set api project as startup project
@@ -12,9 +26,6 @@ Set api project as startup project
 # Run tests
 > docker run -i loadimpact/k6 run - <script.js
 
-
-
-#V1
 Core architecture of system.
 
 ![alt text](https://github.com/AGranosik/LetChooseTeams/blob/event-sourcing/images/v1_architectures.png)

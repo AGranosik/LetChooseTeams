@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: lct-api-deployment
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      app: lct-api
+  template:
+    metadata:
+      labels:
+        app: lct-api
+    spec:
+      containers:
+        - name: lct-api
+          image: localhost:7000/lct:1
+          imagePullPolicy: IfNotPresent
+          env:
+          - name: ASPNETCORE_ENVIRONMENT
+            value: Development
+          - name: ASPNETCORE_URLS
+            value: http://+:80
+          - name: Mongo__ConnectionString
+            value: mongodb://mongo1
+          - name: Mongo__DatabaseName
+            value: Lct_Dev
+          - name: fe__ConnectionString
+            value: 192.168.1.11:3000
+          - name: ElasticConfiguration__Uri
+            value: http://elasticsearch:9200
