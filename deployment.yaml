@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: lct-api-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector: 
     matchLabels:
       app: lct-api
@@ -20,7 +20,7 @@ spec:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development
           - name: ASPNETCORE_URLS
-            value: http://+:80
+            value: http://+:80w
           - name: Mongo__ConnectionString
             value: mongodb://mongo1
           - name: Mongo__DatabaseName
