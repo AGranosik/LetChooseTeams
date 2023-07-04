@@ -22,10 +22,10 @@ spec:
           - name: ASPNETCORE_URLS
             value: http://+:80w
           - name: Mongo__ConnectionString
-            value: mongodb://mongo1
+            value: mongodb://172.17.0.1:27021
           - name: Mongo__DatabaseName
             value: Lct_Dev
           - name: fe__ConnectionString
-            value: 192.168.1.11:3000
+            value: 172.17.0.1:3000
           - name: ElasticConfiguration__Uri
-            value: http://elasticsearch:9200
+            value: http://172.17.0.1:9200
