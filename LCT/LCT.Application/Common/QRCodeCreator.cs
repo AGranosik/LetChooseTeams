@@ -1,5 +1,5 @@
-﻿using QRCoder;
-using System.Drawing;
+﻿using System.Drawing;
+using QRCoder;
 
 namespace LCT.Application.Common
 {

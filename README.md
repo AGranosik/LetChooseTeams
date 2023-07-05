@@ -10,13 +10,14 @@ Working on local docker registry
 
 To 'push' to registry
 
-`docker build . -t localhost:7000/my-image`
+`docker build . -t localhost:7000/lct`
+
 
 
 #V1
 
 ##To run project:
-`docker-compose up -d`
+`docker-compose up -d` 
 Set api project as startup project
 `dotnet run`
 
@@ -34,7 +35,9 @@ Frontent communicate with Backend via http requests.
 WebSockets added for better responsivness & User experience
 
 
-[] docker
+[X] docker
 [] k8s
+[] check if code does not need refactor in some places
 [] k6 tests
+[] websockets
 [] azure

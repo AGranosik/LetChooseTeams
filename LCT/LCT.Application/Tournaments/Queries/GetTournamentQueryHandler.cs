@@ -4,6 +4,7 @@ using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using LCT.Domain.Common.Interfaces;
 using MediatR;
+using Serilog;
 
 namespace LCT.Application.Tournaments.Queries
 {
@@ -42,13 +43,13 @@ namespace LCT.Application.Tournaments.Queries
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
             var tournament = await _repository.LoadAsync(request.TournamentId);
-
+            Log.Error("hehe");
             return new TournamentDto
             {
                 Id = tournament.Id.Value,
                 TournamentName = tournament.TournamentName,
                 PlayerLimit = tournament.Limit.Limit,
-                //QRCode = await GenerateQrCodeForTournament(tournament.Id),
+                QRCode = await GenerateQrCodeForTournament(tournament.Id),
                 Version = tournament.Version,
                 Players = tournament.Players.Select(p => new PlayerDto
                 {

@@ -9,7 +9,7 @@
         "SNAPSHOT_FRQUENCY": "5"
       },
       "dotnetRunMessages": true,
-      "applicationUrl": "https://localhost:6008;http://localhost:5008;"
+      "applicationUrl": "https://localhost:6009;http://localhost:5009;"
     },
     "Test": {
       "commandName": "Project",
