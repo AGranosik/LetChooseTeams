@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: lct-api
-          image: localhost:7000/lct:4 
+          image: localhost:7000/lct
           imagePullPolicy: Always
           env:
           - name: ASPNETCORE_ENVIRONMENT

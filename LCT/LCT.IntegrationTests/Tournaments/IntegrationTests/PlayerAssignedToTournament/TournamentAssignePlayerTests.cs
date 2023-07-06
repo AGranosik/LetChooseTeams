@@ -2,17 +2,13 @@
 using LCT.Application.Players.Commands;
 using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
-using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
-using LCT.Domain.Common.BaseTypes;
 using LCT.IntegrationTests.Mocks;
 using MediatR;
-using Microsoft.AspNetCore.SignalR;
 using Moq;
 using NUnit.DFM;
 using NUnit.Framework;
 using System;
-using System.Diagnostics.Contracts;
 using System.Threading;
 using System.Threading.Tasks;
 

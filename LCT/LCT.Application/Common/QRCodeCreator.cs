@@ -1,5 +1,4 @@
-﻿using System.Drawing;
-using QRCoder;
+﻿using QRCoder;
 
 namespace LCT.Application.Common
 {
@@ -16,10 +15,8 @@ namespace LCT.Application.Common
                 throw new ArgumentNullException("qrcode url");
 
             QRCodeData QrCodeInfo = _qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
-            var QrCode = new QRCode(QrCodeInfo);
-            Bitmap QrBitmap = QrCode.GetGraphic(60);
-            byte[] BitmapArray = QrBitmap.BitmapToByteArray();
-            return Convert.ToBase64String(BitmapArray);
+            var qrCode = new Base64QRCode(QrCodeInfo);
+            return qrCode.GetGraphic(60);
         }
     }
 }
