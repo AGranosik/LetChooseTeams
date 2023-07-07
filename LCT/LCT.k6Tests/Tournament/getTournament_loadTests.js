@@ -19,6 +19,7 @@ export const options = {
     var id;
     group('post is success', function(){
         const postResult = postTournament();
+        console.log(postResult);
         id = postResult.body.split('"').join("");
     })
     const url = new URL(_baseTournamentApiUrl);

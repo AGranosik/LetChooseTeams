@@ -20,7 +20,7 @@ export const options = {
             executor: 'shared-iterations',
             startTime: '125s',
             vus: 100,
-            iterations: 800,
+            iterations: 6000,
             maxDuration: '40s'
         },
         per_vu_iter_scernario:{
