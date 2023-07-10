@@ -16,6 +16,13 @@ spec:
         - name: lct-api
           image: localhost:7000/lct
           imagePullPolicy: Always
+          resources:
+            requests:
+                memory: "200Mi"
+                cpu: "150m"
+            limits:
+                memory: "400Mi"
+                cpu: "450m"
           env:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development

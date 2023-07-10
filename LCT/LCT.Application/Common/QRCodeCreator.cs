@@ -16,7 +16,7 @@ namespace LCT.Application.Common
 
             QRCodeData QrCodeInfo = _qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
             var qrCode = new Base64QRCode(QrCodeInfo);
-            return qrCode.GetGraphic(60);
+            return qrCode.GetGraphic(20);
         }
     }
 }

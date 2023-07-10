@@ -4,7 +4,7 @@ import { _basePostParams, _baseTournamentApiUrl } from "../variables.js";
 export function postTournament(limit = 2) {
     const rand = Date.now() * Math.random()
     const payload = JSON.stringify({
-        name: 'performance test' + rand.toString(),
+        name: 'performanceTest' + rand.toString(),
         playerLimit: limit
     });
 

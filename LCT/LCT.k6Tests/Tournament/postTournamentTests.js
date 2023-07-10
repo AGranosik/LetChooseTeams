@@ -2,7 +2,6 @@ import { check, } from 'k6';
 import { _basePostParams, _baseTournamentApiUrl } from '../variables.js';
 import { postTournament } from './common.js';
 export const options = {
-    // 2s for request (post + qr code generation)
     scenarios: {
         ramping_vus_scenario:{
             executor: 'ramping-vus',

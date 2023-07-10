@@ -16,10 +16,9 @@ export const options = {
     },
 }
   export default function () {
-    var id;
+    let id;
     group('post is success', function(){
         const postResult = postTournament();
-        console.log(postResult);
         id = postResult.body.split('"').join("");
     })
     const url = new URL(_baseTournamentApiUrl);

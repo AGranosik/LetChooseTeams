@@ -43,7 +43,6 @@ namespace LCT.Application.Tournaments.Queries
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
             var tournament = await _repository.LoadAsync(request.TournamentId);
-            Log.Error("hehe");
             return new TournamentDto
             {
                 Id = tournament.Id.Value,

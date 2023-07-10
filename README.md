@@ -34,10 +34,13 @@ Core architecture of system.
 Frontent communicate with Backend via http requests.
 WebSockets added for better responsivness & User experience
 
-
+TO DO: 
 [X] docker
-[] k8s
+[X] k8s for local host
+[] k6 tests
 [] check if code does not need refactor in some places
 [] k6 tests
 [] websockets
+[] monitoring
 [] azure
+[] azure monitoring
