@@ -2,6 +2,7 @@
 using LCT.Domain.Common.Interfaces;
 using Microsoft.Extensions.Configuration;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories
@@ -43,7 +44,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories
             Func<IClientSessionHandle, UniqnessModel, Task> func =
                 (session, @event) => new ConcreteUniqnessExecutor<TEvent>(database).ExcecuteAsync(session, @event, collectionName);
             _uniqnessCollections.Add(eventName, func);
-
+            BsonClassMap.RegisterClassMap<TEvent>();
             return this;
         }
     }

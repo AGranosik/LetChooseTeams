@@ -8,7 +8,7 @@ namespace LCT.Application.Common
     }
     public class QRCodeCreator: IQRCodeCreator
     {
-        public static QRCodeGenerator _qrGenerator = new QRCodeGenerator();
+        public static QRCodeGenerator _qrGenerator = new();
         public string Generate(string url)
         {
             if(string.IsNullOrEmpty(url))
@@ -16,7 +16,7 @@ namespace LCT.Application.Common
 
             QRCodeData QrCodeInfo = _qrGenerator.CreateQrCode(url, QRCodeGenerator.ECCLevel.Q);
             var qrCode = new Base64QRCode(QrCodeInfo);
-            return qrCode.GetGraphic(20);
+            return qrCode.GetGraphic(5);
         }
     }
 }
