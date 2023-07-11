@@ -26,7 +26,7 @@ export const options = {
             executor: 'per-vu-iterations',
             startTime: '170s',
             vus: 100,
-            iterations: 25,
+            iterations: 400,
             maxDuration: '55s'
         },
         cosntant_vu_scenario:{

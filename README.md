@@ -37,10 +37,12 @@ WebSockets added for better responsivness & User experience
 TO DO: 
 [X] docker
 [X] k8s for local host
-[] k6 tests
+[X] k6 tests
 [] check if code does not need refactor in some places
 [] k6 tests
+[] env for k6 tests
 [] websockets
+[] documentation
 [] monitoring
 [] azure
 [] azure monitoring

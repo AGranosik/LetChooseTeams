@@ -19,10 +19,10 @@ spec:
           resources:
             requests:
                 memory: "200Mi"
-                cpu: "150m"
+                cpu: "200m"
             limits:
-                memory: "400Mi"
-                cpu: "450m"
+                memory: "600Mi"
+                cpu: "500m"
           env:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development

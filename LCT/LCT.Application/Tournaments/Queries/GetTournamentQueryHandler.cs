@@ -1,4 +1,5 @@
-﻿using LCT.Application.Common;
+﻿using System.Text;
+using LCT.Application.Common;
 using LCT.Application.Common.Configs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
@@ -64,8 +65,11 @@ namespace LCT.Application.Tournaments.Queries
         {
             return await Task.Run(() =>
             {
-                var feLink = "http://" + _feCfg.ConnectionString + "/player/register/" + id.Value;
-                return _qrCodeCreator.Generate(feLink);
+                var stringBuilder = new StringBuilder("http://");
+                stringBuilder.Append(_feCfg.ConnectionString);
+                stringBuilder.Append("/player/register/");
+                stringBuilder.Append(id.Value);
+                return _qrCodeCreator.Generate(stringBuilder.ToString());
             });
         }
     }
