@@ -49,7 +49,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
 
                 if (domainEvent is IUniqness)
                 {
-                    await _uniqnessExecutor.ExcecuteAsync(session, domainEvent);
+                    tasks.Add(_uniqnessExecutor.ExcecuteAsync(session, domainEvent));
                 }
             }
 
@@ -62,8 +62,9 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
 
             await Task.WhenAll(tasks.ToArray());
             await session.CommitTransactionAsync();
+
             if (createSnapshot)
-                await CreateSnapshot<TAggregateRoot>(domainEvents[0].StreamId, latestEventNumber);
+                CreateSnapshotAsync<TAggregateRoot>(domainEvents[0].StreamId, latestEventNumber);
         }
 
         public static string GetStreamName<TAggregate>()
@@ -83,10 +84,10 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
                 .InsertOneAsync(session, new AggregateVersionModel(aggregateId, version));
         }
 
-        private async Task CreateSnapshot<TAggregateRoot>(Guid streamId, int eventNumber)
+        private async Task CreateSnapshotAsync<TAggregateRoot>(Guid streamId, int eventNumber)
             where TAggregateRoot : IAgregateRoot, new()
         {
-            var aggregate = await GetAggregate<TAggregateRoot>(streamId);
+            var aggregate = await GetAggregateAsync<TAggregateRoot>(streamId);
             var snapshot = new AggregateSnapshot<TAggregateRoot>(eventNumber, aggregate, streamId);
             var snapshotCollection = GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>());
 
@@ -103,7 +104,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             }
         }
 
-        public async Task<TAggregateRoot> GetAggregate<TAggregateRoot>(Guid streamId)
+        public async Task<TAggregateRoot> GetAggregateAsync<TAggregateRoot>(Guid streamId)
             where TAggregateRoot : IAgregateRoot, new()
         {
             var latestsSnapshotCursor = await GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())

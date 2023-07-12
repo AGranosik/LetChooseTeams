@@ -8,7 +8,7 @@ namespace LCT.Application.Common.Interfaces
         Task SaveEventAsync<TAggregate>(DomainEvent[] domainEvent, int version = 0)
             where TAggregate : IAgregateRoot, new();
 
-        Task<TAggregateRoot> GetAggregate<TAggregateRoot>(Guid streamId)
+        Task<TAggregateRoot> GetAggregateAsync<TAggregateRoot>(Guid streamId)
             where TAggregateRoot : IAgregateRoot, new();
     }
 

@@ -40,9 +40,9 @@ TO DO:
 [X] k6 tests
 [] check if code does not need refactor in some places
 [] k6 tests
-[] env for k6 tests
+[] environment for k6 tests
 [] websockets
 [] documentation
-[] monitoring
+[] monitoring for memory leaks
 [] azure
 [] azure monitoring

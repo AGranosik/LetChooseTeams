@@ -69,6 +69,7 @@ namespace LCT.Application.Tournaments.Queries
                 stringBuilder.Append(_feCfg.ConnectionString);
                 stringBuilder.Append("/player/register/");
                 stringBuilder.Append(id.Value);
+
                 return _qrCodeCreator.Generate(stringBuilder.ToString());
             });
         }

@@ -44,7 +44,7 @@ namespace LCT.IntegrationTests.Repositories.EventNumber
         {
             await SaveAsync(_tournament);
 
-            var tournament = await _client.GetAggregate<Tournament>(_tournament.Id.Value);
+            var tournament = await _client.GetAggregateAsync<Tournament>(_tournament.Id.Value);
             var events = tournament.GetEvents();
             events.Should().NotBeNull()
                 .And.NotBeEmpty();
@@ -75,7 +75,7 @@ namespace LCT.IntegrationTests.Repositories.EventNumber
             aggregateFromDb.SetName("fiu fiu");
             await SaveAsync(aggregateFromDb, aggregateFromDb.Version);
 
-            var tournament = await _client.GetAggregate<Tournament>(_tournament.Id.Value);
+            var tournament = await _client.GetAggregateAsync<Tournament>(_tournament.Id.Value);
             var events = tournament.GetEvents();
             events.Should().NotBeNull()
                 .And.NotBeEmpty();
