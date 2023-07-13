@@ -21,6 +21,7 @@ namespace LCT.IntegrationTests.Tournaments.DomainTests.Services
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();
+            AddTableToTruncate("Tournament_SetTournamentNameEvent_index");
         }
         [Test]
         public void TeamsCannotBeTheSameAsSelected()

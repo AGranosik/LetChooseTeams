@@ -35,7 +35,9 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             bool createSnapshot = false;
             var aggregateId = domainEvents[0].StreamId.ToString();
             int latestEventNumber = 0;
-            var tasks = new List<Task>(2);
+            var tasks = new List<Task>(3);
+
+
             using var session = await _mongoClient.StartSessionAsync();
             session.StartTransaction();
             foreach (var domainEvent in domainEvents)
@@ -50,6 +52,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
                 if (domainEvent is IUniqness)
                 {
                     tasks.Add(_uniqnessExecutor.ExcecuteAsync(session, domainEvent));
+                    //await _uniqnessExecutor.ExcecuteAsync(session, domainEvent);
                 }
             }
 

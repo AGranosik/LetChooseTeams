@@ -42,6 +42,7 @@ TO DO:
 [] k6 tests
 [] environment for k6 tests
 [] websockets
+[] publish fallbacks
 [] documentation
 [] monitoring for memory leaks
 [] azure

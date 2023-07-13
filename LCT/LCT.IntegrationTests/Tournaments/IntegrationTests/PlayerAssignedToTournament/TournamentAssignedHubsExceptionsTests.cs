@@ -21,7 +21,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.PlayerAssignedToTour
         {
             _hubContextMock.Setup(h => h.Clients)
                 .Throws<Exception>();
-
+            AddTableToTruncate("Tournament_SetTournamentNameEvent_index");
             SwapSingleton(_hubContextMock.Object);
             Environment("Development")
                 .ProjectName("LCT.Api")
