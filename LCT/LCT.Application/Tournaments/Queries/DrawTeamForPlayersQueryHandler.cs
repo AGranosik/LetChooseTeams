@@ -11,6 +11,7 @@ namespace LCT.Application.Tournaments.Queries
     }
 
     public record DrawnTeamDto(string name, string surname, string teamName);
+    // should be command
     public class DrawTeamForPlayersQueryHandler : IRequestHandler<DrawTeamForPlayersQuery, List<DrawnTeamDto>>
     {
         private readonly ITournamentDomainService _tournamentDomainService;

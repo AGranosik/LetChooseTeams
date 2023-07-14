@@ -51,8 +51,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
 
                 if (domainEvent is IUniqness)
                 {
-                    tasks.Add(_uniqnessExecutor.ExcecuteAsync(session, domainEvent));
-                    //await _uniqnessExecutor.ExcecuteAsync(session, domainEvent);
+                    await _uniqnessExecutor.ExcecuteAsync(session, domainEvent);
                 }
             }
 

@@ -38,8 +38,8 @@ TO DO:
 [X] docker
 [X] k8s for local host
 [X] k6 tests
-[] check if code does not need refactor in some places
-[] k6 tests
+[X] check if code does not need refactor in some places
+[X] k6 tests
 [] environment for k6 tests
 [] websockets
 [] publish fallbacks

@@ -122,7 +122,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
         private void OnSetTournamentName(SetTournamentNameEvent tn)
         {
             TournamentName = TournamentName.Create(tn.TournamentName);
-            Incerement();
+            VersionIncrement();
         }
 
         private void OnTeamDrawn(DrawTeamEvent dt)
@@ -147,7 +147,7 @@ namespace LCT.Domain.Aggregates.TournamentAggregate.Entities
             Id = TournamentId.Create(tc.StreamId);
         }
 
-        public void Incerement()
+        public void VersionIncrement()
             => _version++;
     }
 }

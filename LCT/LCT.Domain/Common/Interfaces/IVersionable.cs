@@ -3,7 +3,7 @@
     public interface IVersionable<TVersion> : IVersionable
     {
         int Version { get; }
-        void Incerement();
+        void VersionIncrement();
     }
 
     public interface IVersionable
