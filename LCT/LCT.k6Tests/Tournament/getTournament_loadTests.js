@@ -19,14 +19,22 @@ export const options = {
     let id;
     group('post is success', function(){
         const postResult = postTournament();
+        check(postResult, {
+            'post is ok': result => result.status === 200
+        })
+        
+        check(postResult.body, {
+            'id is not null': body => body !== null
+        })
         id = postResult.body.split('"').join("");
     })
     const url = new URL(_baseTournamentApiUrl);
     url.searchParams.append('Id', id);
     group('get is ok', function(){
         const result = http.get(url.toString());
+
         check(result, {
-            'is status 200:': (r) => r.status == 200
+            'is status 200:': (r) => r.status === 200
         });
     })
 }
