@@ -43,13 +43,14 @@ namespace LCT.Application.Tournaments.Queries
         }
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
+            var generationQrCodeTask = GenerateQrCodeForTournament(request.TournamentId);
             var tournament = await _repository.LoadAsync(request.TournamentId);
             return new TournamentDto
             {
                 Id = tournament.Id.Value,
                 TournamentName = tournament.TournamentName,
                 PlayerLimit = tournament.Limit.Limit,
-                QRCode = await GenerateQrCodeForTournament(tournament.Id),
+                QRCode = await generationQrCodeTask,
                 Version = tournament.Version,
                 Players = tournament.Players.Select(p => new PlayerDto
                 {
@@ -61,14 +62,14 @@ namespace LCT.Application.Tournaments.Queries
             };
         }
 
-        private async Task<string> GenerateQrCodeForTournament(TournamentId id)
+        private async Task<string> GenerateQrCodeForTournament(Guid id)
         {
             return await Task.Run(() =>
             {
                 var stringBuilder = new StringBuilder("http://");
                 stringBuilder.Append(_feCfg.ConnectionString);
                 stringBuilder.Append("/player/register/");
-                stringBuilder.Append(id.Value);
+                stringBuilder.Append(id);
 
                 return _qrCodeCreator.Generate(stringBuilder.ToString());
             });

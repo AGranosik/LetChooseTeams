@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: lct-api-deployment
 spec:
-  replicas: 2
+  replicas: 3
   selector: 
     matchLabels:
       app: lct-api
@@ -21,8 +21,8 @@ spec:
                 memory: "200Mi"
                 cpu: "200m"
             limits:
-                memory: "600Mi"
-                cpu: "700m"
+                memory: "300Mi"
+                cpu: "400m"
           env:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development
