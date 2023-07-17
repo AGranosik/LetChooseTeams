@@ -126,6 +126,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
 
             if (!snapshotExists && events.Count == 0)
                 return default;
+
             var aggregate = latestSnapshot is null ? new TAggregateRoot() : latestSnapshot.Aggregate;
             aggregate.Load(events);
 
@@ -135,12 +136,10 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
         private IMongoCollection<T> GetCollection<T>(string streamName)
             => _database.GetCollection<T>($"{streamName}");
 
-        private async Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId, int? eventNumber = null)
+        private async Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId, int eventNumber = -1)
             where T: IAgregateRoot, new()
         {
-            Expression<Func<DomainEvent, bool>> expression = s => s.StreamId == streamId;
-            if (eventNumber.HasValue)
-                expression = s => s.StreamId == streamId && s.EventNumber > eventNumber.Value;
+            Expression<Func<DomainEvent, bool>> expression = s => s.StreamId == streamId && s.EventNumber > eventNumber;
 
             var cursorAsync = await GetCollection<DomainEvent>(GetStreamName<T>()).FindAsync(expression);
             return await cursorAsync.ToListAsync();

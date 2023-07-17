@@ -25,6 +25,7 @@ namespace LCT.Api
                 .AddApplication();
 
             services.AddSignalR();
+            Console.WriteLine("Configuration finished.");
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

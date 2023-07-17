@@ -34,6 +34,8 @@ Core architecture of system.
 Frontent communicate with Backend via http requests.
 WebSockets added for better responsivness & User experience
 
+
+probably solutions isnt loaded properly in k8s??
 TO DO: 
 [X] docker
 [X] k8s for local host
