@@ -25,9 +25,7 @@ namespace LCT.Application.Teams.Events
         }
         public async Task Handle(TeamSelectedDomainEvent notification, CancellationToken cancellationToken)
         {
-            // send it to redis
-            // then redis propagates it to every consumer who check if he has opened connection for that message
-            // if does then send it via webscokets
+            // fe -> ??? gdzie strzelac?? -> redis -> queue 'handler' -> publish to all connected clients
             try
             {
                 await _hubContext.Clients.All.SendCoreAsync(notification.StreamId.ToString(), new[] { 
