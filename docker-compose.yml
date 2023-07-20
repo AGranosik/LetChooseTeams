@@ -59,7 +59,14 @@ services:
         ports:
           - 27017
         restart: always
-        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
+        entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]    
+    redis:
+        container_name: basic-redis-chat
+        image: redis    
+        restart: always
+        command: redis-server --appendonly yes --requirepass 123456    
+        ports:
+          - "6379:6379"
     backend-api:
         container_name: lct-backend-api
         build: ./LCT
