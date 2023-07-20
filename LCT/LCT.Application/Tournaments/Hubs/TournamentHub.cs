@@ -1,6 +1,7 @@
 ﻿using LCT.Application.Teams.Events.Actions;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using Serilog;
 
 namespace LCT.Application.Tournaments.Hubs
 {
@@ -12,7 +13,23 @@ namespace LCT.Application.Tournaments.Hubs
             _mediator = mediator;
         }
         public async Task TeamClicked(TeamClickedAction action)
-            => await _mediator.Publish(action);
-            
+        {
+            Log.Warning("wybrano: " + Context.ConnectionId);
+            await _mediator.Publish(action);
+        }
+
+        public override async Task OnConnectedAsync()
+        {
+            Log.Warning("connected: " + Context.ConnectionId);
+            Log.Warning("pod: " + Environment.MachineName);
+            await base.OnConnectedAsync();
+        }
+
+        public override async Task OnDisconnectedAsync(Exception ex)
+        {
+            Log.Warning("disconnected: " + Context.ConnectionId);
+            await base.OnDisconnectedAsync(ex);
+        }
+
     }
 }

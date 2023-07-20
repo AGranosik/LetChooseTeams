@@ -48,3 +48,5 @@ TO DO:
 [] monitoring for memory leaks
 [] azure
 [] azure monitoring
+
+Webscokets -> connection cannot bisnt hold via load balancer so how is it gonna be sent with pub/sub anyway??
