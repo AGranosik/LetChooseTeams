@@ -17,7 +17,7 @@ namespace LCT.Api.Configuration
             {
                 await _requestDelegate(context);
             }
-            catch (Exception ex)
+            catch (Exception ex) 
             {
                 Log.Error(ex, ex.Message);
                 context.Response.StatusCode = 400;
