@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: lct-api-deployment
 spec:
-  replicas: 5
+  replicas: 4
   selector: 
     matchLabels:
       app: lct-api
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: lct-api
-          image: localhost:7000/lct
+          image: localhost:7000/lct:latest
           imagePullPolicy: Always
           resources:
             requests:

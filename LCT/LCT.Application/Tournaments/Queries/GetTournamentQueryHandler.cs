@@ -2,10 +2,8 @@
 using LCT.Application.Common;
 using LCT.Application.Common.Configs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
-using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects;
 using LCT.Domain.Common.Interfaces;
 using MediatR;
-using Serilog;
 
 namespace LCT.Application.Tournaments.Queries
 {
