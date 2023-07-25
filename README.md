@@ -42,11 +42,12 @@ TO DO:
 [X] k6 tests
 [-] environment for k6 tests
 [] websockets
+[] health chcecks
+[] api versioning
 [] publish fallbacks
 [] true cqrs
 [] documentation
 [] monitoring for memory leaks
+???[]action microservice
 [] azure
 [] azure monitoring
-
-Webscokets -> connection cannot bisnt hold via load balancer so how is it gonna be sent with pub/sub anyway??
