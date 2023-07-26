@@ -5,6 +5,7 @@ using Serilog;
 
 namespace LCT.Application.Tournaments.Hubs
 {
+    //should be infrastructure
     public class TournamentHub : Hub
     {
         private readonly IMediator _mediator;

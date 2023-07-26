@@ -1,0 +1,20 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cafe-ingress
+spec:
+  tls:
+  - hosts:
+    - lct.com
+    secretName: lct-secret
+  rules:
+  - host: cafe.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: lct-api-service
+            port:
+              number: 80
