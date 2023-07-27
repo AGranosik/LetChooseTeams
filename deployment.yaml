@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: lct-api-deployment
 spec:
-  replicas: 3
+  replicas: 5
   selector: 
     matchLabels:
       app: lct-api
@@ -36,3 +36,10 @@ spec:
             value: 172.17.0.1:3000
           - name: ElasticConfiguration__Uri
             value: http://172.17.0.1:9200
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: lct-api
+            topologyKey: kubernetes.io/hostname

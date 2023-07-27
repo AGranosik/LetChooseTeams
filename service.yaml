@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: lct-api-service
+  name: lct-api
   annotations:
       service.beta.kubernetes.io/do-loadbalancer-protocol: "http"
       service.beta.kubernetes.io/do-loadbalancer-sticky-sessions-type: "cookies"
@@ -14,6 +14,7 @@ spec:
   sessionAffinity: ClientIP
   externalTrafficPolicy: Local
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 6008
       targetPort: 80
