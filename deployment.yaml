@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: lct-api-deployment
+  name: lct-api
 spec:
   replicas: 5
   selector: 
@@ -13,7 +13,7 @@ spec:
         app: lct-api
     spec:
       containers:
-        - name: lct-api
+        - name: lct
           image: localhost:7000/lct:latest
           imagePullPolicy: Always
           resources:
@@ -38,8 +38,8 @@ spec:
             value: http://172.17.0.1:9200
       affinity:
         podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-          - labelSelector:
-              matchLabels:
-                app: lct-api
-            topologyKey: kubernetes.io/hostname
+            requiredDuringSchedulingIgnoredDuringExecution:
+                - labelSelector:
+                    matchLabels:
+                        app: lct
+                  topologyKey: kubernetes.io/hostname

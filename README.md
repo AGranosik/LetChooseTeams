@@ -34,6 +34,7 @@ Core architecture of system.
 Frontent communicate with Backend via http requests.
 WebSockets added for better responsivness & User experience
 
+trop to moze implementacja po stronie reacta by strzelał jednym połączeniem.
 TO DO: 
 [X] docker
 [X] k8s for local host
