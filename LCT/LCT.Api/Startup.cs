@@ -49,7 +49,6 @@ namespace LCT.Api
             app.UseHttpsRedirection();
             app.UseAuthorization();
 
-            //https://learn.microsoft.com/en-us/aspnet/core/signalr/configuration?view=aspnetcore-7.0&tabs=dotnet#configure-additional-options
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
