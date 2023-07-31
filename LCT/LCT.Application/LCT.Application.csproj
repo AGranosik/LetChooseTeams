@@ -19,8 +19,4 @@
     <ProjectReference Include="..\LCT.Domain\LCT.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Common\UniqnessModels\" />
-  </ItemGroup>
-
 </Project>

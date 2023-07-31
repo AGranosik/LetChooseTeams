@@ -59,6 +59,8 @@ namespace LCT.Application.Teams.Events.Actions
             try
             {
                 tournament = await _aggregateRepository.LoadAsync(action.GroupKey);
+                // the should not be try catch
+                // 
             }
             catch(Exception ex) { }
 

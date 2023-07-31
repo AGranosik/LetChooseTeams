@@ -25,7 +25,6 @@ namespace LCT.Application.Teams.Events
         }
         public async Task Handle(TeamSelectedDomainEvent notification, CancellationToken cancellationToken)
         {
-            // fe -> ??? gdzie strzelac?? -> redis -> queue 'handler' -> publish to all connected clients
             try
             {
                 await _hubContext.Clients.All.SendCoreAsync(notification.StreamId.ToString(), new[] { 

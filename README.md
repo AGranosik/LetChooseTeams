@@ -43,6 +43,7 @@ TO DO:
 [X] k6 tests
 [-] environment for k6 tests
 [X] websockets
+[] websockets should be in infra layer??
 [] Redis
 [] health chcecks
 [] api versioning
@@ -50,6 +51,6 @@ TO DO:
 [] true cqrs
 [] documentation
 [] monitoring for memory leaks
-???[]action microservice
 [] azure
 [] azure monitoring
+???[]action microservice
