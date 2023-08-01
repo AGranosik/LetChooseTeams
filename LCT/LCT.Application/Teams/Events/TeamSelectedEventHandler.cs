@@ -1,8 +1,7 @@
 ﻿using LCT.Application.Common.Events;
-using LCT.Application.Tournaments.Hubs;
+using LCT.Application.Common.Interfaces;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using MediatR;
-using Microsoft.AspNetCore.SignalR;
 using Serilog;
 
 namespace LCT.Application.Teams.Events
@@ -18,16 +17,16 @@ namespace LCT.Application.Teams.Events
 
     public class TeamSelectedEventHandler : INotificationHandler<TeamSelectedDomainEvent>
     {
-        private readonly IHubContext<TournamentHub> _hubContext;
-        public TeamSelectedEventHandler(IHubContext<TournamentHub> hubContext)
+        private readonly IClientCommunicationService _clientCommunicationService;
+        public TeamSelectedEventHandler(IClientCommunicationService clientCommunication)
         {
-            _hubContext = hubContext;
+            _clientCommunicationService = clientCommunication;
         }
         public async Task Handle(TeamSelectedDomainEvent notification, CancellationToken cancellationToken)
         {
             try
             {
-                await _hubContext.Clients.All.SendCoreAsync(notification.StreamId.ToString(), new[] { 
+                await _clientCommunicationService.SendAsync(notification.StreamId.ToString(), new[] { 
                     new TeamSelectedHubMessage{
                         PlayerName = notification.Player.Name,
                         PlayerSurname = notification.Player.Surname,

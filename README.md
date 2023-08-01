@@ -44,6 +44,7 @@ TO DO:
 [-] environment for k6 tests
 [X] websockets
 [] websockets should be in infra layer??
+[] Cancellation token
 [] Redis
 [] health chcecks
 [] api versioning

@@ -1,12 +1,9 @@
 ﻿using LCT.Application.Common.Events;
 using LCT.Application.Common.Interfaces;
-using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
-using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 using LCT.Domain.Common.Interfaces;
 using MediatR;
-using Microsoft.AspNetCore.SignalR;
 using Serilog;
 
 namespace LCT.Application.Teams.Events.Actions
@@ -33,12 +30,12 @@ namespace LCT.Application.Teams.Events.Actions
     public class TeamClickedActionHandler : INotificationHandler<TeamClickedAction>
     {
         private readonly ILctActionRepository<TeamClickedAction, Guid> _repository;
-        private readonly IHubContext<TournamentHub> _hub;
+        private readonly IClientCommunicationService _clientCommunicationService;
         private readonly IAggregateRepository<Tournament> _aggregateRepository;
-        public TeamClickedActionHandler(ILctActionRepository<TeamClickedAction, Guid> repository, IHubContext<TournamentHub> hub, IAggregateRepository<Tournament> aggregateRepository)
+        public TeamClickedActionHandler(ILctActionRepository<TeamClickedAction, Guid> repository, IClientCommunicationService clientCommunicationService, IAggregateRepository<Tournament> aggregateRepository)
         {
             _repository = repository;
-            _hub = hub;
+            _clientCommunicationService = clientCommunicationService;
             _aggregateRepository = aggregateRepository;
         }
         public async Task Handle(TeamClickedAction notification, CancellationToken cancellationToken)
@@ -47,10 +44,10 @@ namespace LCT.Application.Teams.Events.Actions
             if (!saved)
                 return;
             var allClickedTeams = await GetLatesClickedTeams(notification);
-            await _hub.Clients.All.SendCoreAsync(notification.GroupKey.ToString(), new[]
+            await _clientCommunicationService.SendAsync(notification.GroupKey.ToString(), new[]
             {
                 allClickedTeams
-            });
+            }, cancellationToken);
         }
 
         private async Task<TeamClickedEvent> GetLatesClickedTeams(TeamClickedAction action)

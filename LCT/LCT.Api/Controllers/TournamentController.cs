@@ -18,10 +18,6 @@ namespace LCT.Api.Controllers
         public async Task<IActionResult> Get(Guid Id)
             => Ok(await _mediator.Send(new GetTournamentQuery {  TournamentId = Id }));
 
-        [HttpGet("test")]
-        public async Task<IActionResult> Get2(Guid Id)
-            => Ok(await _mediator.Send(new TestQuery { Id = Id }));
-
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateTournamentCommand request)
         => Ok(await _mediator.Send(request));

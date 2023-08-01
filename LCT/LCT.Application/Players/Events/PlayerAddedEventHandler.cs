@@ -1,5 +1,5 @@
 ﻿using LCT.Application.Common.Events;
-using LCT.Application.Tournaments.Hubs;
+using LCT.Application.Common.Interfaces;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
@@ -17,22 +17,20 @@ namespace LCT.Application.Players.Events
     //where messages should be handled?
     public class PlayerAddedEventHandler : INotificationHandler<PlayerAddedDomainEvent>
     {
-        private readonly IHubContext<TournamentHub> _hubContext;
+        private readonly IClientCommunicationService _clientCommuncationService;
 
-        public PlayerAddedEventHandler(IHubContext<TournamentHub> hubContext)
+        public PlayerAddedEventHandler(IClientCommunicationService clientCommuncationService)
         {
-            _hubContext = hubContext;
+            _clientCommuncationService = clientCommuncationService;
         }
 
         public async Task Handle(PlayerAddedDomainEvent notification, CancellationToken cancellationToken)
         {
-            // difne clients??
-            await _hubContext.Clients.All.SendCoreAsync(notification.StreamId.ToString(), new[] {
-                new PlayerAddedHubMessage{
-                    TournamentId = notification.StreamId,
-                    Name  = notification.Name,
-                    Surname = notification.Surname
-                }
+            await _clientCommuncationService.SendAsync(notification.StreamId.ToString(), new PlayerAddedHubMessage
+            {
+                TournamentId = notification.StreamId,
+                Name = notification.Name,
+                Surname = notification.Surname
             }, cancellationToken);
         }
     }

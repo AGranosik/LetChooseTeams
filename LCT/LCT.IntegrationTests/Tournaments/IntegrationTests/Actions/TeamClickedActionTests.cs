@@ -74,12 +74,12 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
                 Team = TournamentTeamNames.Teams.First()
             };
 
-            var hubMocks = HubMocks();
-            await ActionHandle(action, hubMocks.Item2.Object);
+            var clientCommunicationServiceMock = new Mock<IClientCommunicationService>();
+            await ActionHandle(action, clientCommunicationServiceMock.Object);
             var actions = await GetSavedActions(actionGroupKey);
             actions.Should().NotBeNull();
             actions.Should().NotBeEmpty();
-            hubMocks.Item1.Verify(c => c.SendCoreAsync(It.IsAny<string>(), It.Is<object?[]>(x => x.Length == 1), CancellationToken.None));
+            clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object?[]>(x => x.Length == 1), CancellationToken.None));
         }
 
         [Test]
@@ -87,25 +87,25 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
         {
             var tournament = await CreateCompleteTournament(3, 3);
             var actionGroupKey = tournament.Id.Value;
-            var hubMocks = HubMocks();
+            var clientCommunicationServiceMock = new Mock<IClientCommunicationService>();
 
             var actions = CreateActions(3, actionGroupKey);
 
             for(int i = 0; i < 2; i++)
-                await ActionHandle(actions[i], hubMocks.Item2.Object);
+                await ActionHandle(actions[i], clientCommunicationServiceMock.Object);
 
             var firstPLayer = tournament.Players.First();
             tournament.SelectTeam(firstPLayer.Name, firstPLayer.Surname, TournamentTeamNames.Teams[0]);
             await SaveAsync(tournament);
 
-            hubMocks = HubMocks();
-            await ActionHandle(actions[2], hubMocks.Item2.Object);
+            clientCommunicationServiceMock = new Mock<IClientCommunicationService>();
+            await ActionHandle(actions[2], clientCommunicationServiceMock.Object);
             var actionsFromDB = await GetSavedActions(actionGroupKey);
             actionsFromDB.Should().NotBeNull();
             actionsFromDB.Count.Should().Be(3);
             var clickedTeam = TournamentTeamNames.Teams.Last();
             actionsFromDB.Any(a => a.Team == clickedTeam).Should().BeTrue();
-            hubMocks.Item1.Verify(c => c.SendCoreAsync(It.IsAny<string>(), It.Is<object?[]>(x => ((TeamClickedEvent)x[0]).ClickedTeams.Count == 2 && !((TeamClickedEvent)x[0]).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams.Last())), CancellationToken.None));
+            clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object?[]>(x => ((TeamClickedEvent)x[0]).ClickedTeams.Count == 2 && !((TeamClickedEvent)x[0]).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams.Last())), CancellationToken.None));
 
         }
 
@@ -114,22 +114,22 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
         {
             var tournament = await CreateCompleteTournament(3, 3);
             var actionGroupKey = tournament.Id.Value;
-            var hubMocks = HubMocks();
+            var clientCommunicationServiceMock = new Mock<IClientCommunicationService>();
             var actions = CreateActions(3, actionGroupKey);
 
             for (int i = 0; i < 2; i++)
             {
                 var action = actions[i];
-                await ActionHandle(action, hubMocks.Item2.Object);
+                await ActionHandle(action, clientCommunicationServiceMock.Object);
                 tournament.SelectTeam(action.Name, action.Surname, TournamentTeamNames.Teams[i]);
             }
             await SaveAsync(tournament);
-            hubMocks = HubMocks();
-            await ActionHandle(actions[2], hubMocks.Item2.Object);
+            clientCommunicationServiceMock = new Mock<IClientCommunicationService>();
+            await ActionHandle(actions[2], clientCommunicationServiceMock.Object);
             var actionsFromDB = await GetSavedActions(actionGroupKey);
             actionsFromDB.Should().NotBeNull();
             actionsFromDB.Count.Should().Be(3);
-            hubMocks.Item1.Verify(c => c.SendCoreAsync(It.IsAny<string>(), It.Is<object?[]>(x => ((TeamClickedEvent)x[0]).ClickedTeams.Count == 1 && ((TeamClickedEvent)x[0]).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 3])), CancellationToken.None));
+            clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object?[]>(x => ((TeamClickedEvent)x[0]).ClickedTeams.Count == 1 && ((TeamClickedEvent)x[0]).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 3])), CancellationToken.None));
         }
 
         private List<TeamClickedAction> CreateActions(int numberOfActions, Guid actionGroupKey)
@@ -166,25 +166,12 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
         private Player CreatePlayerForTest(int playerNumer)
             => Player.Create(playerNumer.ToString(), playerNumer.ToString());
 
-        private Tuple<Mock<IClientProxy>, IMock<IHubContext<TournamentHub>>> HubMocks()
-        {
-            var hubContext = new Mock<IHubContext<TournamentHub>>();
-            var hubClients = new Mock<IHubClients>();
-            var clientProxy = new Mock<IClientProxy>();
-            hubClients.Setup(hc => hc.All)
-                .Returns(clientProxy.Object);
-            hubContext.Setup(hc => hc.Clients)
-                .Returns(hubClients.Object);
-
-            return new Tuple<Mock<IClientProxy>, IMock<IHubContext<TournamentHub>>>(clientProxy, hubContext);
-        }
-
-        private async Task ActionHandle(TeamClickedAction notification, IHubContext<TournamentHub> hub = null)
+        private async Task ActionHandle(TeamClickedAction notification, IClientCommunicationService communcationService = null)
         {
             var repo = GetLctActionRepository();
-            hub ??= IHubContextMock.GetMockedHubContext<TournamentHub>();
+            communcationService ??= new Mock<IClientCommunicationService>().Object;
             var aggregateRepository = _scope.ServiceProvider.GetRequiredService<IAggregateRepository<Tournament>>();
-            var actionHandler = new TeamClickedActionHandler(repo, hub, aggregateRepository);
+            var actionHandler = new TeamClickedActionHandler(repo, communcationService, aggregateRepository);
             await actionHandler.Handle(notification, CancellationToken.None);
         }
 

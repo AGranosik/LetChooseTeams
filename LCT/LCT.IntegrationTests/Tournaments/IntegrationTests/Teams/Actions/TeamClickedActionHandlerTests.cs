@@ -15,6 +15,7 @@ using LCT.Application.Common.Interfaces;
 using LCT.IntegrationTests.Mocks;
 using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Common.Interfaces;
+using Moq;
 
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.Actions
 {
@@ -79,7 +80,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.Actions
         {
             var repository = _scope.ServiceProvider.GetRequiredService<ILctActionRepository<TeamClickedAction, Guid>>();
             var aggregateRepository = _scope.ServiceProvider.GetRequiredService<IAggregateRepository<Tournament>>();
-            await new TeamClickedActionHandler(repository, IHubContextMock.GetMockedHubContext<TournamentHub>(), aggregateRepository).Handle(action, CancellationToken.None);
+            await new TeamClickedActionHandler(repository, new Mock<IClientCommunicationService>().Object, aggregateRepository).Handle(action, CancellationToken.None);
         }
 
         private async Task<List<TeamClickedAction>> GetClicksForTournament(Guid tournamentId)
