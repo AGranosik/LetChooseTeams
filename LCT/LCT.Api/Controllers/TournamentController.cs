@@ -15,8 +15,8 @@ namespace LCT.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(Guid Id)
-            => Ok(await _mediator.Send(new GetTournamentQuery {  TournamentId = Id }));
+        public async Task<IActionResult> Get(Guid Id, CancellationToken cancellationToken)
+            => Ok(await _mediator.Send(new GetTournamentQuery {  TournamentId = Id }, cancellationToken));
 
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateTournamentCommand request)

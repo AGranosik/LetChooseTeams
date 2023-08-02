@@ -41,8 +41,10 @@ namespace LCT.Application.Tournaments.Queries
         }
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var generationQrCodeTask = GenerateQrCodeForTournament(request.TournamentId);
-            var tournament = await _repository.LoadAsync(request.TournamentId);
+            var tournament = await _repository.LoadAsync(request.TournamentId, cancellationToken);
             return new TournamentDto
             {
                 Id = tournament.Id.Value,

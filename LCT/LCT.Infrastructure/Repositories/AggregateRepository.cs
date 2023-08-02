@@ -17,8 +17,10 @@ namespace LCT.Infrastructure.Repositories
             _client = client;
             _mediator = mediator;
         }
-        public async Task<TAggregateRoot> LoadAsync(Guid Id)
+        public async Task<TAggregateRoot> LoadAsync(Guid Id, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             var aggregate = await _client.GetAggregateAsync<TAggregateRoot>(Id);
             if (aggregate is null)
                 throw new EntityDoesNotExist(nameof(TAggregateRoot));

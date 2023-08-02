@@ -37,21 +37,28 @@ WebSockets added for better responsivness & User experience
 
 TO DO: 
 [X] docker
-[X] k8s for local host
+[X] k8s for localhost
 [X] k6 tests
 [X] check if code does not need refactor in some places
 [X] k6 tests
 [-] environment for k6 tests
 [X] websockets
-[] websockets should be in infra layer??
-[] Cancellation token
+[X] websockets should be in infra layer
+[X] Cancellation token
+[] can easly remove actions from service -> refactor if need to
 [] Redis
+[] publish fallbacks
 [] health chcecks
 [] api versioning
-[] publish fallbacks
 [] true cqrs
+[] generation qr code -> fe?
 [] documentation
 [] monitoring for memory leaks
 [] azure
 [] azure monitoring
 ???[]action microservice
+
+What documenttion should include:
+[] why cancellation token is only in on request -> to shwo how to use for havy loaded endpoints only
+[] explanation for tests library
+[] 
