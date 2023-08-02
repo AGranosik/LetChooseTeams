@@ -3,9 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.SignalR;
 using Serilog;
 
-namespace LCT.Application.Tournaments.Hubs
+namespace LCT.Infrastructure.ClientCommunication.Hubs
 {
-    //should be infrastructure
     public class TournamentHub : Hub
     {
         private readonly IMediator _mediator;

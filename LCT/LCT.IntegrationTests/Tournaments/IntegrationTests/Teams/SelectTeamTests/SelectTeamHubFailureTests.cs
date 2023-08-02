@@ -1,13 +1,11 @@
 ﻿using FluentAssertions;
 using LCT.Application.Teams.Commands;
-using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
-using LCT.Domain.Aggregates.TournamentAggregate.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
+using LCT.Infrastructure.ClientCommunication.Hubs;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.DFM;
 using NUnit.Framework;

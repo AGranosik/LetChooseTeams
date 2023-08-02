@@ -12,8 +12,6 @@ using FluentAssertions;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using System.Linq;
 using LCT.Application.Common.Interfaces;
-using LCT.IntegrationTests.Mocks;
-using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Common.Interfaces;
 using Moq;
 

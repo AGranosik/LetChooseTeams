@@ -3,10 +3,9 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using LCT.Application.Common.Interfaces;
 using LCT.Application.Teams.Events.Actions;
-using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+using LCT.Infrastructure.ClientCommunication.Hubs;
 using LCT.IntegrationTests.Mocks;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.DFM;
 using NUnit.Framework;
@@ -18,7 +17,7 @@ namespace LCT.IntegrationTests.Repositories.LctActionRepository
     {
         public LctActionRepositoryTests()
         {
-            SwapSingleton<IHubContext<TournamentHub>>(IHubContextMock.GetMockedHubContext<TournamentHub>());
+            SwapSingleton(IHubContextMock.GetMockedHubContext<TournamentHub>());
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();

@@ -1,5 +1,5 @@
 ﻿using LCT.Application.Common.Interfaces;
-using LCT.Application.Tournaments.Hubs;
+using LCT.Infrastructure.ClientCommunication.Hubs;
 using Microsoft.AspNetCore.SignalR;
 
 namespace LCT.Infrastructure.ClientCommunication

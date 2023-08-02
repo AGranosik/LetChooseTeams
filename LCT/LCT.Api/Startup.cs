@@ -1,7 +1,7 @@
 ﻿using LCT.Api.Configuration;
 using LCT.Application;
-using LCT.Application.Tournaments.Hubs;
 using LCT.Infrastructure;
+using LCT.Infrastructure.ClientCommunication.Hubs;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using System.Reflection;

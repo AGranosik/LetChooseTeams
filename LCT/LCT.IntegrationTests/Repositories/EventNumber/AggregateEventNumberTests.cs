@@ -2,12 +2,11 @@
 using System.Threading.Tasks;
 using FluentAssertions;
 using LCT.Application.Common.Interfaces;
-using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
+using LCT.Infrastructure.ClientCommunication.Hubs;
 using LCT.Infrastructure.Persistance.EventsStorage;
 using LCT.IntegrationTests.Mocks;
-using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using NUnit.DFM;

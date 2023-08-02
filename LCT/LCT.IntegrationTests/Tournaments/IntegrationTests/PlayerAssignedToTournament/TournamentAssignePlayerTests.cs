@@ -1,8 +1,8 @@
 ﻿using FluentAssertions;
 using LCT.Application.Players.Commands;
-using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Exceptions;
+using LCT.Infrastructure.ClientCommunication.Hubs;
 using LCT.IntegrationTests.Mocks;
 using MediatR;
 using Moq;

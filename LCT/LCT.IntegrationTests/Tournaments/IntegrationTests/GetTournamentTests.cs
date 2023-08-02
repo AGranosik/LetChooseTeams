@@ -1,13 +1,12 @@
 ﻿using FluentAssertions;
 using LCT.Application.Common;
 using LCT.Application.Common.Configs;
-using LCT.Application.Tournaments.Hubs;
 using LCT.Application.Tournaments.Queries;
-using LCT.Core.Shared.Exceptions;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 using LCT.Domain.Common.Exceptions;
+using LCT.Infrastructure.ClientCommunication.Hubs;
 using LCT.IntegrationTests.Mocks;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,7 +27,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
         {
             AddTableToTruncate("TournamentStream");
             AddTableToTruncate("Tournament_SetTournamentNameEvent_index");
-            SwapSingleton<IHubContext<TournamentHub>>(IHubContextMock.GetMockedHubContext<TournamentHub>());
+            SwapSingleton(IHubContextMock.GetMockedHubContext<TournamentHub>());
             this.Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();

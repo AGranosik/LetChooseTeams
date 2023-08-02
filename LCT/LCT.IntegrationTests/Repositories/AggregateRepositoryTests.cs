@@ -11,10 +11,10 @@ using NUnit.Framework;
 using MongoDB.Driver;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Exceptions;
-using LCT.Application.Tournaments.Hubs;
 using LCT.IntegrationTests.Mocks;
 using Microsoft.AspNetCore.SignalR;
 using LCT.Infrastructure.Persistance.EventsStorage;
+using LCT.Infrastructure.ClientCommunication.Hubs;
 
 namespace LCT.IntegrationTests.Repositories
 {

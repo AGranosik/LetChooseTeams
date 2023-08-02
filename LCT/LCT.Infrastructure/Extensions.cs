@@ -3,6 +3,7 @@ using LCT.Application.Common.Interfaces;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
+using LCT.Infrastructure.ClientCommunication;
 using LCT.Infrastructure.Persistance.ActionsStorage;
 using LCT.Infrastructure.Persistance.EventsStorage;
 using LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories;
@@ -17,9 +18,9 @@ namespace LCT.Infrastructure
 {
     public static class Extensions
     {
-        //compositions root
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
-            => services.ConfigureMongo();
+            => services.ConfigureMongo()
+                .ConfigureWebsockets();
 
         private static IServiceCollection ConfigureMongo(this IServiceCollection services)
         {
@@ -36,6 +37,12 @@ namespace LCT.Infrastructure
             RegisterDomainEvents();
             services.ConfigureFrontendUrl();
 
+            return services;
+        }
+
+        private static IServiceCollection ConfigureWebsockets(this IServiceCollection services)
+        {
+            services.AddSingleton<IClientCommunicationService, WebSocketClientCommunicationService>();
             return services;
         }
 

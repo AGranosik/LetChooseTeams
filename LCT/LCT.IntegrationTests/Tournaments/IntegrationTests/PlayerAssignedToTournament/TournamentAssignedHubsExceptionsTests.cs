@@ -2,7 +2,6 @@
 using System;
 using System.Threading.Tasks;
 using LCT.Application.Players.Commands;
-using LCT.Application.Tournaments.Hubs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using MediatR;
 using Moq;
@@ -10,6 +9,7 @@ using NUnit.DFM;
 using NUnit.Framework;
 using FluentAssertions;
 using Microsoft.AspNetCore.SignalR;
+using LCT.Infrastructure.ClientCommunication.Hubs;
 
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests.PlayerAssignedToTournament
 {
