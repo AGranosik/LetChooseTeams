@@ -4,6 +4,7 @@ using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
 using LCT.Infrastructure.ClientCommunication;
+using LCT.Infrastructure.MessageBrokers;
 using LCT.Infrastructure.Persistance.ActionsStorage;
 using LCT.Infrastructure.Persistance.EventsStorage;
 using LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories;
@@ -20,6 +21,7 @@ namespace LCT.Infrastructure
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services)
             => services.ConfigureMongo()
+                .ConfigureRedis()
                 .ConfigureWebsockets();
 
         private static IServiceCollection ConfigureMongo(this IServiceCollection services)
@@ -37,6 +39,14 @@ namespace LCT.Infrastructure
             RegisterDomainEvents();
             services.ConfigureFrontendUrl();
 
+            return services;
+        }
+
+        private static IServiceCollection ConfigureRedis(this IServiceCollection services)
+        {
+            var redisConfig = services.GetOptions<RedisSettings>("Redis");
+
+            services.AddSingleton<IMessageBroker>(m => new RedisMessageBroker(redisConfig));
             return services;
         }
 

@@ -52,6 +52,7 @@ namespace LCT.Application.Teams.Events.Actions
 
         private async Task<TeamClickedEvent> GetLatesClickedTeams(TeamClickedAction action)
         {
+            // send only clicked teams not selected
             Tournament tournament = new();
             try
             {
