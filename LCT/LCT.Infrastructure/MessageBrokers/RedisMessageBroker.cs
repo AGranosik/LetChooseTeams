@@ -1,10 +1,12 @@
-﻿using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Serilog;
 using StackExchange.Redis;
 
 namespace LCT.Infrastructure.MessageBrokers
 {
+    // on connect -> ty to subscibe if not aleady
+    // on disconenct -> disconnect if the last one
+    // diffeent "messages" ?
     internal class RedisMessageBroker : IMessageBroker
     {
         private readonly ConnectionMultiplexer _connection;

@@ -45,8 +45,9 @@ namespace LCT.Infrastructure
         private static IServiceCollection ConfigureRedis(this IServiceCollection services)
         {
             var redisConfig = services.GetOptions<RedisSettings>("Redis");
+            services.AddSingleton<RedisSettings>();
 
-            services.AddSingleton<IMessageBroker>(m => new RedisMessageBroker(redisConfig));
+            services.AddSingleton<IMessageBroker, RedisMessageBroker>();
             return services;
         }
 
