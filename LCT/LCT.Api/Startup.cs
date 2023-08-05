@@ -52,7 +52,7 @@ namespace LCT.Api
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
-                endpoints.MapHub<TournamentHub>("/hubs/actions");
+                endpoints.MapHub<TournamentHub>("/hubs/actions/{tournamentId}");
             });
         }
 
