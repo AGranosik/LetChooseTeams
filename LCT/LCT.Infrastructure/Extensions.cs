@@ -5,6 +5,7 @@ using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
 using LCT.Infrastructure.ClientCommunication;
 using LCT.Infrastructure.MessageBrokers;
+using LCT.Infrastructure.MessageBrokers.Interfaces;
 using LCT.Infrastructure.Persistance.ActionsStorage;
 using LCT.Infrastructure.Persistance.EventsStorage;
 using LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories;
@@ -45,7 +46,7 @@ namespace LCT.Infrastructure
         private static IServiceCollection ConfigureRedis(this IServiceCollection services)
         {
             var redisConfig = services.GetOptions<RedisSettings>("Redis");
-            services.AddSingleton<RedisSettings>();
+            services.AddSingleton(redisConfig);
 
             services.AddSingleton<IMessageBroker, RedisMessageBroker>();
             return services;

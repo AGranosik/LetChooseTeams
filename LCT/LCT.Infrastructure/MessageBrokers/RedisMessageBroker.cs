@@ -1,12 +1,11 @@
-﻿using Newtonsoft.Json;
+﻿using LCT.Infrastructure.MessageBrokers.Interfaces;
+using LCT.Infrastructure.MessageBrokers.Models;
+using Newtonsoft.Json;
 using Serilog;
 using StackExchange.Redis;
 
 namespace LCT.Infrastructure.MessageBrokers
 {
-    // on connect -> ty to subscibe if not aleady
-    // on disconenct -> disconnect if the last one
-    // diffeent "messages" ?
     internal class RedisMessageBroker : IMessageBroker
     {
         private readonly ConnectionMultiplexer _connection;
@@ -17,17 +16,22 @@ namespace LCT.Infrastructure.MessageBrokers
                 options.Password = redisSettings.Password;
             });
         }
-        public async Task PublishAsync<T>(string destination, T message)
+        public async Task PublishAsync<T>(string groupId, T message)
         {
             var subscriber = _connection.GetSubscriber();
 
-            var clients = await subscriber.PublishAsync(destination, JsonConvert.SerializeObject(message), CommandFlags.FireAndForget);
-            Log.Information($@"Message sent via redis. Clients: {clients}. Channel: {destination}");
+            //var clients = await subscriber.PublishAsync(destination, JsonConvert.SerializeObject(message), CommandFlags.FireAndForget);
+            //Log.Information($@"Message sent via redis. Clients: {clients}. Channel: {destination}");
         }
 
-        public Task SubscribeAsync()
+        public async Task SubscribeAsync(MessageBrokerConnection connection)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+        }
+
+        public async Task UnsubscribeAsync(MessageBrokerConnection connection)
+        {
+            //throw new NotImplementedException();
         }
     }
 }

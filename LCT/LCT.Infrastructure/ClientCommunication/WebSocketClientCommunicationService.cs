@@ -1,6 +1,6 @@
 ﻿using LCT.Application.Common.Interfaces;
 using LCT.Infrastructure.ClientCommunication.Hubs;
-using LCT.Infrastructure.MessageBrokers;
+using LCT.Infrastructure.MessageBrokers.Interfaces;
 using Microsoft.AspNetCore.SignalR;
 
 namespace LCT.Infrastructure.ClientCommunication
