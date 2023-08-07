@@ -20,7 +20,6 @@ namespace LCT.Infrastructure.ClientCommunication
             where T : class
         {
             await _messageBroker.PublishAsync(destination, message);
-            //await _hubContext.Clients.All.SendCoreAsync(destination, new[] { message } , cancellationToken);
         }
     }
 }
