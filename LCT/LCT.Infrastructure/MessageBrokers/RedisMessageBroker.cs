@@ -42,7 +42,20 @@ namespace LCT.Infrastructure.MessageBrokers
 
         public async Task UnsubscribeAsync(MessageBrokerConnection connection)
         {
-            //throw new NotImplementedException();
+            var connections = GetCeonnectionsIfGroupsExists(connection.GroupId);
+            if (connections is null)
+                return;
+
+            connections.Remove(connection.UserIdentifier);
+
+            if(connections.Count == 0)
+                await UnsubscribeAsync(connection.GroupId);
+        }
+
+        private async Task UnsubscribeAsync(string groupId)
+        {
+            var pubsub = _connection.GetSubscriber();
+            await pubsub.UnsubscribeAsync(groupId);
         }
 
         private async Task SubscribeAsync(string groupId)
