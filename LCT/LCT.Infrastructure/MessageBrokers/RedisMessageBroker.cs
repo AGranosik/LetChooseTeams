@@ -1,6 +1,10 @@
-﻿using LCT.Infrastructure.MessageBrokers.Interfaces;
+﻿using System.Text.Json;
+using LCT.Infrastructure.ClientCommunication.Hubs;
+using LCT.Infrastructure.MessageBrokers.Interfaces;
 using LCT.Infrastructure.MessageBrokers.Models;
+using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Serilog;
 using StackExchange.Redis;
 
@@ -10,18 +14,23 @@ namespace LCT.Infrastructure.MessageBrokers
     {
         private readonly ConnectionMultiplexer _connection;
         private static Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
-        public RedisMessageBroker(RedisSettings redisSettings)
+        private readonly IHubContext<TournamentHub> _hubContext;
+        public RedisMessageBroker(RedisSettings redisSettings, IHubContext<TournamentHub> hubContext)
         {
             _connection = ConnectionMultiplexer.Connect(redisSettings.ConnectionString, options =>
             {
                 options.Password = redisSettings.Password;
             });
+            _hubContext = hubContext;
         }
         public async Task PublishAsync<T>(string groupId, T message)
         {
             var subscriber = _connection.GetSubscriber();
 
-            var clients = await subscriber.PublishAsync(groupId, JsonConvert.SerializeObject(message), CommandFlags.FireAndForget);
+            var clients = await subscriber.PublishAsync(groupId, JsonConvert.SerializeObject(message, new JsonSerializerSettings
+            {
+                ContractResolver = new CamelCasePropertyNamesContractResolver()
+            }), CommandFlags.FireAndForget);
             Log.Information($@"Message sent via redis. Clients: {clients}. Channel: {groupId}");
         }
 
@@ -61,7 +70,10 @@ namespace LCT.Infrastructure.MessageBrokers
         private async Task SubscribeAsync(string groupId)
         {
             var pubsub = _connection.GetSubscriber();
-            await pubsub.SubscribeAsync(groupId, (channel, message) => Console.WriteLine("test test test " + message));
+            await pubsub.SubscribeAsync(groupId, (channel, message) =>
+            {
+                _hubContext.Clients.All.SendCoreAsync(groupId, new[] { message.ToString() });
+            });
         }
 
         private static List<string> GetCeonnectionsIfGroupsExists(string groupId)

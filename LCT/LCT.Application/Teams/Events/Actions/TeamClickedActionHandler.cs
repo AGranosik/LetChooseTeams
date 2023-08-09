@@ -44,10 +44,7 @@ namespace LCT.Application.Teams.Events.Actions
             if (!saved)
                 return;
             var allClickedTeams = await GetLatesClickedTeams(notification);
-            await _clientCommunicationService.SendAsync(notification.GroupKey.ToString(), new[]
-            {
-                allClickedTeams
-            }, cancellationToken);
+            await _clientCommunicationService.SendAsync(notification.GroupKey.ToString(), allClickedTeams, cancellationToken);
         }
 
         private async Task<TeamClickedEvent> GetLatesClickedTeams(TeamClickedAction action)

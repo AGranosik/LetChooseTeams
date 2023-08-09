@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: lct-api
 spec:
-  replicas: 5
+  replicas: 4
   selector: 
     matchLabels:
       app: lct-api
@@ -22,7 +22,7 @@ spec:
                 cpu: "200m"
             limits:
                 memory: "300Mi"
-                cpu: "350m"
+                cpu: "400m"
           env:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development
@@ -36,6 +36,10 @@ spec:
             value: 172.17.0.1:3000
           - name: ElasticConfiguration__Uri
             value: http://172.17.0.1:9200
+          - name: Redis__ConnectionString
+            value: 172.17.0.1:6379
+          - name: Redis__Password
+            value: "123456"
       # affinity: its into nodes not pods.
         # podAntiAffinity:
             # requiredDuringSchedulingIgnoredDuringExecution:
