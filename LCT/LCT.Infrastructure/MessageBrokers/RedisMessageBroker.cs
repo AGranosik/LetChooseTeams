@@ -36,6 +36,9 @@ namespace LCT.Infrastructure.MessageBrokers
 
         public async Task SubscribeAsync(MessageBrokerConnection connection)
         {
+            if (!ConnectionValidation(connection))
+                return;
+
             var connections = GetCeonnectionsIfGroupsExists(connection.GroupId);
             if(connections is null)
             {
@@ -48,9 +51,12 @@ namespace LCT.Infrastructure.MessageBrokers
                     connections.Add(connection.UserIdentifier);
             }
         }
-
+        //unsibsribe not working probably
         public async Task UnsubscribeAsync(MessageBrokerConnection connection)
         {
+            if (ConnectionValidation(connection))
+                return;
+
             var connections = GetCeonnectionsIfGroupsExists(connection.GroupId);
             if (connections is null)
                 return;
@@ -61,6 +67,8 @@ namespace LCT.Infrastructure.MessageBrokers
                 await UnsubscribeAsync(connection.GroupId);
         }
 
+        private static bool ConnectionValidation(MessageBrokerConnection connection)
+            => connection.GroupId is not null && connection.UserIdentifier is not null;
         private async Task UnsubscribeAsync(string groupId)
         {
             var pubsub = _connection.GetSubscriber();

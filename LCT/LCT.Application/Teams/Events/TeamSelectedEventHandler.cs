@@ -26,13 +26,12 @@ namespace LCT.Application.Teams.Events
         {
             try
             {
-                await _clientCommunicationService.SendAsync(notification.StreamId.ToString(), new[] { 
+                await _clientCommunicationService.SendAsync(notification.StreamId.ToString(),
                     new TeamSelectedHubMessage{
                         PlayerName = notification.Player.Name,
                         PlayerSurname = notification.Player.Surname,
                         Team = notification.TeamName,
                         TournamentId = notification.StreamId
-                    }
                 }, cancellationToken);
             }
             catch (Exception ex)

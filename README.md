@@ -46,8 +46,10 @@ TO DO:
 [X] websockets should be in infra layer
 [X] Cancellation token
 [X] can easly remove actions from service -> refactor if need to
-[] Redis
+[X] Redis
+[] poprawka działania fe z be
 [] publish fallbacks
+[] wszystkie komentarze w kodzie be
 [] update to .net core 7
 [] udpate packages
 [] update k8s
