@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using LCT.Infrastructure.ClientCommunication.Hubs;
+﻿using LCT.Infrastructure.ClientCommunication.Hubs;
 using LCT.Infrastructure.MessageBrokers.Interfaces;
 using LCT.Infrastructure.MessageBrokers.Models;
 using Microsoft.AspNetCore.SignalR;
@@ -7,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Serilog;
 using StackExchange.Redis;
+
 
 namespace LCT.Infrastructure.MessageBrokers
 {
@@ -51,7 +51,6 @@ namespace LCT.Infrastructure.MessageBrokers
                     connections.Add(connection.UserIdentifier);
             }
         }
-        //unsibsribe not working probably
         public async Task UnsubscribeAsync(MessageBrokerConnection connection)
         {
             if (ConnectionValidation(connection))
@@ -80,6 +79,7 @@ namespace LCT.Infrastructure.MessageBrokers
             var pubsub = _connection.GetSubscriber();
             await pubsub.SubscribeAsync(groupId, (channel, message) =>
             {
+                Log.Information($@"Message received. group id: {groupId}");
                 _hubContext.Clients.All.SendCoreAsync(groupId, new[] { message.ToString() });
             });
         }

@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using LCT.Application.Common.Interfaces;
 using LCT.Application.Teams.Commands;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
@@ -20,13 +21,13 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
     [TestFixture]
     public class SelectTeamHubFailureTests : Testing<Tournament>
     {
-        private Mock<IHubContext<TournamentHub>> _hubContextMock = new Mock<IHubContext<TournamentHub>>();
+        private Mock<IClientCommunicationService> _clientCommunicationService = new Mock<IClientCommunicationService>();
         public SelectTeamHubFailureTests()
         {
-            _hubContextMock.Setup(h => h.Clients)
-                .Throws<Exception>();
+            _clientCommunicationService.Setup(cs => cs.SendAsync(It.IsAny<string>(), It.IsAny<It.IsAnyType>(), It.IsAny<CancellationToken>()))
+                .ThrowsAsync(new Exception());
 
-            SwapSingleton(_hubContextMock.Object);
+            SwapSingleton(_clientCommunicationService.Object);
             Environment("Development")
                 .ProjectName("LCT.Api")
                 .Build();
@@ -53,8 +54,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
             firstSelectedTeam.Player.Surname.Should().Be(player.Surname);
             firstSelectedTeam.TeamName.Value.Should().Be(TournamentTeamNames.Teams.First());
 
-
-            _hubContextMock.Verify(hc => hc.Clients, Times.AtLeast(4));
+            _clientCommunicationService.Verify(hc => hc.SendAsync(It.IsAny<string>(), It.IsAny<It.IsAnyType>(), It.IsAny<CancellationToken>()), Times.AtLeast(4)); // x2 add player // x2 selected team
         }
 
 

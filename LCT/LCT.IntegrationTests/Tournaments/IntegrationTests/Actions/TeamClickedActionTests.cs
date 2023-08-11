@@ -76,7 +76,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
             var actions = await GetSavedActions(actionGroupKey);
             actions.Should().NotBeNull();
             actions.Should().NotBeEmpty();
-            clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object?[]>(x => x.Length == 1), CancellationToken.None));
+            clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.IsAny<object?>(), CancellationToken.None));
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
             actionsFromDB.Count.Should().Be(3);
             var clickedTeam = TournamentTeamNames.Teams.Last();
             actionsFromDB.Any(a => a.Team == clickedTeam).Should().BeTrue();
-            clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object?[]>(x => ((TeamClickedEvent)x[0]).ClickedTeams.Count == 2 && !((TeamClickedEvent)x[0]).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams.Last())), CancellationToken.None));
+            clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object?>(x => ((TeamClickedEvent)x).ClickedTeams.Count == 2 && !((TeamClickedEvent)x).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams.Last())), CancellationToken.None));
 
         }
 
@@ -126,7 +126,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
             var actionsFromDB = await GetSavedActions(actionGroupKey);
             actionsFromDB.Should().NotBeNull();
             actionsFromDB.Count.Should().Be(3);
-            clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object?[]>(x => ((TeamClickedEvent)x[0]).ClickedTeams.Count == 1 && ((TeamClickedEvent)x[0]).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 3])), CancellationToken.None));
+            clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object>(x => ((TeamClickedEvent)x).ClickedTeams.Count == 1 && ((TeamClickedEvent)x).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 3])), CancellationToken.None));
         }
 
         private List<TeamClickedAction> CreateActions(int numberOfActions, Guid actionGroupKey)
