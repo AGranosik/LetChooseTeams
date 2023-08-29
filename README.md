@@ -53,6 +53,7 @@ TO DO:
 [] update to .net core 7
 [] udpate packages
 [] update k8s
+[] routing fe -> remove play names from params and store in store 
 [] generation qr code -> fe?
 [] k6 tests
 [] health chcecks

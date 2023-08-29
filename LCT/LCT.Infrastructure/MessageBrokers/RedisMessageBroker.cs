@@ -17,6 +17,7 @@ namespace LCT.Infrastructure.MessageBrokers
         private readonly IHubContext<TournamentHub> _hubContext;
         public RedisMessageBroker(RedisSettings redisSettings, IHubContext<TournamentHub> hubContext)
         {
+            // when cannot conenct throws exception and hub doesnt work properly
             _connection = ConnectionMultiplexer.Connect(redisSettings.ConnectionString, options =>
             {
                 options.Password = redisSettings.Password;
