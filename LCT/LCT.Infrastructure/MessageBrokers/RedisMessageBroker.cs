@@ -12,16 +12,12 @@ namespace LCT.Infrastructure.MessageBrokers
 {
     internal class RedisMessageBroker : IMessageBroker
     {
-        private readonly ConnectionMultiplexer _connection;
+        private ConnectionMultiplexer _connection;
         private static Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
         private readonly IHubContext<TournamentHub> _hubContext;
         public RedisMessageBroker(RedisSettings redisSettings, IHubContext<TournamentHub> hubContext)
         {
-            // when cannot conenct throws exception and hub doesnt work properly
-            _connection = ConnectionMultiplexer.Connect(redisSettings.ConnectionString, options =>
-            {
-                options.Password = redisSettings.Password;
-            });
+            OpenRedisConnection(redisSettings);
             _hubContext = hubContext;
         }
         public async Task PublishAsync<T>(string groupId, T message)
@@ -87,11 +83,25 @@ namespace LCT.Infrastructure.MessageBrokers
 
         private static List<string> GetCeonnectionsIfGroupsExists(string groupId)
         {
-            var result = new List<string>();
-            var isValueExist = _groupConnectionsDicitonary.TryGetValue(groupId, out result);
+            var isValueExist = _groupConnectionsDicitonary.TryGetValue(groupId, out var result);
 
             return isValueExist ? result : null;
         }
 
+        private void OpenRedisConnection(RedisSettings redisSettings)
+        {
+            try
+            {
+                _connection = ConnectionMultiplexer.Connect(redisSettings.ConnectionString, options =>
+                {
+                    options.Password = redisSettings.Password;
+                    options.HeartbeatInterval = TimeSpan.FromSeconds(20);
+                });
+            }
+            catch (Exception ex)
+            {
+                Log.Error($@"Redis connection failed.", ex);
+            }
+        }
     }
 }
