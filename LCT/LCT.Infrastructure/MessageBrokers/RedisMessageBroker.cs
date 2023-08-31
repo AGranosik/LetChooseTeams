@@ -13,16 +13,21 @@ namespace LCT.Infrastructure.MessageBrokers
     internal class RedisMessageBroker : IMessageBroker
     {
         private ConnectionMultiplexer _connection;
+        private readonly RedisSettings _settings;
         private static Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
         private readonly IHubContext<TournamentHub> _hubContext;
         public RedisMessageBroker(RedisSettings redisSettings, IHubContext<TournamentHub> hubContext)
         {
-            OpenRedisConnection(redisSettings);
+            _settings = redisSettings;
+            TryOpenRedisConnection();
             _hubContext = hubContext;
         }
         public async Task PublishAsync<T>(string groupId, T message)
         {
-            var subscriber = _connection.GetSubscriber();
+            //create queue
+            // filter to only to message for opened collection
+            // remove only on current state not clear all.
+            var subscriber = GetSubscriber();
 
             var clients = await subscriber.PublishAsync(groupId, JsonConvert.SerializeObject(message, new JsonSerializerSettings
             {
@@ -67,13 +72,13 @@ namespace LCT.Infrastructure.MessageBrokers
             => connection.GroupId is not null && connection.UserIdentifier is not null;
         private async Task UnsubscribeAsync(string groupId)
         {
-            var pubsub = _connection.GetSubscriber();
+            var pubsub = GetSubscriber();
             await pubsub.UnsubscribeAsync(groupId);
         }
 
         private async Task SubscribeAsync(string groupId)
         {
-            var pubsub = _connection.GetSubscriber();
+            var pubsub = GetSubscriber();
             await pubsub.SubscribeAsync(groupId, (channel, message) =>
             {
                 Log.Information($@"Message received. group id: {groupId}");
@@ -88,13 +93,13 @@ namespace LCT.Infrastructure.MessageBrokers
             return isValueExist ? result : null;
         }
 
-        private void OpenRedisConnection(RedisSettings redisSettings)
+        private void TryOpenRedisConnection()
         {
             try
             {
-                _connection = ConnectionMultiplexer.Connect(redisSettings.ConnectionString, options =>
+                _connection = ConnectionMultiplexer.Connect(_settings.ConnectionString, options =>
                 {
-                    options.Password = redisSettings.Password;
+                    options.Password = _settings.Password;
                     options.HeartbeatInterval = TimeSpan.FromSeconds(20);
                 });
             }
@@ -102,6 +107,14 @@ namespace LCT.Infrastructure.MessageBrokers
             {
                 Log.Error($@"Redis connection failed.", ex);
             }
+        }
+
+        private ISubscriber GetSubscriber()
+        {
+            if (_connection is null)
+                TryOpenRedisConnection();
+
+            return _connection.GetSubscriber();
         }
     }
 }

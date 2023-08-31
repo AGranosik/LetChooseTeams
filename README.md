@@ -47,7 +47,7 @@ TO DO:
 [X] Cancellation token
 [X] can easly remove actions from service -> refactor if need to
 [X] Redis
-[] poprawka działania fe z be
+[X] poprawka działania fe z be
 [] publish fallbacks
 [] wszystkie komentarze w kodzie be
 [] update to .net core 7
@@ -55,6 +55,7 @@ TO DO:
 [] update k8s
 [] routing fe -> remove play names from params and store in store 
 [] generation qr code -> fe?
+[] monitoring grafana etc.
 [] k6 tests
 [] health chcecks
 [] api versioning
