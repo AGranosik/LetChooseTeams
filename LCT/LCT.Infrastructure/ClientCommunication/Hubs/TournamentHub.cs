@@ -4,6 +4,10 @@ using LCT.Infrastructure.MessageBrokers.Models;
 using MediatR;
 using Microsoft.AspNetCore.Http.Connections.Features;
 using Microsoft.AspNetCore.SignalR;
+using Polly;
+using Polly.Fallback;
+using Polly.Retry;
+using Serilog;
 
 namespace LCT.Infrastructure.ClientCommunication.Hubs
 {
@@ -11,6 +15,17 @@ namespace LCT.Infrastructure.ClientCommunication.Hubs
     {
         private readonly IMediator _mediator;
         private readonly IMessageBroker _messageBroker;
+        private readonly AsyncRetryPolicy _retryPolicy = Policy.Handle<Exception>()
+                .WaitAndRetryAsync(3, retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
+                );
+        private readonly AsyncFallbackPolicy _fallbackPoliocy = Policy.Handle<Exception>()
+            .FallbackAsync(async ct =>
+            {
+                Log.Error("Error during trying to establish connection to Redis.");
+                await Task.FromResult(true);
+            }
+            );
         public TournamentHub(IMediator mediator, IMessageBroker messageBroker)
         {
             _mediator = mediator;
@@ -23,7 +38,8 @@ namespace LCT.Infrastructure.ClientCommunication.Hubs
 
         public override async Task OnConnectedAsync()
         {
-            await _messageBroker.SubscribeAsync(GetMessageBrokerConnection());
+            var policy = Policy.WrapAsync(_fallbackPoliocy, _retryPolicy);
+            policy.ExecuteAsync(() => _messageBroker.SubscribeAsync(GetMessageBrokerConnection()));
             await base.OnConnectedAsync();
         }
 

@@ -17,7 +17,7 @@ namespace LCT.Infrastructure.ClientCommunication
         public async Task SendAsync<T>(string destination, T message, CancellationToken cancellationToken)
             where T : class
         {
-            await ConnectionPolicy.AsyncRetry.ExecuteAsync(() => _messageBroker.PublishAsync(destination, message));
+            await  _messageBroker.PublishAsync(destination, message);
         }
     }
 }

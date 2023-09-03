@@ -17,12 +17,11 @@ namespace LCT.Infrastructure.MessageBrokers
         private readonly RedisSettings _settings;
         private static Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
         private readonly IHubContext<TournamentHub> _hubContext;
-        private List<UnsentMessage> _unsentMessages = new List<UnsentMessage>();
+        private static List<UnsentMessage> _unsentMessages = new List<UnsentMessage>();
 
         public RedisMessageBroker(RedisSettings redisSettings, IHubContext<TournamentHub> hubContext)
         {
             _settings = redisSettings;
-            TryOpenRedisConnection();
             _hubContext = hubContext;
         }
         public async Task PublishAsync<T>(string groupId, T message)
@@ -36,11 +35,11 @@ namespace LCT.Infrastructure.MessageBrokers
             if (!ConnectionValidation(connection))
                 return;
 
-            var connections = GetCeonnectionsIfGroupsExists(connection.GroupId);
+            var connections = GetConnectionsIfGroupsExists(connection.GroupId);
             if(connections is null)
             {
-                _groupConnectionsDicitonary.Add(connection.GroupId, new List<string> { connection.UserIdentifier });
                 await SubscribeAsync(connection.GroupId);
+                _groupConnectionsDicitonary.Add(connection.GroupId, new List<string> { connection.UserIdentifier });
             }
             else
             {
@@ -53,7 +52,7 @@ namespace LCT.Infrastructure.MessageBrokers
             if (ConnectionValidation(connection))
                 return;
 
-            var connections = GetCeonnectionsIfGroupsExists(connection.GroupId);
+            var connections = GetConnectionsIfGroupsExists(connection.GroupId);
             if (connections is null)
                 return;
 
@@ -92,7 +91,7 @@ namespace LCT.Infrastructure.MessageBrokers
 
         private async Task<long> PublishMessagesAsync(List<UnsentMessage> unsentMessages)
         {
-            var subscriber = GetSubscriber();
+            var subscriber = await GetSubscriber();
             long clients = 0;
             foreach (var queuedMessage in unsentMessages)
             {
@@ -106,13 +105,12 @@ namespace LCT.Infrastructure.MessageBrokers
             => connection.GroupId is not null && connection.UserIdentifier is not null;
         private async Task UnsubscribeAsync(string groupId)
         {
-            var pubsub = GetSubscriber();
+            var pubsub = await GetSubscriber();
             await pubsub.UnsubscribeAsync(groupId);
         }
-
         private async Task SubscribeAsync(string groupId)
         {
-            var pubsub = GetSubscriber();
+            var pubsub = await GetSubscriber();
             await pubsub.SubscribeAsync(groupId, (channel, message) =>
             {
                 Log.Information($@"Message received. group id: {groupId}");
@@ -120,18 +118,18 @@ namespace LCT.Infrastructure.MessageBrokers
             });
         }
 
-        private static List<string> GetCeonnectionsIfGroupsExists(string groupId)
+        private static List<string> GetConnectionsIfGroupsExists(string groupId)
         {
             var isValueExist = _groupConnectionsDicitonary.TryGetValue(groupId, out var result);
 
             return isValueExist ? result : null;
         }
 
-        private void TryOpenRedisConnection()
+        private async Task TryOpenRedisConnection()
         {
             try
             {
-                _connection = ConnectionMultiplexer.Connect(_settings.ConnectionString, options =>
+                _connection = await ConnectionMultiplexer.ConnectAsync(_settings.ConnectionString, options =>
                 {
                     options.Password = _settings.Password;
                     options.HeartbeatInterval = TimeSpan.FromSeconds(20);
@@ -143,10 +141,10 @@ namespace LCT.Infrastructure.MessageBrokers
             }
         }
 
-        private ISubscriber GetSubscriber()
+        private async Task<ISubscriber> GetSubscriber()
         {
             if (_connection is null || !_connection.IsConnected)
-                TryOpenRedisConnection();
+                await TryOpenRedisConnection();
 
             return _connection.GetSubscriber();
         }
