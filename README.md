@@ -49,6 +49,9 @@ TO DO:
 [X] Redis
 [X] poprawka działania fe z be
 [] publish fallbacks
+[] test for redis meesage beroker
+[] test for hub
+[] check logs
 [] wszystkie komentarze w kodzie be
 [] update to .net core 7
 [] udpate packages

@@ -24,8 +24,7 @@ namespace LCT.Infrastructure.ClientCommunication.Hubs
             {
                 Log.Error("Error during trying to establish connection to Redis.");
                 await Task.FromResult(true);
-            }
-            );
+            });
         public TournamentHub(IMediator mediator, IMessageBroker messageBroker)
         {
             _mediator = mediator;
@@ -38,6 +37,8 @@ namespace LCT.Infrastructure.ClientCommunication.Hubs
 
         public override async Task OnConnectedAsync()
         {
+            //ok polaczenie nawiazane, ale jak zostanie przywrocone w trakcie to nie ma subscribe...
+            // moze sprobowac sie polaczyc, gdy brakuje polaczenia, ale jak?
             var policy = Policy.WrapAsync(_fallbackPoliocy, _retryPolicy);
             policy.ExecuteAsync(() => _messageBroker.SubscribeAsync(GetMessageBrokerConnection()));
             await base.OnConnectedAsync();
@@ -45,7 +46,7 @@ namespace LCT.Infrastructure.ClientCommunication.Hubs
 
         public override async Task OnDisconnectedAsync(Exception ex)
         {
-            await _messageBroker.UnsubscribeAsync(GetMessageBrokerConnection());
+            _messageBroker.UnsubscribeAsync(GetMessageBrokerConnection());
             await base.OnDisconnectedAsync(ex);
         }
 

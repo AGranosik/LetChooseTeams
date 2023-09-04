@@ -38,8 +38,8 @@ namespace LCT.Infrastructure.MessageBrokers
             var connections = GetConnectionsIfGroupsExists(connection.GroupId);
             if(connections is null)
             {
-                await SubscribeAsync(connection.GroupId);
                 _groupConnectionsDicitonary.Add(connection.GroupId, new List<string> { connection.UserIdentifier });
+                await SubscribeAsync(connection.GroupId);
             }
             else
             {
