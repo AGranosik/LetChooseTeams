@@ -51,6 +51,7 @@ TO DO:
 [] publish fallbacks
 [] test for redis meesage beroker
 [] test for hub
+[] redis shouldnt block requests
 [] check logs
 [] wszystkie komentarze w kodzie be
 [] update to .net core 7

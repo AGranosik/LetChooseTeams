@@ -5,19 +5,36 @@ using LCT.Infrastructure.MessageBrokers.Models;
 using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Polly.Fallback;
+using Polly.Retry;
+using Polly;
 using Serilog;
 using StackExchange.Redis;
 
-
 namespace LCT.Infrastructure.MessageBrokers
 {
+    // normal flow
+    // disconnected at the start then connect
+    // disconnect after working for a while then connected again
     internal class RedisMessageBroker : IMessageBroker
     {
         private ConnectionMultiplexer _connection;
         private readonly RedisSettings _settings;
         private static Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
         private readonly IHubContext<TournamentHub> _hubContext;
+
+        // move it
         private static List<UnsentMessage> _unsentMessages = new List<UnsentMessage>();
+        private readonly AsyncRetryPolicy _retryPolicy = Policy.Handle<Exception>()
+            .WaitAndRetryForeverAsync(retryAttempt =>
+                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
+            );
+        private readonly AsyncFallbackPolicy _fallbackPoliocy = Policy.Handle<Exception>()
+            .FallbackAsync(async ct =>
+            {
+                Log.Error("Error during trying to establish connection to Redis.");
+                await Task.FromResult(true);
+            });
 
         public RedisMessageBroker(RedisSettings redisSettings, IHubContext<TournamentHub> hubContext)
         {
@@ -38,8 +55,13 @@ namespace LCT.Infrastructure.MessageBrokers
             var connections = GetConnectionsIfGroupsExists(connection.GroupId);
             if(connections is null)
             {
+                var policy = Policy.WrapAsync(_fallbackPoliocy, _retryPolicy);
                 _groupConnectionsDicitonary.Add(connection.GroupId, new List<string> { connection.UserIdentifier });
-                await SubscribeAsync(connection.GroupId);
+                await policy.ExecuteAsync(async () => {
+                    var group = GetConnectionsIfGroupsExists(connection.GroupId);
+                    if(group is not null)
+                        await SubscribeAsync(connection.GroupId);
+                });
             }
             else
             {
@@ -49,7 +71,7 @@ namespace LCT.Infrastructure.MessageBrokers
         }
         public async Task UnsubscribeAsync(MessageBrokerConnection connection)
         {
-            if (ConnectionValidation(connection))
+            if (!ConnectionValidation(connection))
                 return;
 
             var connections = GetConnectionsIfGroupsExists(connection.GroupId);
@@ -78,7 +100,10 @@ namespace LCT.Infrastructure.MessageBrokers
             long result = 0;
             try
             {
-                result = await PublishMessagesAsync(queuedMessages);
+                if(_connection is null || _connection.IsConnected)
+                    result = await PublishMessagesAsync(queuedMessages);
+                else
+                    _unsentMessages.AddRange(queuedMessages);
             }
             catch (Exception ex)
             {
@@ -95,7 +120,10 @@ namespace LCT.Infrastructure.MessageBrokers
             long clients = 0;
             foreach (var queuedMessage in unsentMessages)
             {
-                var singleCLients = await subscriber.PublishAsync(queuedMessage.GroupId, queuedMessage.SerializedMessage, CommandFlags.FireAndForget);
+                var singleCLients = await subscriber.PublishAsync(queuedMessage.GroupId, queuedMessage.SerializedMessage);
+                if (singleCLients == 0)
+                    await UnsubscribeAsync(queuedMessage.GroupId);
+
                 clients += singleCLients;
             }
             return clients;
@@ -138,6 +166,7 @@ namespace LCT.Infrastructure.MessageBrokers
             catch (Exception ex)
             {
                 Log.Error($@"Redis connection failed.", ex);
+                throw;
             }
         }
 
@@ -161,5 +190,5 @@ namespace LCT.Infrastructure.MessageBrokers
             Id = Guid.NewGuid();
         }
     
-    } 
+    }
 }
