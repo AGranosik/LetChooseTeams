@@ -6,35 +6,35 @@ using Microsoft.AspNetCore.SignalR;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Polly.Fallback;
-using Polly.Retry;
 using Polly;
 using Serilog;
 using StackExchange.Redis;
+using Polly.Wrap;
+using LCT.Core.RetryPolicies;
 
 namespace LCT.Infrastructure.MessageBrokers
 {
-    // normal flow
-    // disconnected at the start then connect
-    // disconnect after working for a while then connected again
     internal class RedisMessageBroker : IMessageBroker
     {
         private ConnectionMultiplexer _connection;
         private readonly RedisSettings _settings;
         private static Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
         private readonly IHubContext<TournamentHub> _hubContext;
+        private static List<UnsentMessage> _unsentMessages = new();
+        private static JsonSerializerSettings _serializeSettings = new()
+        {
+            ContractResolver = new CamelCasePropertyNamesContractResolver()
+        };
 
-        // move it
-        private static List<UnsentMessage> _unsentMessages = new List<UnsentMessage>();
-        private readonly AsyncRetryPolicy _retryPolicy = Policy.Handle<Exception>()
-            .WaitAndRetryForeverAsync(retryAttempt =>
-                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
-            );
-        private readonly AsyncFallbackPolicy _fallbackPoliocy = Policy.Handle<Exception>()
+        private static readonly AsyncFallbackPolicy _fallbackPolicy = Policy.Handle<Exception>()
             .FallbackAsync(async ct =>
             {
+                // there gonna be alert to inform IT department about failure
                 Log.Error("Error during trying to establish connection to Redis.");
                 await Task.FromResult(true);
             });
+
+        private readonly AsyncPolicyWrap _retryWrappedPolicy = Policy.WrapAsync(_fallbackPolicy, ConnectionPolicy.AsyncRetryForever);
 
         public RedisMessageBroker(RedisSettings redisSettings, IHubContext<TournamentHub> hubContext)
         {
@@ -55,9 +55,8 @@ namespace LCT.Infrastructure.MessageBrokers
             var connections = GetConnectionsIfGroupsExists(connection.GroupId);
             if(connections is null)
             {
-                var policy = Policy.WrapAsync(_fallbackPoliocy, _retryPolicy);
                 _groupConnectionsDicitonary.Add(connection.GroupId, new List<string> { connection.UserIdentifier });
-                await policy.ExecuteAsync(async () => {
+                await _retryWrappedPolicy.ExecuteAsync(async () => {
                     var group = GetConnectionsIfGroupsExists(connection.GroupId);
                     if(group is not null)
                         await SubscribeAsync(connection.GroupId);
@@ -65,8 +64,7 @@ namespace LCT.Infrastructure.MessageBrokers
             }
             else
             {
-                if(!connections.Any(c => c == connection.UserIdentifier))
-                    connections.Add(connection.UserIdentifier);
+                connections.Add(connection.UserIdentifier);
             }
         }
         public async Task UnsubscribeAsync(MessageBrokerConnection connection)
@@ -78,7 +76,7 @@ namespace LCT.Infrastructure.MessageBrokers
             if (connections is null)
                 return;
 
-            connections.Remove(connection.UserIdentifier);
+            connections.RemoveAll(c => c == connection.UserIdentifier);
 
             if(connections.Count == 0)
                 await UnsubscribeAsync(connection.GroupId);
@@ -89,14 +87,12 @@ namespace LCT.Infrastructure.MessageBrokers
             if (!_groupConnectionsDicitonary.Any(d => d.Key == groupId))
                 Log.Warning($@"Misssing connection for {groupId}");
 
-            var serializedMessage = JsonConvert.SerializeObject(message, new JsonSerializerSettings
-            {
-                ContractResolver = new CamelCasePropertyNamesContractResolver()
-            });
+            var serializedMessage = SerilizeMessage(message);
 
-            var queuedMessages = _unsentMessages.Where(um => um.GroupId == groupId).ToList();
+            var queuedMessages = _unsentMessages.Where(um => true).OrderBy(um => um.CreationDate).ToList();
             _unsentMessages.RemoveAll(um => queuedMessages.Any(qm => qm.Id == um.Id));
             queuedMessages.Add(new UnsentMessage(groupId, serializedMessage));
+
             long result = 0;
             try
             {
@@ -153,6 +149,9 @@ namespace LCT.Infrastructure.MessageBrokers
             return isValueExist ? result : null;
         }
 
+        private static string SerilizeMessage<T>(T message)
+            => JsonConvert.SerializeObject(message, _serializeSettings);
+
         private async Task TryOpenRedisConnection()
         {
             try
@@ -183,11 +182,13 @@ namespace LCT.Infrastructure.MessageBrokers
         public  string GroupId { get; init; }
         public string SerializedMessage { get; init; }
         public Guid Id { get; init; }
+        public DateTime CreationDate { get; init; }
         public UnsentMessage (string groupId, string serializedMessage)
         {
             GroupId = groupId;
             SerializedMessage = serializedMessage;
             Id = Guid.NewGuid();
+            CreationDate = DateTime.Now;
         }
     
     }

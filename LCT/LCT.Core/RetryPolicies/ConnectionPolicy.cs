@@ -10,5 +10,11 @@ namespace LCT.Core.RetryPolicies
                 .WaitAndRetryAsync(3, retryAttempt =>
                     TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
                 );
+
+        public static AsyncRetryPolicy AsyncRetryForever 
+            => Policy.Handle<Exception>()
+                .WaitAndRetryForeverAsync(retryAttempt =>
+                    TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))
+                );
     }
 }
