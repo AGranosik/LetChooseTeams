@@ -24,20 +24,13 @@ namespace LCT.Application.Teams.Events
         }
         public async Task Handle(TeamSelectedDomainEvent notification, CancellationToken cancellationToken)
         {
-            try
-            {
-                await _clientCommunicationService.SendAsync(notification.StreamId.ToString(),
-                    new TeamSelectedHubMessage{
-                        PlayerName = notification.Player.Name,
-                        PlayerSurname = notification.Player.Surname,
-                        Team = notification.TeamName,
-                        TournamentId = notification.StreamId
-                }, cancellationToken);
-            }
-            catch (Exception ex)
-            { 
-                Log.Error(ex.Message);
-            }
+            await _clientCommunicationService.SendAsync(notification.StreamId.ToString(),
+                new TeamSelectedHubMessage{
+                    PlayerName = notification.Player.Name,
+                    PlayerSurname = notification.Player.Surname,
+                    Team = notification.TeamName,
+                    TournamentId = notification.StreamId
+            }, cancellationToken);
         }
     }
 }

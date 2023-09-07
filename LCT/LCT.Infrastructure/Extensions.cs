@@ -89,7 +89,6 @@ namespace LCT.Infrastructure
 
         private static IServiceCollection ConfigureFrontendUrl(this IServiceCollection services)
         {
-            // generate based on who send request?
             var fe = services.GetOptions<FrontendConfiguration>("fe");
             services.AddSingleton(fe);
 

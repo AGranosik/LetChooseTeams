@@ -79,56 +79,6 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
             clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.IsAny<object?>(), CancellationToken.None));
         }
 
-        [Test]
-        public async Task TeamClickedByMultiplePlayers_OnePlayerAlreadySelectedTeam_ReturnWithoutSelectedTeam()
-        {
-            var tournament = await CreateCompleteTournament(3, 3);
-            var actionGroupKey = tournament.Id.Value;
-            var clientCommunicationServiceMock = new Mock<IClientCommunicationService>();
-
-            var actions = CreateActions(3, actionGroupKey);
-
-            for(int i = 0; i < 2; i++)
-                await ActionHandle(actions[i], clientCommunicationServiceMock.Object);
-
-            var firstPLayer = tournament.Players.First();
-            tournament.SelectTeam(firstPLayer.Name, firstPLayer.Surname, TournamentTeamNames.Teams[0]);
-            await SaveAsync(tournament);
-
-            clientCommunicationServiceMock = new Mock<IClientCommunicationService>();
-            await ActionHandle(actions[2], clientCommunicationServiceMock.Object);
-            var actionsFromDB = await GetSavedActions(actionGroupKey);
-            actionsFromDB.Should().NotBeNull();
-            actionsFromDB.Count.Should().Be(3);
-            var clickedTeam = TournamentTeamNames.Teams.Last();
-            actionsFromDB.Any(a => a.Team == clickedTeam).Should().BeTrue();
-            clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object?>(x => ((TeamClickedEvent)x).ClickedTeams.Count == 2 && !((TeamClickedEvent)x).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams.Last())), CancellationToken.None));
-
-        }
-
-        [Test]
-        public async Task TeamClickedByMultiplePlayers_AllPlayersSelectedTeams_SendEmptyList()
-        {
-            var tournament = await CreateCompleteTournament(3, 3);
-            var actionGroupKey = tournament.Id.Value;
-            var clientCommunicationServiceMock = new Mock<IClientCommunicationService>();
-            var actions = CreateActions(3, actionGroupKey);
-
-            for (int i = 0; i < 2; i++)
-            {
-                var action = actions[i];
-                await ActionHandle(action, clientCommunicationServiceMock.Object);
-                tournament.SelectTeam(action.Name, action.Surname, TournamentTeamNames.Teams[i]);
-            }
-            await SaveAsync(tournament);
-            clientCommunicationServiceMock = new Mock<IClientCommunicationService>();
-            await ActionHandle(actions[2], clientCommunicationServiceMock.Object);
-            var actionsFromDB = await GetSavedActions(actionGroupKey);
-            actionsFromDB.Should().NotBeNull();
-            actionsFromDB.Count.Should().Be(3);
-            clientCommunicationServiceMock.Verify(c => c.SendAsync(It.IsAny<string>(), It.Is<object>(x => ((TeamClickedEvent)x).ClickedTeams.Count == 1 && ((TeamClickedEvent)x).ClickedTeams.Any(ct => ct.Team == TournamentTeamNames.Teams[TournamentTeamNames.Teams.Count - 3])), CancellationToken.None));
-        }
-
         private List<TeamClickedAction> CreateActions(int numberOfActions, Guid actionGroupKey)
         {
             var actions = new List<TeamClickedAction>();

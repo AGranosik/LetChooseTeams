@@ -14,7 +14,6 @@ namespace LCT.Application.Players.Events
         public string Surname { get; set; }
     }
 
-    //where messages should be handled?
     public class PlayerAddedEventHandler : INotificationHandler<PlayerAddedDomainEvent>
     {
         private readonly IClientCommunicationService _clientCommuncationService;

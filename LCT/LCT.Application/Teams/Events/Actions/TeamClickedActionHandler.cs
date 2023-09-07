@@ -49,20 +49,8 @@ namespace LCT.Application.Teams.Events.Actions
 
         private async Task<TeamClickedEvent> GetLatesClickedTeams(TeamClickedAction action)
         {
-            // send only clicked teams not selected
-            Tournament tournament = new();
-            try
-            {
-                tournament = await _aggregateRepository.LoadAsync(action.GroupKey);
-                // the should not be try catch
-                // 
-            }
-            catch(Exception ex) { }
-
-            var playerPickedTeams = tournament.SelectedTeams.Select(st => st.Player);
             var actions = await _repository.GetByGroupIdAsync(action.GroupKey);
             var grouppedByPlayer = actions
-                .Where(a => !playerPickedTeams.Any(p => p.Name == a.Name && p.Surname == a.Surname))
                 .GroupBy(a => new { a.Surname, a.Name })
                 .Select(a => new ClieckedPlayerTeam
                 {
