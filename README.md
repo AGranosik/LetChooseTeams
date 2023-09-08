@@ -52,8 +52,7 @@ TO DO:
 [] test for redis meesage beroker
 [] test for hub
 [] redis shouldnt block requests
-[] check logs
-[] wszystkie komentarze w kodzie be
+[X] check logs
 [] update to .net core 7
 [] udpate packages
 [] update k8s

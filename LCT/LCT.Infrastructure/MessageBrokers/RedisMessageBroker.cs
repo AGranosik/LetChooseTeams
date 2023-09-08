@@ -89,8 +89,7 @@ namespace LCT.Infrastructure.MessageBrokers
 
             var serializedMessage = SerilizeMessage(message);
 
-            var queuedMessages = _unsentMessages.Where(um => true).OrderBy(um => um.CreationDate).ToList();
-            _unsentMessages.RemoveAll(um => queuedMessages.Any(qm => qm.Id == um.Id));
+            var queuedMessages = GetUnsentMessages();
             queuedMessages.Add(new UnsentMessage(groupId, serializedMessage));
 
             long result = 0;
@@ -123,6 +122,14 @@ namespace LCT.Infrastructure.MessageBrokers
                 clients += singleCLients;
             }
             return clients;
+        }
+
+        private List<UnsentMessage> GetUnsentMessages()
+        {
+            var queuedMessages = _unsentMessages.Where(um => true).OrderBy(um => um.CreationDate).ToList();
+            _unsentMessages.RemoveAll(um => queuedMessages.Any(qm => qm.Id == um.Id));
+
+            return queuedMessages;
         }
 
         private static bool ConnectionValidation(MessageBrokerConnection connection)
