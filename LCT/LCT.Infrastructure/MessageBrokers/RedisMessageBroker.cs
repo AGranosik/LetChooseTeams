@@ -16,11 +16,10 @@ namespace LCT.Infrastructure.MessageBrokers
 {
     internal class RedisMessageBroker : IMessageBroker
     {
-        private ConnectionMultiplexer _connection;
-        private readonly RedisSettings _settings;
         private static Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
         private readonly IHubContext<TournamentHub> _hubContext;
         private static List<UnsentMessage> _unsentMessages = new();
+        private readonly IRedisConnection _redisConnection;
         private static JsonSerializerSettings _serializeSettings = new()
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
@@ -36,9 +35,9 @@ namespace LCT.Infrastructure.MessageBrokers
 
         private readonly AsyncPolicyWrap _retryWrappedPolicy = Policy.WrapAsync(_fallbackPolicy, ConnectionPolicy.AsyncRetryForever);
 
-        public RedisMessageBroker(RedisSettings redisSettings, IHubContext<TournamentHub> hubContext)
+        public RedisMessageBroker(IRedisConnection redisConnection, IHubContext<TournamentHub> hubContext)
         {
-            _settings = redisSettings;
+            _redisConnection = redisConnection;
             _hubContext = hubContext;
         }
         public async Task PublishAsync<T>(string groupId, T message)
@@ -95,7 +94,7 @@ namespace LCT.Infrastructure.MessageBrokers
             long result = 0;
             try
             {
-                if(_connection is null || _connection.IsConnected)
+                if(_redisConnection.IsOpened())
                     result = await PublishMessagesAsync(queuedMessages);
                 else
                     _unsentMessages.AddRange(queuedMessages);
@@ -111,7 +110,7 @@ namespace LCT.Infrastructure.MessageBrokers
 
         private async Task<long> PublishMessagesAsync(List<UnsentMessage> unsentMessages)
         {
-            var subscriber = await GetSubscriber();
+            var subscriber = await _redisConnection.GetSubscriber();
             long clients = 0;
             foreach (var queuedMessage in unsentMessages)
             {
@@ -136,12 +135,12 @@ namespace LCT.Infrastructure.MessageBrokers
             => connection.GroupId is not null && connection.UserIdentifier is not null;
         private async Task UnsubscribeAsync(string groupId)
         {
-            var pubsub = await GetSubscriber();
+            var pubsub = await _redisConnection.GetSubscriber();
             await pubsub.UnsubscribeAsync(groupId);
         }
         private async Task SubscribeAsync(string groupId)
         {
-            var pubsub = await GetSubscriber();
+            var pubsub = await _redisConnection.GetSubscriber();
             await pubsub.SubscribeAsync(groupId, (channel, message) =>
             {
                 Log.Information($@"Message received. group id: {groupId}");
@@ -158,31 +157,6 @@ namespace LCT.Infrastructure.MessageBrokers
 
         private static string SerilizeMessage<T>(T message)
             => JsonConvert.SerializeObject(message, _serializeSettings);
-
-        private async Task TryOpenRedisConnection()
-        {
-            try
-            {
-                _connection = await ConnectionMultiplexer.ConnectAsync(_settings.ConnectionString, options =>
-                {
-                    options.Password = _settings.Password;
-                    options.HeartbeatInterval = TimeSpan.FromSeconds(20);
-                });
-            }
-            catch (Exception ex)
-            {
-                Log.Error($@"Redis connection failed.", ex);
-                throw;
-            }
-        }
-
-        private async Task<ISubscriber> GetSubscriber()
-        {
-            if (_connection is null || !_connection.IsConnected)
-                await TryOpenRedisConnection();
-
-            return _connection.GetSubscriber();
-        }
     }
 
     internal class UnsentMessage {
