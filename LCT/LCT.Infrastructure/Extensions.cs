@@ -49,6 +49,7 @@ namespace LCT.Infrastructure
             services.AddSingleton(redisConfig);
 
             services.AddSingleton<IMessageBroker, RedisMessageBroker>();
+            services.AddSingleton<IRedisConnection, RedisConnection>();
             return services;
         }
 

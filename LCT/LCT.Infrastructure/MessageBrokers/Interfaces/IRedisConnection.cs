@@ -2,7 +2,7 @@
 
 namespace LCT.Infrastructure.MessageBrokers.Interfaces
 {
-    internal interface IRedisConnection
+    public interface IRedisConnection
     {
         Task<ISubscriber> GetSubscriber();
         bool IsOpened();

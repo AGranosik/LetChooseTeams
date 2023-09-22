@@ -1,5 +1,4 @@
-﻿using System.Text.RegularExpressions;
-using LCT.Infrastructure.ClientCommunication.Hubs;
+﻿using LCT.Infrastructure.ClientCommunication.Hubs;
 using LCT.Infrastructure.MessageBrokers.Interfaces;
 using LCT.Infrastructure.MessageBrokers.Models;
 using Microsoft.AspNetCore.SignalR;
@@ -8,13 +7,12 @@ using Newtonsoft.Json.Serialization;
 using Polly.Fallback;
 using Polly;
 using Serilog;
-using StackExchange.Redis;
 using Polly.Wrap;
 using LCT.Core.RetryPolicies;
 
 namespace LCT.Infrastructure.MessageBrokers
 {
-    internal class RedisMessageBroker : IMessageBroker
+    public class RedisMessageBroker : IMessageBroker
     {
         private static Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
         private readonly IHubContext<TournamentHub> _hubContext;
@@ -123,7 +121,7 @@ namespace LCT.Infrastructure.MessageBrokers
             return clients;
         }
 
-        private List<UnsentMessage> GetUnsentMessages()
+        private static List<UnsentMessage> GetUnsentMessages()
         {
             var queuedMessages = _unsentMessages.Where(um => true).OrderBy(um => um.CreationDate).ToList();
             _unsentMessages.RemoveAll(um => queuedMessages.Any(qm => qm.Id == um.Id));
@@ -132,7 +130,7 @@ namespace LCT.Infrastructure.MessageBrokers
         }
 
         private static bool ConnectionValidation(MessageBrokerConnection connection)
-            => connection.GroupId is not null && connection.UserIdentifier is not null;
+            => !string.IsNullOrEmpty(connection.GroupId) && !string.IsNullOrEmpty(connection.UserIdentifier);
         private async Task UnsubscribeAsync(string groupId)
         {
             var pubsub = await _redisConnection.GetSubscriber();
