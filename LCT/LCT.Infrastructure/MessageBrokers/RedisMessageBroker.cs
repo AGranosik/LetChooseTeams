@@ -14,11 +14,11 @@ namespace LCT.Infrastructure.MessageBrokers
 {
     public class RedisMessageBroker : IMessageBroker
     {
-        private static Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
+        private Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
         private readonly IHubContext<TournamentHub> _hubContext;
-        private static List<UnsentMessage> _unsentMessages = new();
+        private List<UnsentMessage> _unsentMessages = new();
         private readonly IRedisConnection _redisConnection;
-        private static JsonSerializerSettings _serializeSettings = new()
+        private JsonSerializerSettings _serializeSettings = new()
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
@@ -76,7 +76,10 @@ namespace LCT.Infrastructure.MessageBrokers
             connections.RemoveAll(c => c == connection.UserIdentifier);
 
             if(connections.Count == 0)
+            {
+                _groupConnectionsDicitonary.Remove(connection.GroupId);
                 await UnsubscribeAsync(connection.GroupId);
+            }
         }
 
         private async Task<long> TryPublishAsync<T>(string groupId, T message)
@@ -121,7 +124,7 @@ namespace LCT.Infrastructure.MessageBrokers
             return clients;
         }
 
-        private static List<UnsentMessage> GetUnsentMessages()
+        private List<UnsentMessage> GetUnsentMessages()
         {
             var queuedMessages = _unsentMessages.Where(um => true).OrderBy(um => um.CreationDate).ToList();
             _unsentMessages.RemoveAll(um => queuedMessages.Any(qm => qm.Id == um.Id));
@@ -146,14 +149,14 @@ namespace LCT.Infrastructure.MessageBrokers
             });
         }
 
-        private static List<string> GetConnectionsIfGroupsExists(string groupId)
+        private List<string> GetConnectionsIfGroupsExists(string groupId)
         {
             var isValueExist = _groupConnectionsDicitonary.TryGetValue(groupId, out var result);
 
             return isValueExist ? result : null;
         }
 
-        private static string SerilizeMessage<T>(T message)
+        private string SerilizeMessage<T>(T message)
             => JsonConvert.SerializeObject(message, _serializeSettings);
     }
 
