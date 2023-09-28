@@ -18,13 +18,11 @@ namespace LCT.Application.Tournaments.Commands
             _repository = repository;
         }
 
-        public async Task<Unit> Handle(SetTournamentNameCommand request, CancellationToken cancellationToken)
+        public async Task Handle(SetTournamentNameCommand request, CancellationToken cancellationToken)
         {
             var tournament = await _repository.LoadAsync(request.TournamentId);
             tournament.SetName(request.Name);
             await _repository.SaveAsync(tournament, tournament.Version);
-
-            return Unit.Value;
         }
     }
 }

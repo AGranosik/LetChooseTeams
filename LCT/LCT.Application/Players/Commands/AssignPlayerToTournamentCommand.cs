@@ -6,7 +6,7 @@ using Serilog;
 
 namespace LCT.Application.Players.Commands
 {
-    public class AssignPlayerToTournamentCommand: IRequest<Unit>
+    public class AssignPlayerToTournamentCommand: IRequest
     {
         public string Name { get; set; }
         public string Surname { get; set; }
@@ -14,20 +14,18 @@ namespace LCT.Application.Players.Commands
     }
 
     public record PlayerAssignedMessageDto(Guid Id, string Name, string Surname);
-    public class AssignPlayerToTournamentCommandHandler : IRequestHandler<AssignPlayerToTournamentCommand, Unit>
+    public class AssignPlayerToTournamentCommandHandler : IRequestHandler<AssignPlayerToTournamentCommand>
     {
         private readonly IAggregateRepository<Tournament> _repository;
         public AssignPlayerToTournamentCommandHandler(IAggregateRepository<Tournament> reposiotry)
         {
             _repository = reposiotry;
         }
-        public async Task<Unit> Handle(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)
+        public async Task Handle(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)
         {
             var tournament = await _repository.LoadAsync(request.TournamentId);
             tournament.AddPlayer(request.Name, request.Surname);
             await _repository.SaveAsync(tournament);
-
-            return Unit.Value;
         }
     }
 

@@ -57,9 +57,9 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.PlayerAssignedToTour
 
 
 
-        private async Task<Unit> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId)
+        private async Task AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId)
         {
-            return await new AssignPlayerToTournamentCommandHandler(GetRepository()).Handle(new AssignPlayerToTournamentCommand
+            await new AssignPlayerToTournamentCommandHandler(GetRepository()).Handle(new AssignPlayerToTournamentCommand
             {
                 Name = name,
                 Surname = surname,

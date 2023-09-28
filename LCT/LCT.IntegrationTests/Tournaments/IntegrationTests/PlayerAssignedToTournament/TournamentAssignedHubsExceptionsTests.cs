@@ -33,14 +33,14 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.PlayerAssignedToTour
         public async Task AssignPlayer_ReturnsPlayerIdDespiteHubException()
         {
             var tournament = await CreateTournament();
-            var result = await AssignPlayerCommandHandleAsync("name", "surname", tournament.Id.Value);
+            var assignPlayerAction = () => AssignPlayerCommandHandleAsync("name", "surname", tournament.Id.Value);
 
-            result.Should().NotBeNull();
+            await assignPlayerAction.Should().NotThrowAsync();
         }
 
-        private async Task<Unit> AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId)
+        private async Task AssignPlayerCommandHandleAsync(string name, string surname, Guid tournamentId)
         {
-            return await new AssignPlayerToTournamentCommandHandler(GetRepository()).Handle(new AssignPlayerToTournamentCommand
+            await new AssignPlayerToTournamentCommandHandler(GetRepository()).Handle(new AssignPlayerToTournamentCommand
             {
                 Name = name,
                 Surname = surname,

@@ -10,7 +10,7 @@ namespace LCT.Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection collection)
         {
-            collection.AddMediatR(typeof(Extensions));
+            collection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(Extensions)));
             collection.AddSingleton<IQRCodeCreator, QRCodeCreator>();
             collection.AddSingleton<ITournamentDomainService, TournamentDomainService>();
             //composition root

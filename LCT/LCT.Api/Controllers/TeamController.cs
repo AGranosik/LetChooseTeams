@@ -22,6 +22,9 @@ namespace LCT.Api.Controllers
 
         [HttpPost("select")]
         public async Task<IActionResult> SelectTeam(SelectTeamCommand request)
-            => Ok(await _mediator.Send(request));
+        {
+            await _mediator.Send(request);
+            return Ok();
+        }
     }
 }

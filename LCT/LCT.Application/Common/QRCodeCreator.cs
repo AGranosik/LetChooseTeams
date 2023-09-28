@@ -1,4 +1,6 @@
-﻿using QRCoder;
+﻿
+
+using QRCoder;
 
 namespace LCT.Application.Common
 {
@@ -6,6 +8,8 @@ namespace LCT.Application.Common
     {
         string Generate(string url);
     }
+
+    // implementation in infra??
     public class QRCodeCreator: IQRCodeCreator
     {
         public static QRCodeGenerator _qrGenerator = new();

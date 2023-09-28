@@ -112,7 +112,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.SetTournamentNameTes
             return tournament;
         }
 
-        private async Task<Unit> SetTournamentName(SetTournamentNameCommand request)
+        private async Task SetTournamentName(SetTournamentNameCommand request)
             => await new SetTournamentNameCommandHandler(GetRepository()).Handle(request, CancellationToken.None);
 
         private async Task<Tournament> GetTournamentById(Guid id)

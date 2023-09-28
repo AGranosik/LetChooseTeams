@@ -70,8 +70,9 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
         {
             var tournament = await CreateTournament();
             var player = tournament.Players.Last();
-            var result = await SelectTeamCommandHandlerAsync(player.Name, player.Surname, tournament.Id.Value, TournamentTeamNames.Teams.First());
-            result.Should().NotBeNull();
+            var selectTeamAction = () => SelectTeamCommandHandlerAsync(player.Name, player.Surname, tournament.Id.Value, TournamentTeamNames.Teams.First());
+            await selectTeamAction.Should().NotThrowAsync();
+
             var tournamentFromDb = await GetTournamentById(tournament.Id.Value);
             tournamentFromDb.Should().NotBeNull();
             tournamentFromDb.Players.Count().Should().Be(3);
@@ -132,9 +133,9 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.SelectTeamTest
             return tournament;
         }
 
-        private async Task<Unit> SelectTeamCommandHandlerAsync(string playerName, string playerSurname, Guid TournamentId, string Team)
+        private async Task SelectTeamCommandHandlerAsync(string playerName, string playerSurname, Guid TournamentId, string Team)
         {
-            return await new SelectTeamCommandHandler(GetRepository()).Handle(new SelectTeamCommand
+            await new SelectTeamCommandHandler(GetRepository()).Handle(new SelectTeamCommand
             {
                 PlayerName = playerName,
                 PlayerSurname = playerSurname,
