@@ -20,11 +20,14 @@ namespace LCT.Api.Controllers
 
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateTournamentCommand request)
-        => Ok(await _mediator.Send(request));
+            => Ok(await _mediator.Send(request));
 
         [HttpPost("assignPlayer")]
         public async Task<IActionResult> AssignPlayerToTournament(AssignPlayerToTournamentCommand request)
-            => Ok(await _mediator.Send(request));
+        {
+            await _mediator.Send(request);
+            return Ok();
+        }
 
         [HttpGet("draw")]
         public async Task<IActionResult> DrawTeams(Guid tournamentId)

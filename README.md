@@ -48,13 +48,12 @@ TO DO:
 [X] can easly remove actions from service -> refactor if need to
 [X] Redis
 [X] poprawka działania fe z be
-[] publish fallbacks
-[] test for redis meesage beroker
-[] test for hub
-[] redis shouldnt block requests
+[X] publish fallbacks
+[X] test for redis meesage beroker
+[X] redis shouldnt block requests
 [X] check logs
-[] update to .net core 7
-[] udpate packages
+[X] update to .net core 7
+[X] udpate packages
 [] update k8s
 [] routing fe -> remove play names from params and store in store 
 [] generation qr code -> fe?
