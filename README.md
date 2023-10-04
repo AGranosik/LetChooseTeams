@@ -54,6 +54,8 @@ TO DO:
 [X] check logs
 [X] update to .net core 7
 [X] udpate packages
+[X] work on mobile
+[] swagger documentation
 [] update k8s
 [] routing fe -> remove play names from params and store in store 
 [] generation qr code -> fe?
@@ -63,7 +65,6 @@ TO DO:
 [] api versioning
 [] true cqrs
 [] documentation
-[] monitoring for memory leaks
 [] azure
 [] azure monitoring
 ???[]action microservice
