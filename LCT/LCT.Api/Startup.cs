@@ -20,7 +20,10 @@ namespace LCT.Api
         {
             services.AddControllers();
             services.AddEndpointsApiExplorer();
-            services.AddSwaggerGen();
+            services.AddSwaggerGen(c =>
+            {
+                c.EnableAnnotations();
+            });
             services.AddInfrastructure()
                 .AddApplication();
 

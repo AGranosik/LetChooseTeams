@@ -56,11 +56,13 @@ TO DO:
 [X] udpate packages
 [X] work on mobile
 [] swagger documentation
-[] update k8s
+[] return request id
+[] documentation should return request id model
 [] routing fe -> remove play names from params and store in store 
 [] generation qr code -> fe?
-[] monitoring grafana etc.
+[] update k8s
 [] k6 tests
+[] monitoring grafana etc.
 [] health chcecks
 [] api versioning
 [] true cqrs

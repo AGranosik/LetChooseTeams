@@ -3,6 +3,7 @@ using LCT.Application.Tournaments.Commands;
 using LCT.Application.Tournaments.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace LCT.Api.Controllers
 {
@@ -15,14 +16,23 @@ namespace LCT.Api.Controllers
         }
 
         [HttpGet]
+        [SwaggerOperation(Summary = "Get single tournament.")]
+        [SwaggerResponse(200, "", typeof(TournamentDto))]
+        [SwaggerResponse(400, "Some error occured. Check logs with provided requestId.")]
         public async Task<IActionResult> Get(Guid Id, CancellationToken cancellationToken)
             => Ok(await _mediator.Send(new GetTournamentQuery {  TournamentId = Id }, cancellationToken));
 
         [HttpPost("create")]
+        [SwaggerOperation(Summary = "Create tournament")]
+        [SwaggerResponse(200, "Tournament created")]
+        [SwaggerResponse(400, "Some error occured. Check logs with provided requestId.")]
         public async Task<IActionResult> Create(CreateTournamentCommand request)
             => Ok(await _mediator.Send(request));
 
         [HttpPost("assignPlayer")]
+        [SwaggerOperation(Summary = "Assign player to tournament.")]
+        [SwaggerResponse(200, "Player assigned to tournament successfully.")]
+        [SwaggerResponse(400, "Some error occured. Check logs with provided requestId.")]
         public async Task<IActionResult> AssignPlayerToTournament(AssignPlayerToTournamentCommand request)
         {
             await _mediator.Send(request);
@@ -30,6 +40,9 @@ namespace LCT.Api.Controllers
         }
 
         [HttpGet("draw")]
+        [SwaggerOperation(Summary = "Draw team for players when all seats are taken.")]
+        [SwaggerResponse(200, "Teams drawn successfully.", typeof(List<DrawnTeamDto>))]
+        [SwaggerResponse(400, "Some error occured. Check logs with provided requestId.")]
         public async Task<IActionResult> DrawTeams(Guid tournamentId)
             => Ok(await _mediator.Send(new DrawTeamForPlayersQuery { TournamentId = tournamentId }));
     }
