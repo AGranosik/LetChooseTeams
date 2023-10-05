@@ -55,9 +55,9 @@ TO DO:
 [X] update to .net core 7
 [X] udpate packages
 [X] work on mobile
-[] swagger documentation
-[] return request id
-[] documentation should return request id model
+[X] swagger documentation
+[X] return request id
+[X] documentation should return request id model
 [] routing fe -> remove play names from params and store in store 
 [] generation qr code -> fe?
 [] update k8s
