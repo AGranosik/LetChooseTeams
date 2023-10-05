@@ -23,7 +23,7 @@ namespace LCT.Infrastructure.Repositories
 
             var aggregate = await _client.GetAggregateAsync<TAggregateRoot>(Id);
             if (aggregate is null)
-                throw new EntityDoesNotExist(nameof(TAggregateRoot));
+                throw new EntityDoesNotExist(typeof(TAggregateRoot).Name);
             return aggregate;
         }
 

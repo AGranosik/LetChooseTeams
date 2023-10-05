@@ -4,6 +4,7 @@ using LCT.Application.Common.Configs;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Common.Interfaces;
 using MediatR;
+using Serilog;
 
 namespace LCT.Application.Tournaments.Queries
 {
@@ -42,7 +43,6 @@ namespace LCT.Application.Tournaments.Queries
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-
             var generationQrCodeTask = GenerateQrCodeForTournament(request.TournamentId);
             var tournament = await _repository.LoadAsync(request.TournamentId, cancellationToken);
             return new TournamentDto

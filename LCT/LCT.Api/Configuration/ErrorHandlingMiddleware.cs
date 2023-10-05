@@ -1,4 +1,7 @@
-﻿using Serilog;
+﻿using System.Text.Json;
+using LCT.Api.Configuration.Models;
+using Serilog;
+using Serilog.Context;
 
 namespace LCT.Api.Configuration
 {
@@ -13,14 +16,20 @@ namespace LCT.Api.Configuration
 
         public async Task Invoke(HttpContext context)
         {
-            try
+            var requestId = Guid.NewGuid();
+            using (LogContext.PushProperty("RequestId", requestId))
             {
-                await _requestDelegate(context);
-            }
-            catch (Exception ex) 
-            {
-                Log.Error(ex, ex.Message);
-                context.Response.StatusCode = 400;
+                var response = context.Response;
+                try
+                {
+                    await _requestDelegate(context);
+                }
+                catch (Exception ex) 
+                {
+                    Log.Error(ex, ex.Message);
+                    var responseModel = JsonSerializer.Serialize(new ErrorResponseModel(requestId , ex.Message));
+                    await response.WriteAsync(responseModel);
+                }
             }
         }
     }
