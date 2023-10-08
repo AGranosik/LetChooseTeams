@@ -58,8 +58,8 @@ TO DO:
 [X] swagger documentation
 [X] return request id
 [X] documentation should return request id model
-[] routing fe -> remove play names from params and store in store 
-[] generation qr code -> fe?
+[X] routing fe -> remove play names from params and store in store 
+[X] generation qr code -> fe?
 [] update k8s
 [] k6 tests
 [] monitoring grafana etc.

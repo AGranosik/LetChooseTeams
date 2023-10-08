@@ -1,10 +1,6 @@
-﻿using System.Text;
-using LCT.Application.Common;
-using LCT.Application.Common.Configs;
-using LCT.Domain.Aggregates.TournamentAggregate.Entities;
+﻿using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Common.Interfaces;
 using MediatR;
-using Serilog;
 
 namespace LCT.Application.Tournaments.Queries
 {
@@ -13,7 +9,6 @@ namespace LCT.Application.Tournaments.Queries
         public Guid Id { get; set; }
         public string TournamentName { get; set; }
         public List<PlayerDto> Players { get; set; }
-        public string QRCode { get; set; }
         public int PlayerLimit { get; set; }
         public int Version { get; set; }
     }
@@ -31,26 +26,20 @@ namespace LCT.Application.Tournaments.Queries
     }
     public class GetTournamentQueryHandler : IRequestHandler<GetTournamentQuery, TournamentDto>
     {
-        private readonly IQRCodeCreator _qrCodeCreator;
         private readonly IAggregateRepository<Tournament> _repository;
-        private readonly FrontendConfiguration _feCfg;
-        public GetTournamentQueryHandler(IQRCodeCreator qRCodeCreator, IAggregateRepository<Tournament> repository, FrontendConfiguration feCfg)
+        public GetTournamentQueryHandler(IAggregateRepository<Tournament> repository)
         {
-            _qrCodeCreator = qRCodeCreator;
             _repository = repository;
-            _feCfg = feCfg;
         }
         public async Task<TournamentDto> Handle(GetTournamentQuery request, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
-            var generationQrCodeTask = GenerateQrCodeForTournament(request.TournamentId);
             var tournament = await _repository.LoadAsync(request.TournamentId, cancellationToken);
             return new TournamentDto
             {
                 Id = tournament.Id.Value,
                 TournamentName = tournament.TournamentName,
                 PlayerLimit = tournament.Limit.Limit,
-                QRCode = await generationQrCodeTask,
                 Version = tournament.Version,
                 Players = tournament.Players.Select(p => new PlayerDto
                 {
@@ -60,19 +49,6 @@ namespace LCT.Application.Tournaments.Queries
                     DrawnTeam = tournament.DrawTeams.FirstOrDefault(dt => dt.Player == p)?.TeamName
                 }).ToList()
             };
-        }
-
-        private async Task<string> GenerateQrCodeForTournament(Guid id)
-        {
-            return await Task.Run(() =>
-            {
-                var stringBuilder = new StringBuilder("http://");
-                stringBuilder.Append(_feCfg.ConnectionString);
-                stringBuilder.Append("/player/register/");
-                stringBuilder.Append(id);
-
-                return _qrCodeCreator.Generate(stringBuilder.ToString());
-            });
         }
     }
 }

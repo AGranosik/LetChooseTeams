@@ -1,7 +1,5 @@
-﻿using LCT.Application.Common;
-using LCT.Core.Entites.Tournaments.Services;
+﻿using LCT.Core.Entites.Tournaments.Services;
 using LCT.Domain.Aggregates.TournamentAggregate.Services;
-using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LCT.Application
@@ -11,7 +9,6 @@ namespace LCT.Application
         public static IServiceCollection AddApplication(this IServiceCollection collection)
         {
             collection.AddMediatR(cfg => cfg.RegisterServicesFromAssemblyContaining(typeof(Extensions)));
-            collection.AddSingleton<IQRCodeCreator, QRCodeCreator>();
             collection.AddSingleton<ITournamentDomainService, TournamentDomainService>();
             //composition root
 

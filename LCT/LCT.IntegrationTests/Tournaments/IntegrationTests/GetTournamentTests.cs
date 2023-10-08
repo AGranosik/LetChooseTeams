@@ -1,6 +1,4 @@
 ﻿using FluentAssertions;
-using LCT.Application.Common;
-using LCT.Application.Common.Configs;
 using LCT.Application.Tournaments.Queries;
 using LCT.Domain.Aggregates.TournamentAggregate.Entities;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
@@ -8,8 +6,6 @@ using LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players;
 using LCT.Domain.Common.Exceptions;
 using LCT.Infrastructure.ClientCommunication.Hubs;
 using LCT.IntegrationTests.Mocks;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.DFM;
 using NUnit.Framework;
@@ -69,23 +65,6 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             tournament.Should().NotBeNull();
             tournament.TournamentName.Should().Be("name8");
             tournament.Players.Should().BeEmpty();
-            tournament.QRCode.Should().NotBeNullOrEmpty();
-        }
-
-        [Test]
-        public async Task GetTournament_CannotCreateQRCode_ThrowsException()
-        {
-            var mockedQRCodeCreator = new Mock<IQRCodeCreator>();
-            mockedQRCodeCreator.Setup(c => c.Generate(It.IsAny<string>()))
-                .Throws(new ArgumentNullException());
-
-            var tournaments = await CreateTournament(2);
-            var func = async () => await GetTournamentQueryHandler(new GetTournamentQuery
-            {
-                TournamentId = tournaments[tournaments.Count - 1].Id.Value
-            }, mockedQRCodeCreator.Object);
-
-            await func.Should().ThrowAsync<ArgumentNullException>();
         }
 
         [Test]
@@ -132,10 +111,9 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
             return list;
         }
 
-        private async Task<TournamentDto> GetTournamentQueryHandler(GetTournamentQuery request, IQRCodeCreator qrCodeCreator = null)
+        private async Task<TournamentDto> GetTournamentQueryHandler(GetTournamentQuery request)
         {
-            qrCodeCreator ??= _scope.ServiceProvider.GetRequiredService<IQRCodeCreator>();
-            return await new GetTournamentQueryHandler(qrCodeCreator, GetRepository(), new FrontendConfiguration()).Handle(request, new CancellationToken());
+            return await new GetTournamentQueryHandler(GetRepository()).Handle(request, new CancellationToken());
         }
     }
 }

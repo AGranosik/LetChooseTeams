@@ -1,5 +1,4 @@
-﻿using LCT.Application.Common.Configs;
-using LCT.Application.Common.Interfaces;
+﻿using LCT.Application.Common.Interfaces;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Interfaces;
@@ -38,7 +37,6 @@ namespace LCT.Infrastructure
             services.AddSingleton<IActionStorageClient, MongoActionStorageClient>();
             services.AddSingleton<IUniqnessIndexExecutor, UniqnessIndexExecutor>();
             RegisterDomainEvents();
-            services.ConfigureFrontendUrl();
 
             return services;
         }
@@ -86,14 +84,6 @@ namespace LCT.Infrastructure
             var options = new T();
             configuration.GetSection(sectionName).Bind(options);
             return options;
-        }
-
-        private static IServiceCollection ConfigureFrontendUrl(this IServiceCollection services)
-        {
-            var fe = services.GetOptions<FrontendConfiguration>("fe");
-            services.AddSingleton(fe);
-
-            return services;
         }
     }
 }
