@@ -60,7 +60,7 @@ TO DO:
 [X] documentation should return request id model
 [X] routing fe -> remove play names from params and store in store 
 [X] generation qr code -> fe?
-[] update k8s
+[X] update k8s
 [] k6 tests
 [] monitoring grafana etc.
 [] health chcecks

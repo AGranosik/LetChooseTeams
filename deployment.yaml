@@ -32,8 +32,6 @@ spec:
             value: mongodb://172.17.0.1:27021
           - name: Mongo__DatabaseName
             value: Lct_Dev
-          - name: fe__ConnectionString
-            value: 172.17.0.1:3000
           - name: ElasticConfiguration__Uri
             value: http://172.17.0.1:9200
           - name: Redis__ConnectionString
