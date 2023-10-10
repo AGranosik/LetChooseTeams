@@ -61,7 +61,7 @@ TO DO:
 [X] routing fe -> remove play names from params and store in store 
 [X] generation qr code -> fe?
 [X] update k8s
-[] k6 tests
+[X] k6 tests
 [] monitoring grafana etc.
 [] health chcecks
 [] api versioning
