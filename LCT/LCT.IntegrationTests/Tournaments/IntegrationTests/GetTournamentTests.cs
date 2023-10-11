@@ -76,6 +76,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests
                 TournamentId = tournaments[tournaments.Count - 1].Id.Value
             });
 
+
             tournament.Should().NotBeNull();
             tournament.TournamentName.Should().Be("name8");
             tournament.Players.Should().NotBeEmpty();

@@ -65,6 +65,7 @@ TO DO:
 [] monitoring grafana etc.
 [] health chcecks
 [] api versioning
+[] need 3 isntances of mongo? -- some local files
 [] true cqrs
 [] documentation
 [] azure
