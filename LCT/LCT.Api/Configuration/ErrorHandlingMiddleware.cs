@@ -28,6 +28,7 @@ namespace LCT.Api.Configuration
                 {
                     Log.Error(ex, ex.Message);
                     var responseModel = JsonSerializer.Serialize(new ErrorResponseModel(requestId , ex.Message));
+                    response.StatusCode = 400;
                     await response.WriteAsync(responseModel);
                 }
             }

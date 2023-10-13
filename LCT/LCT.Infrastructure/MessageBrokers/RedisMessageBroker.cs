@@ -84,13 +84,6 @@ namespace LCT.Infrastructure.MessageBrokers
 
         private async Task<long> TryPublishAsync<T>(string groupId, T message)
         {
-            var connection = GetConnectionsIfGroupsExists(groupId);
-            if (connection is null || connection.Any() == false)
-            {
-                Log.Warning($@"Misssing connection for {groupId}");
-                return 0;
-            }
-
             var serializedMessage = SerilizeMessage(message);
 
             var queuedMessages = GetUnsentMessages();

@@ -12,7 +12,7 @@ To 'push' to registry
 
 `docker build . -t localhost:7000/lct`
 
-
+`docker push localhost:7000/lct`
 
 #V1
 

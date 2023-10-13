@@ -15,7 +15,7 @@ namespace LCT.IntegrationTests.Infrastucture.MessageBrokers.RedisMessageBrokers
     internal class PublishTests
     {
         [Test]
-        public async Task MissingGroupId_PublishNotCalled_Success()
+        public async Task MissingGroupId_PublishCalled_Success()
         {
             var redisConnectionMock = new Mock<IRedisConnection>();
             var hubMock = new Mock<IHubContext<TournamentHub>>();
@@ -32,7 +32,7 @@ namespace LCT.IntegrationTests.Infrastucture.MessageBrokers.RedisMessageBrokers
             var action = () => rmb.PublishAsync(channel, new MessageBrokerConnection("groupId", "userId"));
             await action.Should().NotThrowAsync();
 
-            subsriber.Verify(s => s.PublishAsync(It.Is<RedisChannel>(c => c == channel), It.IsAny<RedisValue>(), It.IsAny<CommandFlags>()), Times.Never());
+            subsriber.Verify(s => s.PublishAsync(It.Is<RedisChannel>(c => c == channel), It.IsAny<RedisValue>(), It.IsAny<CommandFlags>()), Times.Once());
         }
 
         [Test]
