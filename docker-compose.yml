@@ -22,14 +22,6 @@ services:
             - mongors-network
         depends_on:
             - elasticsearch
-    grafana:
-        image: grafana/grafana
-        ports:
-          - 3000:3000
-        networks:
-          - mongors-network
-        depends_on:
-          - elasticsearch
     mongo1:
         container_name: mongo1
         image: mongo:4.4

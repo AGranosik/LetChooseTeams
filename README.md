@@ -12,7 +12,7 @@ To 'push' to registry
 
 `docker build . -t localhost:7000/lct`
 
-`docker push localhost:7000/lct`
+`docker push localhost:7000/lct` 
 
 #V1
 
@@ -62,7 +62,6 @@ TO DO:
 [X] generation qr code -> fe?
 [X] update k8s
 [X] k6 tests
-[] monitoring grafana etc.
 [] health chcecks
 [] api versioning
 [] need 3 isntances of mongo? -- some local files
