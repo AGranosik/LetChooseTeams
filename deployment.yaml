@@ -3,26 +3,26 @@ kind: Deployment
 metadata:
   name: lct-api
 spec:
-  replicas: 4
+  replicas: 1
   selector: 
     matchLabels:
-      app: lct-api
+      app: lct-api-deployment
   template:
     metadata:
       labels:
-        app: lct-api
+        app: lct-api-deployment
     spec:
       containers:
-        - name: lct
+        - name: lct-api
           image: localhost:7000/lct:latest
           imagePullPolicy: Always
           resources:
             requests:
-                memory: "200Mi"
-                cpu: "200m"
+                memory: 200Mi
+                cpu: 200m
             limits:
-                memory: "300Mi"
-                cpu: "400m"
+                memory: 300Mi
+                cpu: 400m
           env:
           - name: ASPNETCORE_ENVIRONMENT
             value: Development
@@ -38,10 +38,3 @@ spec:
             value: 172.17.0.1:6379
           - name: Redis__Password
             value: "123456"
-      # affinity: its into nodes not pods.
-        # podAntiAffinity:
-            # requiredDuringSchedulingIgnoredDuringExecution:
-                # - labelSelector:
-                    # matchLabels:
-                        # app: lct
-                  # topologyKey: kubernetes.io/hostname
