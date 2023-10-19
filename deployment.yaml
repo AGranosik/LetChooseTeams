@@ -16,6 +16,12 @@ spec:
         - name: lct-api
           image: localhost:7000/lct:latest
           imagePullPolicy: Always
+          livenessProbe:
+            httpGet:
+              path: /liveness
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 200
           resources:
             requests:
                 memory: 200Mi

@@ -19,6 +19,7 @@ namespace LCT.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddHealthChecks();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen(c =>
             {
@@ -26,6 +27,7 @@ namespace LCT.Api
             });
             services.AddInfrastructure()
                 .AddApplication();
+
 
             services.AddSignalR();
             Console.WriteLine("Configuration finished.");
@@ -56,8 +58,11 @@ namespace LCT.Api
             {
                 endpoints.MapControllers();
                 endpoints.MapHub<TournamentHub>("/hubs/actions");
+                endpoints.MapHealthChecks("/liveness");
             });
         }
+
+
 
         private void ConfigureLogger()
         {

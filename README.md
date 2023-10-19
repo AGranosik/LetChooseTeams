@@ -62,6 +62,7 @@ TO DO:
 [X] generation qr code -> fe?
 [X] update k8s
 [X] k6 tests
+[X] load scalling
 [] health chcecks
 [] api versioning
 [] need 3 isntances of mongo? -- some local files
