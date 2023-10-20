@@ -63,7 +63,7 @@ TO DO:
 [X] update k8s
 [X] k6 tests
 [X] load scalling
-[] health chcecks
+[X] health chcecks
 [] api versioning
 [] need 3 isntances of mongo? -- some local files
 [] true cqrs
