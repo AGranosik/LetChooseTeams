@@ -64,7 +64,8 @@ TO DO:
 [X] k6 tests
 [X] load scalling
 [X] health chcecks
-[] api versioning
+[X] api versioning - concept
+[] api versioning -> simple implementation
 [] need 3 isntances of mongo? -- some local files
 [] true cqrs
 [] documentation
