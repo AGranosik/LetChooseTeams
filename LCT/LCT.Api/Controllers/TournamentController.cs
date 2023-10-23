@@ -1,4 +1,5 @@
-﻿using LCT.Api.Configuration.Models;
+﻿using Asp.Versioning;
+using LCT.Api.Configuration.Models;
 using LCT.Application.Players.Commands;
 using LCT.Application.Tournaments.Commands;
 using LCT.Application.Tournaments.Queries;
@@ -10,6 +11,7 @@ namespace LCT.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion("1.0")]
     public class TournamentController : BaseApiController
     {
         public TournamentController(IMediator mediator) : base(mediator)

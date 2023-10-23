@@ -1,4 +1,5 @@
-﻿using LCT.Api.Configuration;
+﻿using Asp.Versioning;
+using LCT.Api.Configuration;
 using LCT.Application;
 using LCT.Infrastructure;
 using LCT.Infrastructure.ClientCommunication.Hubs;
@@ -28,7 +29,8 @@ namespace LCT.Api
             services.AddInfrastructure()
                 .AddApplication();
 
-
+            services.AddApiVersioning(o => o.ApiVersionReader = new HeaderApiVersionReader("api-version"));
+            services.AddMvc();
             services.AddSignalR();
             Console.WriteLine("Configuration finished.");
         }
