@@ -6,6 +6,7 @@ using LCT.Infrastructure.ClientCommunication.Hubs;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 
 namespace LCT.Api
 {
@@ -29,8 +30,8 @@ namespace LCT.Api
             services.AddInfrastructure()
                 .AddApplication();
 
-            services.AddApiVersioning(o => o.ApiVersionReader = new HeaderApiVersionReader("api-version"));
-            services.AddMvc();
+            AddApiVersioning(services);
+
             services.AddSignalR();
             Console.WriteLine("Configuration finished.");
         }
@@ -62,9 +63,19 @@ namespace LCT.Api
                 endpoints.MapHub<TournamentHub>("/hubs/actions");
                 endpoints.MapHealthChecks("/liveness");
             });
+
         }
 
-
+        private static void AddApiVersioning(IServiceCollection serviceCollection)
+        {
+            serviceCollection
+                .AddProblemDetails()
+                .AddApiVersioning(o => {
+                    o.ApiVersionReader = new HeaderApiVersionReader("api-version");
+                    o.DefaultApiVersion = new ApiVersion(1.0);
+                    o.AssumeDefaultVersionWhenUnspecified = true;
+                }).AddMvc();
+        }
 
         private void ConfigureLogger()
         {

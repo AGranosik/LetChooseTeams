@@ -1,4 +1,5 @@
-﻿using LCT.Api.Configuration.Models;
+﻿using Asp.Versioning;
+using LCT.Api.Configuration.Models;
 using LCT.Application.Teams.Commands;
 using LCT.Application.Teams.Queries;
 using MediatR;
@@ -9,6 +10,7 @@ namespace LCT.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [ApiVersion(1.0)]
     public class TeamController : BaseApiController
     {
         public TeamController(IMediator mediator) : base(mediator)
