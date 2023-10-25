@@ -24,9 +24,9 @@ services:
             - elasticsearch
     mongo1:
         container_name: mongo1
-        image: mongo:4.4
+        image: mongo:7.0
         volumes:
-          - ~/mongors/data1:/data/db
+          - mongors:/data/db
           - ./init.sh:/init.sh
         networks:
           - mongors-network
@@ -35,32 +35,29 @@ services:
         links:
           - mongo2
           - mongo3
-        restart: always
         depends_on:
             - mongo2
             - mongo3
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
     mongo2:
         container_name: mongo2
-        image: mongo:4.4
+        image: mongo:7.0
         volumes:
-          - ~/mongors/data2:/data/db
+          - mongors2:/data/db
         networks:
           - mongors-network
         ports:
           - 27017
-        restart: always
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]
     mongo3:
         container_name: mongo3
-        image: mongo:4.4
+        image: mongo:7.0
         volumes:
-          - ~/mongors/data3:/data/db
+          - mongors3:/data/db
         networks:
           - mongors-network
         ports:
           - 27017
-        restart: always
         entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "dbrs" ]    
     redis:
         container_name: basic-redis-chat
@@ -69,23 +66,12 @@ services:
         command: redis-server --appendonly yes --requirepass 123456    
         ports:
           - "6379:6379"
-    backend-api:
-        container_name: lct-backend-api
-        build: ./LCT
-        networks:
-          - mongors-network
-        environment:
-            - ASPNETCORE_ENVIRONMENT=Development
-            - ASPNETCORE_URLS=http://+:80
-            - Mongo__ConnectionString=mongodb://mongo1
-            - Mongo__DatabaseName=Lct_Dev
-            - fe__ConnectionString:192.168.1.11:3000
-            - ElasticConfiguration__Uri=http://elasticsearch:9200
-        ports:
-            - 6008:80
 volumes:
     esdata:
         driver: local
+    mongors:
+    mongors2:
+    mongors3:
 networks:
   mongors-network:
     driver: bridge
