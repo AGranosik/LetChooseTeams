@@ -6,7 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace LCT.Api.Controllers
+namespace LCT.Api.Controllers.v1
 {
     [Route("api/[controller]")]
     [ApiController]

@@ -7,7 +7,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
-namespace LCT.Api.Controllers
+namespace LCT.Api.Controllers.v1
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -23,7 +23,7 @@ namespace LCT.Api.Controllers
         [SwaggerResponse(200, "", typeof(TournamentDto))]
         [SwaggerResponse(400, "Some error occured. Check logs with provided requestId.", typeof(ErrorResponseModel))]
         public async Task<IActionResult> Get(Guid Id, CancellationToken cancellationToken)
-            => Ok(await _mediator.Send(new GetTournamentQuery {  TournamentId = Id }, cancellationToken));
+            => Ok(await _mediator.Send(new GetTournamentQuery { TournamentId = Id }, cancellationToken));
 
         [HttpPost("create")]
         [SwaggerOperation(Summary = "Create tournament")]

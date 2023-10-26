@@ -66,8 +66,7 @@ TO DO:
 [X] health chcecks
 [X] api versioning - concept
 [] api versioning -> simple implementation
-[] need 3 isntances of mongo? -- some local files
-[] true cqrs
+[X] need 3 isntances of mongo? -- some local files
 [] documentation
 [] azure
 [] azure monitoring
