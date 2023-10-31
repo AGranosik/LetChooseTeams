@@ -4,6 +4,19 @@
 
 #V2
 
+Version prepared to run with k8s infrastructure.
+
+## Infrastructure 
+
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/event-sourcing/images/v2-k8s.png)
+
+
+
+## Backend Architecture
+
+## Project structure
+
+### SetUp
 Working on local docker registry
 
 `docker run -d -p 7000:5000 --restart=always --name registry registry:2`
@@ -16,18 +29,7 @@ To 'push' to registry
 
 #V1
 
-##To run project:
-`docker-compose up -d` 
-Set api project as startup project
-`dotnet run`
 
-## Install third-tool to run performance tests
-> docker pull loadimpact/k6
-
-# Run tests
-> docker run -i loadimpact/k6 run - <script.js
-
-Core architecture of system.
 
 ![alt text](https://github.com/AGranosik/LetChooseTeams/blob/event-sourcing/images/v1_architectures.png)
 
@@ -73,6 +75,7 @@ TO DO:
 ???[]action microservice
 
 What documenttion should include:
-[] why cancellation token is only in on request -> to shwo how to use for havy loaded endpoints only
+[] why cancellation token is only in on request -> to shwo how to use for heavy loaded endpoints only
 [] explanation for tests library
-[] 
+[] swagger documentation
+[] Redis
