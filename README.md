@@ -8,11 +8,13 @@ Version prepared to run with k8s infrastructure.
 
 ## Infrastructure 
 
-![alt text](https://github.com/AGranosik/LetChooseTeams/blob/event-sourcing/images/v2-k8s.png)
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2-k8s.png)
 
-
+Application is managed by k8s with load balancer service with hpa scalability above 70% cpu utilization.
 
 ## Backend Architecture
+
+
 
 ## Project structure
 
@@ -67,9 +69,10 @@ TO DO:
 [X] load scalling
 [X] health chcecks
 [X] api versioning - concept
-[] api versioning -> simple implementation
+[X] api versioning -> simple implementation
 [X] need 3 isntances of mongo? -- some local files
 [] documentation
+[] hpa with memory utilization & stabilizationWindowSeconds
 [] azure
 [] azure monitoring
 ???[]action microservice
