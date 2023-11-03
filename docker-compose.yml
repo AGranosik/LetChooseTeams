@@ -22,12 +22,27 @@ services:
             - mongors-network
         depends_on:
             - elasticsearch
+    mongosetup:
+        container_name: mongosetup
+        image: mongo:7.0
+        depends_on:
+          - mongo1
+          - mongo2
+          - mongo3
+        restart: "no"
+        networks:
+          - mongors-network
+        volumes:
+          - ./init.sh:/init.sh
+          - ./setup.sh:/setup.sh
+        environment:
+          DB: modelDb
+        entrypoint: [ "bash", "-c", "sh ./setup.sh"]
     mongo1:
         container_name: mongo1
         image: mongo:7.0
         volumes:
           - mongors:/data/db
-          - ./init.sh:/init.sh
         networks:
           - mongors-network
         ports:
