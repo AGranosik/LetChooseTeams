@@ -27,6 +27,7 @@ services:
         image: mongo:7.0
         volumes:
           - mongors:/data/db
+          - ./init.sh:/init.sh
         networks:
           - mongors-network
         ports:
