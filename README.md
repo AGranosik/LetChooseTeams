@@ -12,6 +12,33 @@ Version prepared to run with k8s infrastructure.
 
 Application is managed by k8s with load balancer service with hpa scalability above 70% cpu utilization.
 
+---
+
+#### Logs
+
+Solution using Elasticsearch + Kibana for logging and aggregation.
+
+---
+
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/v2-logs.png)
+
+---
+
+Each log contains fields which help to observe application behaviour based on response times or error occurences.
+
+* **Elapsed** [ms] - How much time has passed since start fo request.
+* **RequestId** - Unique Id [Guid] per request which helps to track logs for concrete request. Id is returned by server when error occurs.
+* **RequestPath** - endpoint
+* **StatusCode** - http response code
+
+Log fields may differ depends in which place logger is called. Not in every log field 'StatusCode' will appear because during request processing we don't know response code yet.
+
+---
+
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/v2-visualize.png)
+
+---
+
 ## Backend Architecture
 
 
@@ -73,6 +100,8 @@ TO DO:
 [X] need 3 isntances of mongo? -- some local files
 [] documentation
 [] hpa with memory utilization & stabilizationWindowSeconds
+[] k6 tests on single pod [localhost]
+[] k6 on k8s
 [] azure
 [] azure monitoring
 ???[]action microservice
