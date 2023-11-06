@@ -8,9 +8,15 @@ Version prepared to run with k8s infrastructure.
 
 ## Infrastructure 
 
-![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2-k8s.png)
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/v2-k8s.png)
 
 Application is managed by k8s with load balancer service with hpa scalability above 70% cpu utilization.
+
+Purpose of that was to handle heavy load with high availability.
+
+* LoadBalancer -  ensuring that incoming requests are evenly distributed among the available instances to optimize performance and prevent overload on any single instance, providing high availability and scalability.
+* HorizontalPodAutoscaler (hpa) - automatically updates a workload resource with the aim of automatically scaling the workload to match demand.
+* Deployment - describe desired state of backend application
 
 ---
 
@@ -99,7 +105,7 @@ TO DO:
 [X] api versioning -> simple implementation
 [X] need 3 isntances of mongo? -- some local files
 [] documentation
-[] hpa with memory utilization & stabilizationWindowSeconds
+[] hpa with memory utilization & stabilizationWindowSeconds & update documetation
 [] k6 tests on single pod [localhost]
 [] k6 on k8s
 [] azure
