@@ -22,7 +22,7 @@ Purpose of that was to handle heavy load with high availability.
 
 #### Logs
 
-Solution using Elasticsearch + Kibana for logging and aggregation.
+Solution using **Elasticsearch + Kibana** for logging and aggregation.
 
 ---
 
@@ -44,6 +44,21 @@ Log fields may differ depends in which place logger is called. Not in every log 
 ![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/v2-visualize.png)
 
 ---
+
+
+#### Redis Pub/Sub
+
+---
+
+Implementing Publish/Subscribe messagin pattern which helps to handle request via websockets.
+Each message received from client is published to channel. Every instance (Pod) subsribe to a channel whenever Websocket connection is established.
+This solution enable to scale instances while working with ws connections.
+
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/v2_redis.png)
+
+---
+
+### Mongo
 
 ## Backend Architecture
 
