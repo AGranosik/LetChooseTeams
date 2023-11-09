@@ -72,15 +72,39 @@ Document database with replica set configuration. Which provides redundancy and 
 ## Project structure
 
 ### SetUp
-Working on local docker registry
+
+* In main folder run followed command to setup local environment for project
+
+`docker-compose up -d`
+
+* Working on local docker registry
 
 `docker run -d -p 7000:5000 --restart=always --name registry registry:2`
 
-To 'push' to registry
+* Build then push backend app into registry
 
-`docker build . -t localhost:7000/lct`
+`docker build ./LCT -t localhost:7000/lct`
 
 `docker push localhost:7000/lct` 
+
+
+K8s configuration
+
+* Setup Deployment
+`kubectl apply -f .\deployment.yaml`
+
+* LoadBalancer
+`kubectl apply -f .\loadBalancer.yaml`
+
+* metric service - essential for hpa to work
+`kubectl apply -f .\metric-service.yaml`
+
+* Setup hpa
+`kubectl apply -f .\hpa.yaml`
+
+##### Swagger available at
+` http://localhost:6008/swagger/index.html `
+
 
 #V1
 
