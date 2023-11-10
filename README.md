@@ -62,8 +62,11 @@ This solution enable to scale instances while working with ws connections.
 
 Document database with replica set configuration. Which provides redundancy and high availability.
 
+---
+
 [More on ](https://www.mongodb.com/docs/manual/replication/)
 
+---
 
 ## Backend Architecture
 
