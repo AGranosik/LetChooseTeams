@@ -68,8 +68,13 @@ Document database with replica set configuration. Which provides redundancy and 
 
 ---
 
-## Backend Architecture
+## Application Architecture
 
+---
+
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/v2_architecture.png)
+
+---
 
 
 ## Project structure
@@ -152,15 +157,9 @@ TO DO:
 [X] api versioning -> simple implementation
 [X] need 3 isntances of mongo? -- some local files
 [] documentation
+[] redis failure fallbacks
 [] hpa with memory utilization & stabilizationWindowSeconds & update documetation
 [] k6 tests on single pod [localhost]
 [] k6 on k8s
 [] azure
 [] azure monitoring
-???[]action microservice
-
-What documenttion should include:
-[] why cancellation token is only in on request -> to shwo how to use for heavy loaded endpoints only
-[] explanation for tests library
-[] swagger documentation
-[] Redis
