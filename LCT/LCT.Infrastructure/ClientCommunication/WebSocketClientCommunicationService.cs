@@ -1,7 +1,5 @@
 ﻿using LCT.Application.Common.Interfaces;
-using LCT.Core.RetryPolicies;
 using LCT.Infrastructure.MessageBrokers.Interfaces;
-using Polly;
 
 namespace LCT.Infrastructure.ClientCommunication
 {

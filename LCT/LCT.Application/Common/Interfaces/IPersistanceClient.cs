@@ -1,5 +1,4 @@
-﻿using System.Linq.Expressions;
-using LCT.Domain.Common.BaseTypes;
+﻿using LCT.Domain.Common.BaseTypes;
 
 namespace LCT.Application.Common.Interfaces
 {

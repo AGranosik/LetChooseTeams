@@ -20,7 +20,7 @@ Purpose of that was to handle heavy load with high availability.
 
 ---
 
-#### Logs
+### Logs
 
 Solution using **Elasticsearch + Kibana** for logging and aggregation.
 
@@ -46,7 +46,7 @@ Log fields may differ depends in which place logger is called. Not in every log 
 ---
 
 
-#### Redis Pub/Sub
+### Redis Pub/Sub
 
 ---
 
@@ -54,7 +54,7 @@ Implementing Publish/Subscribe messagin pattern which helps to handle request vi
 Each message received from client is published to channel. Every instance (Pod) subsribe to a channel whenever Websocket connection is established.
 This solution enable to scale instances while working with ws connections.
 
-![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/v2_redis.png)
+![redis](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/v2_redis.png)
 
 ---
 
@@ -62,11 +62,8 @@ This solution enable to scale instances while working with ws connections.
 
 Document database with replica set configuration. Which provides redundancy and high availability.
 
----
-
 [More on ](https://www.mongodb.com/docs/manual/replication/)
 
----
 
 ## Application Architecture
 
@@ -78,6 +75,12 @@ Document database with replica set configuration. Which provides redundancy and 
 
 
 ## Project structure
+
+---
+
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/clean_architecture.png)
+
+---
 
 ### SetUp
 
@@ -158,6 +161,8 @@ TO DO:
 [X] need 3 isntances of mongo? -- some local files
 [] documentation
 [] redis failure fallbacks
+[] tests
+[] message templates for groupping
 [] hpa with memory utilization & stabilizationWindowSeconds & update documetation
 [] k6 tests on single pod [localhost]
 [] k6 on k8s
