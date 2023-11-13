@@ -95,7 +95,27 @@ Each layer communicate with higher one via interfaces.
 Two main roles of infrstructrure layer in my application:
 1. Persistent data.
 
-To store events i decided to use Mongo database.
+	To store events i decided to use Mongo database.
+
+	Some issues i decided to solve:
+	* Field uniqness
+
+	Solution for that are mongo db indexes but decided to create more generic way to store events and achive uniqness for simple db fields.
+	We just have to implement `IUniqness` and call method in MongoPersistanceClient.Configure() method.
+
+	```c#
+		ConfigureFieldUniqness<Tournament, SetTournamentNameEvent>(uniqueIndexOptions);
+	```
+
+	* 'Coinditional' versioning
+
+	Some events may increase Entity version because of their impact on application flow. Changing tournament's name is essential and we do not want these changes to be override by other party (two request simultaneously).
+	Other events (like selecting team) does not increase tournament version because we want to work it simultaneously and selecting team by one player does not impact team selection by the other (as long as its not same team)
+
+	We just need to implement `IVersionable` interface and repository will increase entity version.
+
+	* Snapshots
+	It's repository responsibility to create snapshot to increase perfomance. These are created because we do not always want create every aggregate from scratch by applying every event one after another but just from valid point.
 
 ```c#
     public class SetTournamentNameEvent : DomainEvent, IVersionable, IUniqness
@@ -110,27 +130,40 @@ To store events i decided to use Mongo database.
     }
 ```
 
-Some issues i decided to solve:
-* Field uniqness
+2. Manage websocket messages. 
 
-Solution for that are mongo db indexes but decided to create more generic way to store events and achive uniqness for simple db fields.
-We just have to implement `IUniqness` and call method in MongoPersistanceClient.Configure() method.
+To receive or send any web socket message ```Hub``` had to be configured.
+``` endpoints.MapHub<TournamentHub>("/hubs/actions"); ```
+
+After message is received we have to publish it on Redis Pub/Sub to notify other pods then process the message.
 
 ```c#
-	ConfigureFieldUniqness<Tournament, SetTournamentNameEvent>(uniqueIndexOptions);
+        public async Task PublishAsync<T>(string groupId, T message)
+        {
+            var clients = await TryPublishAsync(groupId, message);
+        }
+
+        public async Task SubscribeAsync(MessageBrokerConnection connection)
+        {
+            if (!ConnectionValidation(connection))
+                return;
+
+            var connections = GetConnectionsIfGroupsExists(connection.GroupId);
+            if(connections is null)
+            {
+                _groupConnectionsDicitonary.Add(connection.GroupId, new List<string> { connection.UserIdentifier });
+                await _retryWrappedPolicy.ExecuteAsync(async () => {
+                    var group = GetConnectionsIfGroupsExists(connection.GroupId);
+                    if(group is not null)
+                        await SubscribeAsync(connection.GroupId);
+                });
+            }
+            else
+            {
+                connections.Add(connection.UserIdentifier);
+            }
+        }
 ```
-
-* 'Coinditional' versioning
-
-Some events may increase Entity version because of their impact on application flow. Changing tournament's name is essential and we do not want these changes to be override by other party (two request simultaneously).
-Other events (like selecting team) does not increase tournament version because we want to work it simultaneously and selecting team by one player does not impact team selection by the other (as long as its not same team)
-
-We just need to implement `IVersionable` interface and repository will increase entity version.
-
-* Snapshots
-It's repository responsibility to create snapshot to increase perfomance. These are created because we do not always want create every aggregate from scratch by applying every event one after another but just from valid point.
-
-2. Manage websocket messages. 
 
 ## SetUp
 
