@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LCT.Infrastructure.ClientCommunication.Hubs.TournamentHub">
+    <Position X="3" Y="13.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>FAABAAABAAAQAAAAAAAAARAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ClientCommunication\Hubs\TournamentHub.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Infrastructure.ClientCommunication.WebSocketClientCommunicationService" BaseTypeListCollapsed="true">
+    <Position X="12" Y="7.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ClientCommunication\WebSocketClientCommunicationService.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_messageBroker" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Infrastructure.MessageBrokers.RedisConnection" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="24.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAhAAAAAAAAAAAEAAACAAAAAAABAA=</HashCode>
+      <FileName>MessageBrokers\RedisConnection.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Infrastructure.MessageBrokers.RedisMessageBroker" BaseTypeListCollapsed="true">
+    <Position X="3" Y="8" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAQAAIACEYAAAAAQAEAGAAAAAAAgAQAAAAAAABAAgAQ=</HashCode>
+      <FileName>MessageBrokers\RedisMessageBroker.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_redisConnection" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Infrastructure.MessageBrokers.UnsentMessage">
+    <Position X="6.75" Y="9.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>QAACAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAA=</HashCode>
+      <FileName>MessageBrokers\RedisMessageBroker.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Infrastructure.MessageBrokers.RedisSettings" Collapsed="true">
+    <Position X="4.5" Y="12.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACACAAAAAAAAA=</HashCode>
+      <FileName>MessageBrokers\RedisSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Infrastructure.Persistance.ActionsStorage.MongoActionStorageClient" BaseTypeListCollapsed="true">
+    <Position X="15.25" Y="0.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAACAAAAAAAQAAAAIAACAAAA=</HashCode>
+      <FileName>Persistance\ActionsStorage\MongoActionStorageClient.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories.ConcreteUniqnessExecutor&lt;TEvent&gt;" BaseTypeListCollapsed="true">
+    <Position X="14.75" Y="10.75" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAgAAAAAAAA=</HashCode>
+      <FileName>Persistance\EventsStorage\UniqnessFactories\ConcreteUniqnessExecutor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories.UniqnessIndexExecutor" BaseTypeListCollapsed="true">
+    <Position X="19.25" Y="7.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AgAIAAAAAAAAAAAAAAAAAAAAAAAAAACAAAgAAAAAAAA=</HashCode>
+      <FileName>Persistance\EventsStorage\UniqnessFactories\IUniqnessIndexExecutor.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories.UniqnessModel" Collapsed="true">
+    <Position X="14.5" Y="12.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAABAAAAAAAAAAAA=</HashCode>
+      <FileName>Persistance\EventsStorage\UniqnessFactories\IUniqnessIndexExecutor.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Infrastructure.Persistance.EventsStorage.MongoPersistanceClient" BaseTypeListCollapsed="true">
+    <Position X="10.5" Y="9.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEEAAAAIAAAACABAAAgCAAAAIBQAEQAIAECAABA=</HashCode>
+      <FileName>Persistance\EventsStorage\MongoPersistanceClient.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_uniqnessExecutor" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Infrastructure.Persistance.SnapshotsStorage.AggregateSnapshot&lt;TAgregateRoot&gt;">
+    <Position X="4.5" Y="2.25" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>QAAAAAAEABAAAAAAAAAAAAAAAAAAAABAAABAAAAAAAA=</HashCode>
+      <FileName>Persistance\SnapshotsStorage\Snapshot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Infrastructure.Persistance.SnapshotsStorage.EventSnapshot&lt;TEvent&gt;" Collapsed="true">
+    <Position X="22.5" Y="2.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Persistance\SnapshotsStorage\Snapshot.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Infrastructure.Repositories.Actions.LctActionRepository&lt;TLctAction, TKey&gt;" BaseTypeListCollapsed="true">
+    <Position X="3" Y="5.75" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAYAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\Actions\LctActionRepository.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_actionPersistanceClient" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Infrastructure.Repositories.AggregateRepository&lt;TAggregateRoot&gt;" BaseTypeListCollapsed="true">
+    <Position X="8" Y="1.75" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAgAAAAAEAAAAAAAAAAAIAAgAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Repositories\AggregateRepository.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_client" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="LCT.Infrastructure.MessageBrokers.Interfaces.IMessageBroker">
+    <Position X="14.5" Y="5.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAgAA=</HashCode>
+      <FileName>MessageBrokers\Interfaces\IMessageBroker.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Infrastructure.MessageBrokers.Interfaces.IRedisConnection">
+    <Position X="7.5" Y="8" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAACAAAAAAAAAA=</HashCode>
+      <FileName>MessageBrokers\Interfaces\IRedisConnection.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Infrastructure.Persistance.ActionsStorage.IActionStorageClient">
+    <Position X="9" Y="5.25" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AgAAAAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Persistance\ActionsStorage\IActionStorageClient.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories.IConcreteUniqnessExecutor&lt;TEvent&gt;">
+    <Position X="19.5" Y="5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAA=</HashCode>
+      <FileName>Persistance\EventsStorage\UniqnessFactories\ConcreteUniqnessExecutor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories.IUniqnessIndexExecutor">
+    <Position X="15.5" Y="9" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAAAgAAAAAAAA=</HashCode>
+      <FileName>Persistance\EventsStorage\UniqnessFactories\IUniqnessIndexExecutor.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Application.Common.Interfaces.IPersistanceClient">
+    <Position X="11.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

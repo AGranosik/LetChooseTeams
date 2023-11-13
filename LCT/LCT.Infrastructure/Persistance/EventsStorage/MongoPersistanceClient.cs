@@ -11,8 +11,6 @@ using MongoDB.Driver;
 
 namespace LCT.Infrastructure.Persistance.EventsStorage
 {
-    // split into mongo persistance & Events storage which gonna use ISnapshot storage
-
     public class MongoPersistanceClient : IPersistanceClient
     {
         private readonly IMongoClient _mongoClient;

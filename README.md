@@ -2,7 +2,7 @@
 
 
 
-#V2
+##V2
 
 Version prepared to run with k8s infrastructure.
 
@@ -62,7 +62,7 @@ This solution enable to scale instances while working with ws connections.
 
 Document database with replica set configuration. Which provides redundancy and high availability.
 
-[More on ](https://www.mongodb.com/docs/manual/replication/)
+[More on](https://www.mongodb.com/docs/manual/replication/)
 
 
 ## Application Architecture
@@ -82,7 +82,57 @@ Document database with replica set configuration. Which provides redundancy and 
 
 ---
 
-### SetUp
+Each layer communicate with higher one via interfaces.
+
+### Infrastructure layer
+
+---
+
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/infrastructure_class_diagram.png)
+
+---
+
+Two main roles of infrstructrure layer in my application:
+1. Persistent data.
+
+To store events i decided to use Mongo database.
+
+```c#
+    public class SetTournamentNameEvent : DomainEvent, IVersionable, IUniqness
+    {
+        public string TournamentName { get; set; }
+        public string UniqueValue { get => TournamentName; }
+
+        public SetTournamentNameEvent(string tournamentName, Guid streamId) : base(streamId)
+        {
+            TournamentName = tournamentName;
+        }
+    }
+```
+
+Some issues i decided to solve:
+* Field uniqness
+
+Solution for that are mongo db indexes but decided to create more generic way to store events and achive uniqness for simple db fields.
+We just have to implement `IUniqness` and call method in MongoPersistanceClient.Configure() method.
+
+```c#
+	ConfigureFieldUniqness<Tournament, SetTournamentNameEvent>(uniqueIndexOptions);
+```
+
+* 'Coinditional' versioning
+
+Some events may increase Entity version because of their impact on application flow. Changing tournament's name is essential and we do not want these changes to be override by other party (two request simultaneously).
+Other events (like selecting team) does not increase tournament version because we want to work it simultaneously and selecting team by one player does not impact team selection by the other (as long as its not same team)
+
+We just need to implement `IVersionable` interface and repository will increase entity version.
+
+* Snapshots
+It's repository responsibility to create snapshot to increase perfomance. These are created because we do not always want create every aggregate from scratch by applying every event one after another but just from valid point.
+
+2. Manage websocket messages. 
+
+## SetUp
 
 * In main folder run followed command to setup local environment for project
 
@@ -160,6 +210,7 @@ TO DO:
 [X] api versioning -> simple implementation
 [X] need 3 isntances of mongo? -- some local files
 [] documentation
+[] logs message template
 [] redis failure fallbacks
 [] tests
 [] message templates for groupping
