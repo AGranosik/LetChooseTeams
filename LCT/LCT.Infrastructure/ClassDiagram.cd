@@ -18,14 +18,6 @@
     </ShowAsAssociation>
     <Lollipop Position="0.2" Collapsed="true" />
   </Class>
-  <Class Name="LCT.Infrastructure.MessageBrokers.RedisConnection" Collapsed="true" BaseTypeListCollapsed="true">
-    <Position X="24.25" Y="3.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAhAAAAAAAAAAAEAAACAAAAAAABAA=</HashCode>
-      <FileName>MessageBrokers\RedisConnection.cs</FileName>
-    </TypeIdentifier>
-    <Lollipop Position="0.2" Collapsed="true" />
-  </Class>
   <Class Name="LCT.Infrastructure.MessageBrokers.RedisMessageBroker" BaseTypeListCollapsed="true">
     <Position X="3" Y="8" Width="3.25" />
     <TypeIdentifier>
@@ -97,13 +89,6 @@
     <Position X="4.5" Y="2.25" Width="2.75" />
     <TypeIdentifier>
       <HashCode>QAAAAAAEABAAAAAAAAAAAAAAAAAAAABAAABAAAAAAAA=</HashCode>
-      <FileName>Persistance\SnapshotsStorage\Snapshot.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="LCT.Infrastructure.Persistance.SnapshotsStorage.EventSnapshot&lt;TEvent&gt;" Collapsed="true">
-    <Position X="22.5" Y="2.25" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Persistance\SnapshotsStorage\Snapshot.cs</FileName>
     </TypeIdentifier>
   </Class>

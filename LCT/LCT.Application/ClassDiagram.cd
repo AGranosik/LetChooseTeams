@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LCT.Application.Common.Events.ClientMessage">
+    <Position X="3" Y="7.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Common\Events\ClientMessage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Application.Common.Events.LctAction&lt;AggregateId&gt;">
+    <Position X="8.25" Y="10.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAAAAAAAAAAIAAAAAAABAAA=</HashCode>
+      <FileName>Common\Events\LctAction.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LCT.Application.Common.Events.LctAction" Collapsed="true">
+    <Position X="9.75" Y="8.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Events\LctAction.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Application.Players.Commands.AssignPlayerToTournamentCommandHandler" BaseTypeListCollapsed="true">
+    <Position X="1.25" Y="3" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Players\Commands\AssignPlayerToTournamentCommand.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_repository" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Application.Players.Events.PlayerAddedClientMessage">
+    <Position X="2.75" Y="10" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQABAAEAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Players\Events\PlayerAddedEventHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Application.Teams.Events.Actions.TeamClickedEvent">
+    <Position X="0.75" Y="10" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAIAAAAAEAAAAAQAAAAAAAAA=</HashCode>
+      <FileName>Teams\Events\Actions\TeamClickedActionHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Application.Teams.Events.Actions.TeamClickedAction">
+    <Position X="11" Y="10.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQABAAAAAAAEAAAAAAAAAA=</HashCode>
+      <FileName>Teams\Events\Actions\TeamClickedActionHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Application.Teams.Events.TeamSelectedClientMessage">
+    <Position X="5.25" Y="10" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAEAAAAAAAAAAAAAAAAAAAAAAAAEAAAAERAAAAAAAAA=</HashCode>
+      <FileName>Teams\Events\TeamSelectedEventHandler.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Application.Teams.Queries.GetTeamsQueryHandler" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Teams\Queries\GetTeamsQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_repository" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Application.Tournaments.Commands.CreateTournamentCommandHandler" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="2.75" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Tournaments\Commands\CreateTournamentCommand.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_repository" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Application.Tournaments.Queries.DrawTeamForPlayersQueryHandler" BaseTypeListCollapsed="true">
+    <Position X="6.75" Y="3" Width="3" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAQAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Tournaments\Queries\DrawTeamForPlayersQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_tournamentDomainService" />
+      <Field Name="_repository" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="LCT.Application.Tournaments.Queries.GetTournamentQueryHandler" BaseTypeListCollapsed="true">
+    <Position X="11.25" Y="5.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAABAAAAAAAAAAAAAAAAAAAIAAAAAAAAAAAA=</HashCode>
+      <FileName>Tournaments\Queries\GetTournamentQueryHandler.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="_repository" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Interface Name="LCT.Application.Common.Interfaces.IClientCommunicationService">
+    <Position X="12.5" Y="0.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Interfaces\IClientCommunicationService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Application.Common.Interfaces.ILctActionRepository&lt;TLctAction, TKey&gt;">
+    <Position X="15.75" Y="0.5" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAIAAAQAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Interfaces\ILctActionRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Application.Common.Interfaces.IPersistanceClient">
+    <Position X="20.75" Y="0.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Interfaces\IPersistanceClient.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Domain.Common.Interfaces.IAggregateRepository&lt;TAggregateRoot&gt;">
+    <Position X="4" Y="0.5" Width="3.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Interface Name="LCT.Domain.Aggregates.TournamentAggregate.Services.ITournamentDomainService">
+    <Position X="7" Y="5.5" Width="2.5" />
+    <TypeIdentifier />
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

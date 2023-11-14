@@ -2,11 +2,10 @@
 using LCT.Application.Common.Interfaces;
 using LCT.Domain.Aggregates.TournamentAggregate.Events;
 using MediatR;
-using Microsoft.AspNetCore.SignalR;
 
 namespace LCT.Application.Players.Events
 {
-    public class PlayerAddedHubMessage : HubMessage
+    public class PlayerAddedClientMessage : ClientMessage
     {
         public override string Type => "PlayerAssigned";
         public Guid TournamentId { get; set; }
@@ -25,7 +24,7 @@ namespace LCT.Application.Players.Events
 
         public async Task Handle(PlayerAddedDomainEvent notification, CancellationToken cancellationToken)
         {
-            await _clientCommuncationService.SendAsync(notification.StreamId.ToString(), new PlayerAddedHubMessage
+            await _clientCommuncationService.SendAsync(notification.StreamId.ToString(), new PlayerAddedClientMessage
             {
                 TournamentId = notification.StreamId,
                 Name = notification.Name,

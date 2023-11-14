@@ -6,7 +6,7 @@ using Serilog;
 
 namespace LCT.Application.Teams.Events
 {
-    public class TeamSelectedHubMessage: HubMessage
+    public class TeamSelectedClientMessage: ClientMessage
     {
         public override string Type { get => "TeamSelected"; }
         public Guid TournamentId { get; set; }
@@ -25,7 +25,7 @@ namespace LCT.Application.Teams.Events
         public async Task Handle(TeamSelectedDomainEvent notification, CancellationToken cancellationToken)
         {
             await _clientCommunicationService.SendAsync(notification.StreamId.ToString(),
-                new TeamSelectedHubMessage{
+                new TeamSelectedClientMessage{
                     PlayerName = notification.Player.Name,
                     PlayerSurname = notification.Player.Surname,
                     Team = notification.TeamName,

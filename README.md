@@ -165,6 +165,17 @@ After message is received we have to publish it on Redis Pub/Sub to notify other
         }
 ```
 
+### Application layer
+
+---
+
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/application_layer_part.png)
+
+---
+
+Implementing *Command Query Responsibility Segregation (CQRS)*  pattern.
+
+
 ## SetUp
 
 * In main folder run followed command to setup local environment for project
