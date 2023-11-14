@@ -175,6 +175,15 @@ After message is received we have to publish it on Redis Pub/Sub to notify other
 
 Implementing *Command Query Responsibility Segregation (CQRS)*  pattern.
 
+### Domain
+
+---
+
+![alt text](https://github.com/AGranosik/LetChooseTeams/blob/main/images/v2/domain.png)
+
+---
+
+Domain class structure.
 
 ## SetUp
 

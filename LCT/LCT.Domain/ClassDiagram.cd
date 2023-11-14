@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.Entities.Tournament">
+    <Position X="17.25" Y="13.5" Width="3.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>IAAAAAAQACAgIgAIgIEgIQAAAHAhAEAAAIgAQAAEAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\Entities\Tournament.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.Events.PlayerAddedDomainEvent">
+    <Position X="21.25" Y="5.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQABAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\Events\PlayerAddedDomainEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.Events.SetTournamentNameEvent">
+    <Position X="23.5" Y="5.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAgAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\Events\SetTournamentNameEvent.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.Events.DrawTeamEvent">
+    <Position X="25.75" Y="5.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\Events\TeamDrawnDomainEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.Events.TeamSelectedDomainEvent">
+    <Position X="28" Y="5.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAQAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\Events\TeamSelectedDomainEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.Events.TournamentCreatedDomainEvent">
+    <Position X="30.25" Y="5.75" Width="3" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\Events\TournamentCreatedDomainEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players.Player">
+    <Position X="28.5" Y="1.75" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAQABAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\ValueObjects\Players\Player.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players.PlayerName">
+    <Position X="23.5" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\ValueObjects\Players\PlayerName.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Players.PlayerSurname">
+    <Position X="25.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\ValueObjects\Players\PlayerSurname.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams.DrawnTeam">
+    <Position X="35.75" Y="1.5" Width="3.25" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAABAAAAAEAAAAAAAQAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\ValueObjects\Teams\DrawnTeam.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams.SelectedTeam">
+    <Position X="14.5" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAABAAAgAAAAAABAAAAAEAAAAAAAQAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\ValueObjects\Teams\SelectedTeam.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams.TeamName">
+    <Position X="18.5" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\ValueObjects\Teams\TeamName.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.Teams.TournamentName">
+    <Position X="21.25" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\ValueObjects\Teams\TournamentName.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.TournamentId">
+    <Position X="16.5" Y="4.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAAAAAAAAAEAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\ValueObjects\TournamentId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Aggregates.TournamentAggregate.ValueObjects.TournamentLimit">
+    <Position X="31.75" Y="1.75" Width="2.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAACQAAAAgAAAAQAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\ValueObjects\TournamentLimit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Common.BaseTypes.Aggregate&lt;TKey&gt;">
+    <Position X="13.75" Y="8.75" Width="2.75" />
+    <Compartments>
+      <Compartment Name="Fields" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>IAAAgAAAADEAAAIAAAAAAAAAAAIAAAAAAAAAAAQACAA=</HashCode>
+      <FileName>Common\BaseTypes\Aggregate.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LCT.Domain.Common.BaseTypes.BaseId&lt;TKey, TType&gt;">
+    <Position X="16.75" Y="1.75" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Common\BaseTypes\BaseId.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Common.BaseTypes.DomainEvent">
+    <Position X="24.5" Y="9.25" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAACAAAAAAAAAAAAAAAAAAAAAAABAAABAAAAAAAA=</HashCode>
+      <FileName>Common\BaseTypes\DomainEvent.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="LCT.Domain.Common.BaseTypes.Entity&lt;TKey&gt;">
+    <Position X="20.5" Y="8.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAiA=</HashCode>
+      <FileName>Common\BaseTypes\Entity.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Common.BaseTypes.ValueType&lt;T&gt;">
+    <Position X="24.5" Y="0.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAiA=</HashCode>
+      <FileName>Common\BaseTypes\ValueType.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LCT.Domain.Common.Aggregates.TournamentAggregate.ValueObjects.Name">
+    <Position X="11.75" Y="1.5" Width="1.5" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAACAAAAEgAAAAAAAAAAAAAAAAAAgAAAAAAA=</HashCode>
+      <FileName>Common\ValueTypes\Name.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="LCT.Domain.Aggregates.TournamentAggregate.Services.ITournamentDomainService">
+    <Position X="34.75" Y="4.5" Width="2.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Aggregates\TournamentAggregate\Services\ITournamentDomainService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Domain.Common.BaseTypes.IAgregateRoot">
+    <Position X="35.75" Y="8.75" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAIAAAAAAAAAAAIAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\BaseTypes\Aggregate.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Domain.Common.Interfaces.IAggregateRepository&lt;TAggregateRoot&gt;">
+    <Position X="31.5" Y="8.75" Width="4" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Interfaces\IAggregateRepository.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Domain.Common.Interfaces.IDomainService" Collapsed="true">
+    <Position X="35.25" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Interfaces\IDomainService.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="LCT.Domain.Common.Interfaces.IUniqness">
+    <Position X="38" Y="8.75" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Common\Interfaces\IUniqness.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

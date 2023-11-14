@@ -1,6 +1,6 @@
 ﻿namespace LCT.Domain.Common.Interfaces
 {
-    public interface IVersionable<TVersion> : IVersionable
+    public interface IVersionable<TVersion>
     {
         int Version { get; }
         void VersionIncrement();
