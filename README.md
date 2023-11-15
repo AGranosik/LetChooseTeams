@@ -1,5 +1,7 @@
 # LetChooseTeams
 
+Simple web application to help orginize FIFA 23 tournament. Where player join to tournament by scanning QR Code, provide player info data then select a team.
+When all players chose team team are assigned to each player randomly.
 
 
 ##V2
@@ -262,7 +264,7 @@ TO DO:
 [X] api versioning - concept
 [X] api versioning -> simple implementation
 [X] need 3 isntances of mongo? -- some local files
-[] documentation
+[X] documentation
 [] logs message template
 [] redis failure fallbacks
 [] tests
