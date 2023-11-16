@@ -35,7 +35,7 @@ namespace LCT.Infrastructure.MessageBrokers
             }
             catch (Exception ex)
             {
-                Log.Error($@"Redis connection failed.", ex);
+                Log.Error("Redis connection failed.", ex);
                 throw;
             }
         }

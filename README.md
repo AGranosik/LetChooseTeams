@@ -4,9 +4,9 @@ Simple web application to help orginize FIFA 23 tournament. Where player join to
 When all players chose team team are assigned to each player randomly.
 
 
-##V2
+# V2
 
-Version prepared to run with k8s infrastructure.
+Version prepared to run with k8s infrastructure. Working on multi instances.
 
 ## Infrastructure 
 
@@ -66,6 +66,7 @@ Document database with replica set configuration. Which provides redundancy and 
 
 [More on](https://www.mongodb.com/docs/manual/replication/)
 
+Decided to use mongoDB to get new knowledge on no-sql database.
 
 ## Application Architecture
 
@@ -84,7 +85,7 @@ Document database with replica set configuration. Which provides redundancy and 
 
 ---
 
-Each layer communicate with higher one via interfaces.
+Higher layer (more outside) is implementing interfaces provider by those lower (closer to the center).
 
 ### Infrastructure layer
 
@@ -266,6 +267,7 @@ TO DO:
 [X] need 3 isntances of mongo? -- some local files
 [X] documentation
 [] logs message template
+[] ConfigureAwait(false) -> read and implement probably not for web apps
 [] redis failure fallbacks
 [] tests
 [] message templates for groupping

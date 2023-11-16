@@ -41,7 +41,7 @@ namespace LCT.Infrastructure.MessageBrokers
         public async Task PublishAsync<T>(string groupId, T message)
         {
             var clients = await TryPublishAsync(groupId, message);
-            Log.Information($@"Message sent via redis. Clients: {clients}. Channel: {groupId}");
+            Log.Information("Message sent via redis. Clients: {clients}. Channel: {groupId}", clients, groupId);
         }
 
         public async Task SubscribeAsync(MessageBrokerConnection connection)
@@ -141,7 +141,7 @@ namespace LCT.Infrastructure.MessageBrokers
             var pubsub = await _redisConnection.GetSubscriber();
             await pubsub.SubscribeAsync(groupId, (channel, message) =>
             {
-                Log.Information($@"Message received. group id: {groupId}");
+                Log.Information("Message received. group id: {groupId}", groupId);
                 _hubContext.Clients.All.SendCoreAsync(groupId, new[] { message.ToString() });
             });
         }

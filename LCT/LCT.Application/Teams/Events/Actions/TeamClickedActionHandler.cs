@@ -71,7 +71,7 @@ namespace LCT.Application.Teams.Events.Actions
         {
             if (!IsTeamExist(action.Team))
             {
-                Log.Error("Clicked team does not exist.");
+                Log.Error("Clicked {Team} does not exist.", action.Team);
                 return false;
             }
             await _repository.SaveAsync(action);
