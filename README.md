@@ -266,10 +266,10 @@ TO DO:
 [X] api versioning -> simple implementation
 [X] need 3 isntances of mongo? -- some local files
 [X] documentation
-[] logs message template
-[] ConfigureAwait(false) -> read and implement probably not for web apps
-[] redis failure fallbacks
-[] tests
+[X] logs message template
+[X] ConfigureAwait(false) -> read and implement probably not for web apps
+[X] redis failure fallbacks
+[] tests documentation
 [] message templates for groupping
 [] hpa with memory utilization & stabilizationWindowSeconds & update documetation
 [] k6 tests on single pod [localhost]
