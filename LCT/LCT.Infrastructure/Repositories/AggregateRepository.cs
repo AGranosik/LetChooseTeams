@@ -19,8 +19,6 @@ namespace LCT.Infrastructure.Repositories
         }
         public async Task<TAggregateRoot> LoadAsync(Guid Id, CancellationToken cancellationToken)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-
             var aggregate = await _client.GetAggregateAsync<TAggregateRoot>(Id);
             if (aggregate is null)
                 throw new EntityDoesNotExist(typeof(TAggregateRoot).Name);

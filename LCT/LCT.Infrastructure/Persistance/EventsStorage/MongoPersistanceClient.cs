@@ -25,7 +25,8 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             _uniqnessExecutor = uniqnessExecutor;
             Configure();
         }
-
+        // sprobowac wywalic te taski i od razu awaity.
+        //ustawic mniejszy timeout
         public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, int version = 0)
             where TAggregateRoot : IAgregateRoot, new()
         {
@@ -33,7 +34,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             bool createSnapshot = false;
             var aggregateId = domainEvents[0].StreamId.ToString();
             int latestEventNumber = 0;
-            var tasks = new List<Task>(3);
+            var tasks = new List<Task>(2);
 
             using var session = await _mongoClient.StartSessionAsync();
             session.StartTransaction();
@@ -106,11 +107,11 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
         public async Task<TAggregateRoot> GetAggregateAsync<TAggregateRoot>(Guid streamId)
             where TAggregateRoot : IAgregateRoot, new()
         {
-            var latestsSnapshotCursor = await GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())
-                .FindAsync(a => a.StreamId == streamId);
-
-            var latestSnapshot = await latestsSnapshotCursor.FirstOrDefaultAsync();
             List<DomainEvent> events;
+            var latestSnapshot = await GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())
+                    .Find(a => a.StreamId == streamId)
+                    .FirstOrDefaultAsync();
+
             var snapshotExists = latestSnapshot is not null;
             if (!snapshotExists)
             {
@@ -133,14 +134,9 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
         private IMongoCollection<T> GetCollection<T>(string streamName)
             => _database.GetCollection<T>($"{streamName}");
 
-        private async Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId, int eventNumber = -1)
+        private Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId, int eventNumber = -1)
             where T: IAgregateRoot, new()
-        {
-            Expression<Func<DomainEvent, bool>> expression = s => s.StreamId == streamId && s.EventNumber > eventNumber;
-
-            var cursorAsync = await GetCollection<DomainEvent>(GetStreamName<T>()).FindAsync(expression);
-            return await cursorAsync.ToListAsync();
-        }
+             => GetCollection<DomainEvent>(GetStreamName<T>()).Find(s => s.StreamId == streamId && s.EventNumber > eventNumber).ToListAsync();
 
         private void Configure()
         {

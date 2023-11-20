@@ -8,31 +8,31 @@ export const options = {
             startVUs: 0,
             startTime: 0,
             stages: [
-                { duration: '30s', target: 50 }, // simulate ramp-up of traffic from 1 to 100 users over 5 minutes.
-                { duration: '30s', target: 120 }, // stay at 100 users for 10 minutes
-                { duration: '30s', target: 120 }, // stay at 100 users for 10 minutes
-                { duration: '30s', target: 0 }, // ramp-down to 0 users
+                { duration: '30s', target: 50 },
+                { duration: '30s', target: 80 },
+                { duration: '30s', target: 60 },
+                { duration: '30s', target: 0 },
             ],
             gracefulRampDown: '15s',
         },
         shared_scenario:{
             executor: 'shared-iterations',
-            startTime: '125s',
-            vus: 100,
-            iterations: 6000,
+            startTime: '130s',
+            vus: 80,
+            iterations: 1400,
             maxDuration: '40s'
         },
         per_vu_iter_scernario:{
             executor: 'per-vu-iterations',
-            startTime: '170s',
-            vus: 100,
-            iterations: 400,
+            startTime: '175s',
+            vus: 80,
+            iterations: 25,
             maxDuration: '55s'
         },
         cosntant_vu_scenario:{
             executor: 'constant-vus',
-            startTime: '230s',
-            vus: 100,
+            startTime: '235s',
+            vus: 80,
             duration: '35s',
         }
     },

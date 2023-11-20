@@ -6,13 +6,13 @@ import { postTournament } from "./common.js";
 
 export const options = {
     stages: [
-        { duration: '30s', target: 50 },
-        { duration: '30s', target: 100 }, 
-        { duration: '30s', target: 100 },
-        { duration: '40s', target: 0 },
+        { duration: '30s', target: 35 },
+        { duration: '60s', target: 80 }, 
+        { duration: '60s', target: 80 },
+        { duration: '60s', target: 0 },
     ],
     thresholds: {
-        'group_duration{group:::get is ok}': ['avg < 4000'],
+        'group_duration{group:::get is ok}': ['avg < 3800'],
     },
 }
   export default function () {
