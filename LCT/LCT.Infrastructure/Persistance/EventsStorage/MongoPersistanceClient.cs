@@ -25,8 +25,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             _uniqnessExecutor = uniqnessExecutor;
             Configure();
         }
-        // sprobowac wywalic te taski i od razu awaity.
-        //ustawic mniejszy timeout
+
         public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, int version = 0)
             where TAggregateRoot : IAgregateRoot, new()
         {
@@ -34,9 +33,8 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             bool createSnapshot = false;
             var aggregateId = domainEvents[0].StreamId.ToString();
             int latestEventNumber = 0;
-            var tasks = new List<Task>(2);
 
-            using var session = await _mongoClient.StartSessionAsync();
+            using var session = _mongoClient.StartSession();
             session.StartTransaction();
             foreach (var domainEvent in domainEvents)
             {
@@ -54,13 +52,11 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             }
 
             if (isVersionable)
-                tasks.Add(Versioning(GetVersionIndex<TAggregateRoot>(), aggregateId, version, session));
+                Versioning(GetVersionIndex<TAggregateRoot>(), aggregateId, version, session);
 
+            GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>())
+                .InsertMany(session, domainEvents);
 
-            tasks.Add(GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>())
-                .InsertManyAsync(session, domainEvents));
-
-            await Task.WhenAll(tasks.ToArray());
             await session.CommitTransactionAsync();
 
             if (createSnapshot)
@@ -78,11 +74,10 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
         public static string GetSnapshotName<TAggregate>()
             where TAggregate : IAgregateRoot
             => $"{typeof(TAggregate).Name}_Snapshot";
-        private async Task Versioning(string aggregateName, string aggregateId, int version, IClientSessionHandle session)
-        {
-            await GetCollection<AggregateVersionModel>(aggregateName)
-                .InsertOneAsync(session, new AggregateVersionModel(aggregateId, version));
-        }
+
+        private void Versioning(string aggregateName, string aggregateId, int version, IClientSessionHandle session)
+            => GetCollection<AggregateVersionModel>(aggregateName)
+                .InsertOne(session, new AggregateVersionModel(aggregateId, version));
 
         private async Task CreateSnapshotAsync<TAggregateRoot>(Guid streamId, int eventNumber)
             where TAggregateRoot : IAgregateRoot, new()

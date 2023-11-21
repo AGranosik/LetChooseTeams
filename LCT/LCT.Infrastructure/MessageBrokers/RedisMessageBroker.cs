@@ -23,6 +23,7 @@ namespace LCT.Infrastructure.MessageBrokers
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
+        //cos tu sie odawala, ze 200 nie zwraca
         private static readonly AsyncFallbackPolicy _fallbackPolicy = Policy.Handle<Exception>()
             .FallbackAsync(async ct =>
             {
