@@ -65,6 +65,8 @@ namespace LCT.Infrastructure.MessageBrokers
                 connections.Add(connection.UserIdentifier);
             }
         }
+
+        // cos z operacjami na lsitach, mozliwe, ze czyszcza sobie watki nawzajem
         public async Task UnsubscribeAsync(MessageBrokerConnection connection)
         {
             if (!ConnectionValidation(connection))
