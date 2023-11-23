@@ -270,6 +270,7 @@ TO DO:
 [X] ConfigureAwait(false) -> read and implement probably not for web apps
 [X] redis failure fallbacks
 [] k6 tests on single pod [localhost]
+[] save k6 results for comparision with k8s pods
 [] hpa with memory utilization & stabilizationWindowSeconds & update documetation
 [] k6 on k8s
 [] azure

@@ -87,9 +87,10 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             var snapshotCollection = GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>());
 
             var snapshotExist = await snapshotCollection
-                .FindAsync(a => a.StreamId == streamId);
+                .Find(a => a.StreamId == streamId)
+                .AnyAsync();
 
-            if(await snapshotExist.AnyAsync())
+            if(snapshotExist)
             {
                 await snapshotCollection.ReplaceOneAsync(a => a.StreamId == streamId, snapshot);
             }

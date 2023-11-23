@@ -18,6 +18,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories
             _database = database;
         }
 
+        //pozbyc sie asynkow i awaitow
         public async Task ExcecuteAsync(IClientSessionHandle session, UniqnessModel domainEvent, string collectionName)
         {
             var collection = _database.GetCollection<UniqnessModel>(collectionName);

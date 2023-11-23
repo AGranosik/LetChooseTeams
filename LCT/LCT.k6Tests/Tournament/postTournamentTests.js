@@ -9,8 +9,8 @@ export const options = {
             startTime: 0,
             stages: [
                 { duration: '30s', target: 50 },
+                { duration: '30s', target: 120 },
                 { duration: '30s', target: 80 },
-                { duration: '30s', target: 60 },
                 { duration: '30s', target: 0 },
             ],
             gracefulRampDown: '15s',
@@ -19,21 +19,21 @@ export const options = {
             executor: 'shared-iterations',
             startTime: '130s',
             vus: 80,
-            iterations: 1400,
+            iterations: 1600,
             maxDuration: '40s'
         },
         per_vu_iter_scernario:{
             executor: 'per-vu-iterations',
             startTime: '175s',
-            vus: 80,
+            vus: 120,
             iterations: 25,
             maxDuration: '55s'
         },
         cosntant_vu_scenario:{
             executor: 'constant-vus',
             startTime: '235s',
-            vus: 80,
-            duration: '35s',
+            vus: 120,
+            duration: '1m',
         }
     },
     thresholds: {
