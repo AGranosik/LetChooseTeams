@@ -17,13 +17,20 @@ namespace LCT.Infrastructure.MessageBrokers
         private Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
         private readonly IHubContext<TournamentHub> _hubContext;
         private List<UnsentMessage> _unsentMessages = new();
+        private List<UnsentMessage> ThreadSafeUnsendMessages {
+            get {
+                lock (_unsentMessages)
+                {
+                    return _unsentMessages;
+                }
+            }
+        }
         private readonly IRedisConnection _redisConnection;
         private JsonSerializerSettings _serializeSettings = new()
         {
             ContractResolver = new CamelCasePropertyNamesContractResolver()
         };
 
-        //cos tu sie odawala, ze 200 nie zwraca
         private static readonly AsyncFallbackPolicy _fallbackPolicy = Policy.Handle<Exception>()
             .FallbackAsync(async ct =>
             {
@@ -66,7 +73,6 @@ namespace LCT.Infrastructure.MessageBrokers
             }
         }
 
-        // cos z operacjami na lsitach, mozliwe, ze czyszcza sobie watki nawzajem
         public async Task UnsubscribeAsync(MessageBrokerConnection connection)
         {
             if (!ConnectionValidation(connection))
@@ -98,11 +104,13 @@ namespace LCT.Infrastructure.MessageBrokers
                 if(_redisConnection.IsOpened())
                     result = await PublishMessagesAsync(queuedMessages);
                 else
-                    _unsentMessages.AddRange(queuedMessages);
+                {
+                    ThreadSafeUnsendMessages.AddRange(queuedMessages);
+                }
             }
             catch (Exception ex)
             {
-                _unsentMessages.AddRange(queuedMessages);
+                ThreadSafeUnsendMessages.AddRange(queuedMessages);
                 Log.Error(ex.ToString());
             }
 
@@ -126,8 +134,8 @@ namespace LCT.Infrastructure.MessageBrokers
 
         private List<UnsentMessage> GetUnsentMessages()
         {
-            var queuedMessages = _unsentMessages.Where(um => true).OrderBy(um => um.CreationDate).ToList();
-            _unsentMessages.RemoveAll(um => queuedMessages.Any(qm => qm.Id == um.Id));
+            var queuedMessages = ThreadSafeUnsendMessages.OrderBy(um => um.CreationDate).ToList();
+            ThreadSafeUnsendMessages.RemoveAll(um => ThreadSafeUnsendMessages.Any(qm => qm.Id == um.Id));
 
             return queuedMessages;
         }
