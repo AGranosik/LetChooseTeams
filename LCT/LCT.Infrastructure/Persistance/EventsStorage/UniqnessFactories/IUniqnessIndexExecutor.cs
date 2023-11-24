@@ -7,7 +7,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories
 {
     public interface IUniqnessIndexExecutor
     {
-        Task ExcecuteAsync(IClientSessionHandle session, DomainEvent domainEvent);
+        void Excecute(IClientSessionHandle session, DomainEvent domainEvent);
         IUniqnessIndexExecutor RegisterUniqnessForEvent<TEvent>(string aggregateName, IMongoDatabase database)
             where TEvent : IUniqness;
     }
@@ -15,14 +15,14 @@ namespace LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories
     public class UniqnessIndexExecutor : IUniqnessIndexExecutor
     {
         private readonly CreateIndexOptions _uniqueIndexOptions = new CreateIndexOptions { Unique = true };
-        private Dictionary<string, Func<IClientSessionHandle, UniqnessModel, Task>> _uniqnessCollections = new();
-        public async Task ExcecuteAsync(IClientSessionHandle session, DomainEvent domainEvent)
+        private Dictionary<string, Action<IClientSessionHandle, UniqnessModel>> _uniqnessCollections = new();
+        public async void Excecute(IClientSessionHandle session, DomainEvent domainEvent)
         {
             var eventName = domainEvent.GetType().Name;
-            var func = _uniqnessCollections[eventName];
+            var action = _uniqnessCollections[eventName];
             var uniqueValue = ((IUniqness)domainEvent).UniqueValue;
 
-            await func.Invoke(session, new UniqnessModel
+            action.Invoke(session, new UniqnessModel
             {
                 StreamId = domainEvent.StreamId.ToString(),
                 UniqueValue = uniqueValue
@@ -39,11 +39,11 @@ namespace LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories
             collection
                 .Indexes.CreateOne(indexModel);
 
-            Func<IClientSessionHandle, UniqnessModel, Task> func =
-                (session, @event) => new ConcreteUniqnessExecutor<TEvent>(database).ExcecuteAsync(session, @event, collectionName);
-            _uniqnessCollections.Add(eventName, func);
+            Action<IClientSessionHandle, UniqnessModel> action =
+                (session, @event) => new ConcreteUniqnessExecutor<TEvent>(database).Excecute(session, @event, collectionName);
+            _uniqnessCollections.Add(eventName, action);
 
-            if(!BsonClassMap.IsClassMapRegistered(typeof(TEvent)))
+            if (!BsonClassMap.IsClassMapRegistered(typeof(TEvent)))
                 BsonClassMap.RegisterClassMap<TEvent>();
 
             return this;

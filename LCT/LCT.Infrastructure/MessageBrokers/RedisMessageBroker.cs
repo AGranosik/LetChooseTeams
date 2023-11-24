@@ -17,14 +17,14 @@ namespace LCT.Infrastructure.MessageBrokers
         private Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
         private readonly IHubContext<TournamentHub> _hubContext;
         private List<UnsentMessage> _unsentMessages = new();
-        private List<UnsentMessage> ThreadSafeUnsendMessages {
-            get {
-                lock (_unsentMessages)
-                {
-                    return _unsentMessages;
-                }
-            }
-        }
+        //private List<UnsentMessage> ThreadSafeUnsendMessages {
+        //    get {
+        //        lock (_unsentMessages)
+        //        {
+        //            return _unsentMessages;
+        //        }
+        //    }
+        //}
         private readonly IRedisConnection _redisConnection;
         private JsonSerializerSettings _serializeSettings = new()
         {
@@ -105,12 +105,15 @@ namespace LCT.Infrastructure.MessageBrokers
                     result = await PublishMessagesAsync(queuedMessages);
                 else
                 {
-                    ThreadSafeUnsendMessages.AddRange(queuedMessages);
+                    lock (_unsentMessages)
+                    {
+                        _unsentMessages.AddRange(queuedMessages);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                ThreadSafeUnsendMessages.AddRange(queuedMessages);
+                _unsentMessages.AddRange(queuedMessages);
                 Log.Error(ex.ToString());
             }
 
@@ -134,10 +137,13 @@ namespace LCT.Infrastructure.MessageBrokers
 
         private List<UnsentMessage> GetUnsentMessages()
         {
-            var queuedMessages = ThreadSafeUnsendMessages.OrderBy(um => um.CreationDate).ToList();
-            ThreadSafeUnsendMessages.RemoveAll(um => ThreadSafeUnsendMessages.Any(qm => qm.Id == um.Id));
+            lock (_unsentMessages)
+            {
+                var queuedMessages = _unsentMessages.OrderBy(um => um.CreationDate).ToList();
+                _unsentMessages.RemoveAll(um => queuedMessages.Any(qm => qm.Id == um.Id));
 
-            return queuedMessages;
+                return queuedMessages;
+            }
         }
 
         private static bool ConnectionValidation(MessageBrokerConnection connection)

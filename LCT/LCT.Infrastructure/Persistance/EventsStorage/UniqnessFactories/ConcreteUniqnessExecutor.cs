@@ -7,7 +7,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories
     public interface IConcreteUniqnessExecutor<TEvent>
         where TEvent : IUniqness
     {
-        Task ExcecuteAsync(IClientSessionHandle session, UniqnessModel domainEvent, string collectionName);
+        void Excecute(IClientSessionHandle session, UniqnessModel domainEvent, string collectionName);
     }
     public class ConcreteUniqnessExecutor<TEvent> : IConcreteUniqnessExecutor<TEvent>
         where TEvent : IUniqness
@@ -18,12 +18,11 @@ namespace LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories
             _database = database;
         }
 
-        //pozbyc sie asynkow i awaitow
-        public async Task ExcecuteAsync(IClientSessionHandle session, UniqnessModel domainEvent, string collectionName)
+        public void Excecute(IClientSessionHandle session, UniqnessModel domainEvent, string collectionName)
         {
             var collection = _database.GetCollection<UniqnessModel>(collectionName);
-            await collection.DeleteManyAsync(session, u => u.StreamId == domainEvent.StreamId);
-            await collection.InsertOneAsync(session, domainEvent);
+            collection.DeleteMany(session, u => u.StreamId == domainEvent.StreamId);
+            collection.InsertOne(session, domainEvent);
         }
     }
 }

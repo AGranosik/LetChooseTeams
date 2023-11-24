@@ -16,7 +16,7 @@ export function assignPlayers(id){
     const rand = Date.now() * Math.random()
     const payload = JSON.stringify({
         name: 'test' + rand,
-        surname: 'performance' + rand,
+        surname: 'performance',
         tournamentId: id
     });
 

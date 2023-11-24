@@ -46,9 +46,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
                     isVersionable = true;
 
                 if (domainEvent is IUniqness)
-                {
-                    await _uniqnessExecutor.ExcecuteAsync(session, domainEvent);
-                }
+                    _uniqnessExecutor.Excecute(session, domainEvent);
             }
 
             if (isVersionable)
