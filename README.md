@@ -271,6 +271,8 @@ TO DO:
 [X] redis failure fallbacks
 [] k6 tests on single pod [localhost]
 [] save k6 results for comparision with k8s pods
+[] cancellation tokens
+[] k6 tests on single pod
 [] hpa with memory utilization & stabilizationWindowSeconds & update documetation
 [] k6 on k8s
 [] azure
