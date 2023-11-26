@@ -4,6 +4,7 @@ export const _baseTournamentApiUrl = _baseApiUrl + "/Tournament";
 export const _basePostParams = {
     headers: {
         'Content-Type': 'application/json',
+        'timeout': 120000
     },
 };
 

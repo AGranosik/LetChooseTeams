@@ -58,7 +58,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             await session.CommitTransactionAsync();
 
             if (createSnapshot)
-                CreateSnapshotAsync<TAggregateRoot>(domainEvents[0].StreamId, latestEventNumber);
+                await CreateSnapshotAsync<TAggregateRoot>(domainEvents[0].StreamId, latestEventNumber);
         }
 
         public static string GetStreamName<TAggregate>()

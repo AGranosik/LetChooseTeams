@@ -269,6 +269,7 @@ TO DO:
 [X] logs message template
 [X] ConfigureAwait(false) -> read and implement probably not for web apps
 [X] redis failure fallbacks
+[] multiple user with fewer request (more real example)
 [] k6 tests on single pod [localhost]
 [] save k6 results for comparision with k8s pods
 [] cancellation tokens

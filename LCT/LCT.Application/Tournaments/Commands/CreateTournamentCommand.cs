@@ -20,10 +20,9 @@ namespace LCT.Application.Tournaments.Commands
 
         public async Task<Guid> Handle(CreateTournamentCommand request, CancellationToken cancellationToken)
         {
-            return Guid.NewGuid();
-            //var tournament = Tournament.Create(request.Name, request.PlayerLimit);
-            //await _repository.SaveAsync(tournament, tournament.Version);
-            //return tournament.Id.Value;
+            var tournament = Tournament.Create(request.Name, request.PlayerLimit);
+            await _repository.SaveAsync(tournament, tournament.Version);
+            return tournament.Id.Value;
         }
     }
 }
