@@ -84,27 +84,19 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             var snapshot = new AggregateSnapshot<TAggregateRoot>(eventNumber, aggregate, streamId);
             var snapshotCollection = GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>());
 
-            var snapshotExist = await snapshotCollection
-                .Find(a => a.StreamId == streamId)
-                .AnyAsync();
-
-            if(snapshotExist)
+            await snapshotCollection.ReplaceOneAsync(a => a.StreamId == streamId, snapshot, new ReplaceOptions
             {
-                await snapshotCollection.ReplaceOneAsync(a => a.StreamId == streamId, snapshot);
-            }
-            else
-            {
-                await snapshotCollection.InsertOneAsync(snapshot);
-            }
+                IsUpsert = true
+            });
         }
 
         public async Task<TAggregateRoot> GetAggregateAsync<TAggregateRoot>(Guid streamId)
             where TAggregateRoot : IAgregateRoot, new()
         {
             List<DomainEvent> events;
-            var latestSnapshot = await GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())
+            var latestSnapshot = GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())
                     .Find(a => a.StreamId == streamId)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefault();
 
             var snapshotExists = latestSnapshot is not null;
             if (!snapshotExists)
@@ -128,9 +120,14 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
         private IMongoCollection<T> GetCollection<T>(string streamName)
             => _database.GetCollection<T>($"{streamName}");
 
-        private Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId, int eventNumber = -1)
+        private Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId, int? eventNumber = null)
             where T: IAgregateRoot, new()
-             => GetCollection<DomainEvent>(GetStreamName<T>()).Find(s => s.StreamId == streamId && s.EventNumber > eventNumber).ToListAsync();
+        {
+            if(!eventNumber.HasValue)
+                return GetCollection<DomainEvent>(GetStreamName<T>()).Find(s => s.StreamId == streamId).ToListAsync();
+
+            return GetCollection<DomainEvent>(GetStreamName<T>()).Find(s => s.StreamId == streamId && s.EventNumber > eventNumber).ToListAsync();
+        }
 
         private void Configure()
         {

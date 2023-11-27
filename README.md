@@ -119,7 +119,8 @@ Two main roles of infrstructrure layer in my application:
 
 	* Snapshots
 	It's repository responsibility to create snapshot to increase perfomance. These are created because we do not always want create every aggregate from scratch by applying every event one after another but just from valid point.
-
+	I aware that my application would be fine wihtout it and maybe even better. It's just for learining puroposes.
+	
 ```c#
     public class SetTournamentNameEvent : DomainEvent, IVersionable, IUniqness
     {
