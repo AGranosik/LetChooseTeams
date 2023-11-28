@@ -273,8 +273,9 @@ TO DO:
 [X] multiple user with fewer request (more real example)
 [X] k6 tests on single pod [localhost]
 [X] save k6 results for comparision with k8s pods
-[] cancellation tokens & compare tests
-[] is there need for index on streamId and event number
+[X] cancellation tokens & compare tests
+[] is there need for index on streamId and event number??
+[] async void -> consequences
 [] k6 tests on single pod
 [] hpa with memory utilization & stabilizationWindowSeconds & update documetation
 [] k6 on k8s

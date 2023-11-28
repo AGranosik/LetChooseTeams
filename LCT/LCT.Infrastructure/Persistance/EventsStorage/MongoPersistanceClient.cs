@@ -73,11 +73,11 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             where TAggregate : IAgregateRoot
             => $"{typeof(TAggregate).Name}_Snapshot";
 
-        private void Versioning(string aggregateName, string aggregateId, int version, IClientSessionHandle session, CancellationToken cancellationToken = default(CancellationToken))
+        private void Versioning(string aggregateName, string aggregateId, int version, IClientSessionHandle session, CancellationToken cancellationToken = default)
             => GetCollection<AggregateVersionModel>(aggregateName)
                 .InsertOne(session, new AggregateVersionModel(aggregateId, version), cancellationToken: cancellationToken);
 
-        private async Task CreateSnapshotAsync<TAggregateRoot>(Guid streamId, int eventNumber, CancellationToken cancellationToken = default(CancellationToken))
+        private async Task CreateSnapshotAsync<TAggregateRoot>(Guid streamId, int eventNumber, CancellationToken cancellationToken = default)
             where TAggregateRoot : IAgregateRoot, new()
         {
             var aggregate = await GetAggregateAsync<TAggregateRoot>(streamId, cancellationToken);

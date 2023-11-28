@@ -16,7 +16,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage.UniqnessFactories
     {
         private readonly CreateIndexOptions _uniqueIndexOptions = new CreateIndexOptions { Unique = true };
         private Dictionary<string, Action<IClientSessionHandle, UniqnessModel>> _uniqnessCollections = new();
-        public async void Excecute(IClientSessionHandle session, DomainEvent domainEvent)
+        public void Excecute(IClientSessionHandle session, DomainEvent domainEvent)
         {
             var eventName = domainEvent.GetType().Name;
             var action = _uniqnessCollections[eventName];
