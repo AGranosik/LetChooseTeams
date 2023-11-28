@@ -26,7 +26,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             Configure();
         }
 
-        public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, int version = 0)
+        public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, int version = 0, CancellationToken cancellationToken = default(CancellationToken))
             where TAggregateRoot : IAgregateRoot, new()
         {
             bool isVersionable = false;
@@ -50,15 +50,15 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             }
 
             if (isVersionable)
-                Versioning(GetVersionIndex<TAggregateRoot>(), aggregateId, version, session);
+                Versioning(GetVersionIndex<TAggregateRoot>(), aggregateId, version, session, cancellationToken);
 
             GetCollection<DomainEvent>(GetStreamName<TAggregateRoot>())
-                .InsertMany(session, domainEvents);
+                .InsertMany(session, domainEvents, cancellationToken: cancellationToken);
 
-            await session.CommitTransactionAsync();
+            await session.CommitTransactionAsync(cancellationToken);
 
             if (createSnapshot)
-                await CreateSnapshotAsync<TAggregateRoot>(domainEvents[0].StreamId, latestEventNumber);
+                await CreateSnapshotAsync<TAggregateRoot>(domainEvents[0].StreamId, latestEventNumber, cancellationToken);
         }
 
         public static string GetStreamName<TAggregate>()
@@ -73,39 +73,39 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             where TAggregate : IAgregateRoot
             => $"{typeof(TAggregate).Name}_Snapshot";
 
-        private void Versioning(string aggregateName, string aggregateId, int version, IClientSessionHandle session)
+        private void Versioning(string aggregateName, string aggregateId, int version, IClientSessionHandle session, CancellationToken cancellationToken = default(CancellationToken))
             => GetCollection<AggregateVersionModel>(aggregateName)
-                .InsertOne(session, new AggregateVersionModel(aggregateId, version));
+                .InsertOne(session, new AggregateVersionModel(aggregateId, version), cancellationToken: cancellationToken);
 
-        private async Task CreateSnapshotAsync<TAggregateRoot>(Guid streamId, int eventNumber)
+        private async Task CreateSnapshotAsync<TAggregateRoot>(Guid streamId, int eventNumber, CancellationToken cancellationToken = default(CancellationToken))
             where TAggregateRoot : IAgregateRoot, new()
         {
-            var aggregate = await GetAggregateAsync<TAggregateRoot>(streamId);
+            var aggregate = await GetAggregateAsync<TAggregateRoot>(streamId, cancellationToken);
             var snapshot = new AggregateSnapshot<TAggregateRoot>(eventNumber, aggregate, streamId);
             var snapshotCollection = GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>());
 
             await snapshotCollection.ReplaceOneAsync(a => a.StreamId == streamId, snapshot, new ReplaceOptions
             {
                 IsUpsert = true
-            });
+            }, cancellationToken);
         }
 
-        public async Task<TAggregateRoot> GetAggregateAsync<TAggregateRoot>(Guid streamId)
+        public async Task<TAggregateRoot> GetAggregateAsync<TAggregateRoot>(Guid streamId, CancellationToken cancellationToken = default(CancellationToken))
             where TAggregateRoot : IAgregateRoot, new()
         {
             List<DomainEvent> events;
             var latestSnapshot = GetCollection<AggregateSnapshot<TAggregateRoot>>(GetSnapshotName<TAggregateRoot>())
                     .Find(a => a.StreamId == streamId)
-                    .FirstOrDefault();
+                    .FirstOrDefault(cancellationToken);
 
             var snapshotExists = latestSnapshot is not null;
             if (!snapshotExists)
             {
-                events = await GetEventsAsync<TAggregateRoot>(streamId);
+                events = await GetEventsAsync<TAggregateRoot>(streamId, cancellationToken: cancellationToken);
             }
             else
             {
-                events = await GetEventsAsync<TAggregateRoot>(streamId, latestSnapshot.EventNumber);
+                events = await GetEventsAsync<TAggregateRoot>(streamId, latestSnapshot.EventNumber, cancellationToken: cancellationToken);
             }
 
             if (!snapshotExists && events.Count == 0)
@@ -120,13 +120,13 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
         private IMongoCollection<T> GetCollection<T>(string streamName)
             => _database.GetCollection<T>($"{streamName}");
 
-        private Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId, int? eventNumber = null)
+        private Task<List<DomainEvent>> GetEventsAsync<T>(Guid streamId, int? eventNumber = null, CancellationToken cancellationToken = default(CancellationToken))
             where T: IAgregateRoot, new()
         {
             if(!eventNumber.HasValue)
-                return GetCollection<DomainEvent>(GetStreamName<T>()).Find(s => s.StreamId == streamId).ToListAsync();
+                return GetCollection<DomainEvent>(GetStreamName<T>()).Find(s => s.StreamId == streamId).ToListAsync(cancellationToken);
 
-            return GetCollection<DomainEvent>(GetStreamName<T>()).Find(s => s.StreamId == streamId && s.EventNumber > eventNumber).ToListAsync();
+            return GetCollection<DomainEvent>(GetStreamName<T>()).Find(s => s.StreamId == streamId && s.EventNumber > eventNumber).ToListAsync(cancellationToken);
         }
 
         private void Configure()

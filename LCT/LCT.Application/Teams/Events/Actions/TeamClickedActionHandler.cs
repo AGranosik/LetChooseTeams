@@ -31,12 +31,10 @@ namespace LCT.Application.Teams.Events.Actions
     {
         private readonly ILctActionRepository<TeamClickedAction, Guid> _repository;
         private readonly IClientCommunicationService _clientCommunicationService;
-        private readonly IAggregateRepository<Tournament> _aggregateRepository;
-        public TeamClickedActionHandler(ILctActionRepository<TeamClickedAction, Guid> repository, IClientCommunicationService clientCommunicationService, IAggregateRepository<Tournament> aggregateRepository)
+        public TeamClickedActionHandler(ILctActionRepository<TeamClickedAction, Guid> repository, IClientCommunicationService clientCommunicationService)
         {
             _repository = repository;
             _clientCommunicationService = clientCommunicationService;
-            _aggregateRepository = aggregateRepository;
         }
         public async Task Handle(TeamClickedAction notification, CancellationToken cancellationToken)
         {

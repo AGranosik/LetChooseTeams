@@ -19,7 +19,7 @@ namespace LCT.Application.Teams.Queries
         }
         public async Task<List<TeamToSelectDto>> Handle(GetTeamsQuery request, CancellationToken cancellationToken)
         {
-            var tournament = await _repository.LoadAsync(request.TournamentId);
+            var tournament = await _repository.LoadAsync(request.TournamentId, cancellationToken);
             var alreadySelected = tournament.SelectedTeams;
 
             return TournamentTeamNames.Teams.Select(t => new TeamToSelectDto(t, alreadySelected.Any(selected => selected.TeamName == t))).ToList();

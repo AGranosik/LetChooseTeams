@@ -41,16 +41,13 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.TournamentCreation
         [Test]
         public async Task Tournament_NameUniqnessChecked_ThrowsAsync()
         {
-            await CreateTournamenCommandHander(new CreateTournamentCommand
+            var command = new CreateTournamentCommand
             {
                 Name = "unique",
                 PlayerLimit = 10
-            });
-            var action = () => CreateTournamenCommandHander(new CreateTournamentCommand
-            {
-                Name = "unique",
-                PlayerLimit = 10
-            });
+            };
+            await CreateTournamenCommandHander(command);
+            var action = () => CreateTournamenCommandHander(command);
 
             await action.Should().ThrowAsync<MongoWriteException>();
         }

@@ -25,7 +25,7 @@ namespace LCT.Infrastructure.Repositories
             return aggregate;
         }
 
-        public async Task SaveAsync(TAggregateRoot model, int version = 0)
+        public async Task SaveAsync(TAggregateRoot model, int version = 0, CancellationToken cancellationToken = default(CancellationToken))
         {
             var events = model.GetChanges();
             await _client.SaveEventAsync<TAggregateRoot>(events, version);

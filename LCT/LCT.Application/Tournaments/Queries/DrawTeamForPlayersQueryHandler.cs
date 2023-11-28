@@ -23,12 +23,12 @@ namespace LCT.Application.Tournaments.Queries
         }
         public async Task<List<DrawnTeamDto>> Handle(DrawTeamForPlayersQuery request, CancellationToken cancellationToken)
         {
-            var tournament = await _repository.LoadAsync(request.TournamentId);
+            var tournament = await _repository.LoadAsync(request.TournamentId, cancellationToken);
             if (tournament == null)
                 throw new ArgumentNullException();
 
             tournament.DrawnTeamForPLayers(_tournamentDomainService);
-            await _repository.SaveAsync(tournament);
+            await _repository.SaveAsync(tournament, cancellationToken: cancellationToken);
             return tournament.DrawTeams.Select(dt => new DrawnTeamDto(dt.Player.Name, dt.Player.Surname, dt.TeamName.Value)).ToList();
         }
     }

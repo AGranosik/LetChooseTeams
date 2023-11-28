@@ -29,16 +29,16 @@ namespace LCT.Api.Controllers.v1
         [SwaggerOperation(Summary = "Create tournament")]
         [SwaggerResponse(200, "Tournament created")]
         [SwaggerResponse(400, "Some error occured. Check logs with provided requestId.")]
-        public async Task<IActionResult> Create(CreateTournamentCommand request)
-            => Ok(await _mediator.Send(request));
+        public async Task<IActionResult> Create(CreateTournamentCommand request, CancellationToken cancellationToken)
+            => Ok(await _mediator.Send(request, cancellationToken));
 
         [HttpPost("assignPlayer")]
         [SwaggerOperation(Summary = "Assign player to tournament.")]
         [SwaggerResponse(200, "Player assigned to tournament successfully.")]
         [SwaggerResponse(400, "Some error occured. Check logs with provided requestId.", typeof(ErrorResponseModel))]
-        public async Task<IActionResult> AssignPlayerToTournament(AssignPlayerToTournamentCommand request)
+        public async Task<IActionResult> AssignPlayerToTournament(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)
         {
-            await _mediator.Send(request);
+            await _mediator.Send(request, cancellationToken);
             return Ok();
         }
 
@@ -46,7 +46,7 @@ namespace LCT.Api.Controllers.v1
         [SwaggerOperation(Summary = "Draw team for players when all seats are taken.")]
         [SwaggerResponse(200, "Teams drawn successfully.", typeof(List<DrawnTeamDto>))]
         [SwaggerResponse(400, "Some error occured. Check logs with provided requestId.", typeof(ErrorResponseModel))]
-        public async Task<IActionResult> DrawTeams(Guid tournamentId)
-            => Ok(await _mediator.Send(new DrawTeamForPlayersQuery { TournamentId = tournamentId }));
+        public async Task<IActionResult> DrawTeams(Guid tournamentId, CancellationToken cancellationToken)
+            => Ok(await _mediator.Send(new DrawTeamForPlayersQuery { TournamentId = tournamentId }, cancellationToken));
     }
 }

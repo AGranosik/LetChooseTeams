@@ -270,10 +270,11 @@ TO DO:
 [X] logs message template
 [X] ConfigureAwait(false) -> read and implement probably not for web apps
 [X] redis failure fallbacks
-[] multiple user with fewer request (more real example)
-[] k6 tests on single pod [localhost]
-[] save k6 results for comparision with k8s pods
-[] cancellation tokens
+[X] multiple user with fewer request (more real example)
+[X] k6 tests on single pod [localhost]
+[X] save k6 results for comparision with k8s pods
+[] cancellation tokens & compare tests
+[] is there need for index on streamId and event number
 [] k6 tests on single pod
 [] hpa with memory utilization & stabilizationWindowSeconds & update documetation
 [] k6 on k8s

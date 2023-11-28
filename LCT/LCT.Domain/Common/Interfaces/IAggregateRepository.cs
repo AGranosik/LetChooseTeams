@@ -6,6 +6,6 @@ namespace LCT.Domain.Common.Interfaces
         where TAggregateRoot : IAgregateRoot
     {
         Task<TAggregateRoot> LoadAsync(Guid Id, CancellationToken cancellationToken = default(CancellationToken));
-        Task SaveAsync(TAggregateRoot model, int version = 0); 
+        Task SaveAsync(TAggregateRoot model, int version = 0, CancellationToken cancellationToken = default(CancellationToken)); 
     }
 }

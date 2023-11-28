@@ -21,7 +21,7 @@ namespace LCT.Application.Players.Commands
         }
         public async Task Handle(AssignPlayerToTournamentCommand request, CancellationToken cancellationToken)
         {
-            var tournament = await _repository.LoadAsync(request.TournamentId);
+            var tournament = await _repository.LoadAsync(request.TournamentId, cancellationToken);
             tournament.AddPlayer(request.Name, request.Surname);
             await _repository.SaveAsync(tournament);
         }

@@ -68,8 +68,9 @@ namespace NUnit.DFM
         public virtual async Task TearDownAsync()
         {
             var mongoClient = _scope.ServiceProvider.GetRequiredService<IMongoClient>();
+            var db = mongoClient.GetDatabase(_dbName);
             foreach (var collection in _tableToTruncate)
-                mongoClient.GetDatabase(_dbName).DropCollection(collection);
+                db.DropCollection(collection);
 
             _scope.Dispose();
         }

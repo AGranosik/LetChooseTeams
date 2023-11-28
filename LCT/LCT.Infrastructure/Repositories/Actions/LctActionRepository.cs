@@ -13,10 +13,10 @@ namespace LCT.Infrastructure.Repositories.Actions
             _actionPersistanceClient = actionPersistanceClient;
         }
 
-        public async Task<List<TLctAction>> GetByGroupIdAsync(TKey aggregateId)
+        public async Task<List<TLctAction>> GetByGroupIdAsync(TKey aggregateId, CancellationToken cancellationToken = default)
             => await _actionPersistanceClient.GetActionsAsync<TLctAction, TKey>(aggregateId);
 
-        public async Task SaveAsync(TLctAction action)
+        public async Task SaveAsync(TLctAction action, CancellationToken cancellationToken = default)
             => await _actionPersistanceClient.SaveActionAsync(action);
     }
 }

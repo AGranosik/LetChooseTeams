@@ -20,9 +20,9 @@ namespace LCT.Application.Tournaments.Commands
 
         public async Task Handle(SetTournamentNameCommand request, CancellationToken cancellationToken)
         {
-            var tournament = await _repository.LoadAsync(request.TournamentId);
+            var tournament = await _repository.LoadAsync(request.TournamentId, cancellationToken);
             tournament.SetName(request.Name);
-            await _repository.SaveAsync(tournament, tournament.Version);
+            await _repository.SaveAsync(tournament, tournament.Version, cancellationToken);
         }
     }
 }

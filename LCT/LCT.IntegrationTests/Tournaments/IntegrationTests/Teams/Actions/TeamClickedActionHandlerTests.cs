@@ -77,8 +77,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.Actions
         private async Task TeamClickedActionHandlerAsync(TeamClickedAction action)
         {
             var repository = _scope.ServiceProvider.GetRequiredService<ILctActionRepository<TeamClickedAction, Guid>>();
-            var aggregateRepository = _scope.ServiceProvider.GetRequiredService<IAggregateRepository<Tournament>>();
-            await new TeamClickedActionHandler(repository, new Mock<IClientCommunicationService>().Object, aggregateRepository).Handle(action, CancellationToken.None);
+            await new TeamClickedActionHandler(repository, new Mock<IClientCommunicationService>().Object).Handle(action, CancellationToken.None);
         }
 
         private async Task<List<TeamClickedAction>> GetClicksForTournament(Guid tournamentId)

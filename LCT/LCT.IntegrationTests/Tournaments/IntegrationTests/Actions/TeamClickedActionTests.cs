@@ -118,7 +118,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Actions
             var repo = GetLctActionRepository();
             communcationService ??= new Mock<IClientCommunicationService>().Object;
             var aggregateRepository = _scope.ServiceProvider.GetRequiredService<IAggregateRepository<Tournament>>();
-            var actionHandler = new TeamClickedActionHandler(repo, communcationService, aggregateRepository);
+            var actionHandler = new TeamClickedActionHandler(repo, communcationService);
             await actionHandler.Handle(notification, CancellationToken.None);
         }
 

@@ -22,10 +22,10 @@ namespace LCT.Application.Teams.Commands
         }
         public async Task Handle(SelectTeamCommand request, CancellationToken cancellationToken)
         {
-            var tournament = await _repository.LoadAsync(request.TournamentId);
+            var tournament = await _repository.LoadAsync(request.TournamentId, cancellationToken);
             tournament.SelectTeam(request.PlayerName, request.PlayerSurname, request.Team);
 
-            await _repository.SaveAsync(tournament);
+            await _repository.SaveAsync(tournament, cancellationToken: cancellationToken);
         }
     }
 }
