@@ -274,8 +274,6 @@ TO DO:
 [X] k6 tests on single pod [localhost]
 [X] save k6 results for comparision with k8s pods
 [X] cancellation tokens & compare tests
-[] is there need for index on streamId and event number??
-[] async void -> consequences
 [] k6 tests on single pod
 [] hpa with memory utilization & stabilizationWindowSeconds & update documetation
 [] k6 on k8s
