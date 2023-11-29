@@ -274,8 +274,9 @@ TO DO:
 [X] k6 tests on single pod [localhost]
 [X] save k6 results for comparision with k8s pods
 [X] cancellation tokens & compare tests
-[] k6 tests on single pod
+[X] k6 tests on single pod
 [] hpa with memory utilization & stabilizationWindowSeconds & update documetation
 [] k6 on k8s
 [] azure
 [] azure monitoring
+?[] setup env for k6 tests
