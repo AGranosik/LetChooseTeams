@@ -276,7 +276,7 @@ TO DO:
 [X] cancellation tokens & compare tests
 [X] k6 tests on single pod
 [] hpa with memory utilization & stabilizationWindowSeconds & update documetation
-[] k6 on k8s
+[X] k6 on k8s
 [] azure
 [] azure monitoring
 ?[] setup env for k6 tests
