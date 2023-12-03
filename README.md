@@ -280,3 +280,10 @@ TO DO:
 [] azure
 [] azure monitoring
 ?[] setup env for k6 tests
+
+
+Azure chapter
+mongo:
+	[] setup db
+	[] store credential in safe way
+	[] script for creation mongo db on azure
