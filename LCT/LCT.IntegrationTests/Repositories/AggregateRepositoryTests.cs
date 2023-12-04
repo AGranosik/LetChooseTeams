@@ -37,8 +37,9 @@ namespace LCT.IntegrationTests.Repositories
         {
             var mongoClient = _scope.ServiceProvider.GetRequiredService<IMongoClient>();
             var tournament = await CreateCompleteTournament(3, 3, 3);
+            var mongoSettings = _scope.ServiceProvider.GetRequiredService<MongoSettings>();
 
-            var eventsCursor = await mongoClient.GetDatabase("Lct_test").GetCollection<DomainEvent>(tournamentStream).FindAsync(ts => ts.StreamId == tournament.Id.Value);
+            var eventsCursor = await mongoClient.GetDatabase(mongoSettings.DatabaseName).GetCollection<DomainEvent>(tournamentStream).FindAsync(ts => ts.StreamId == tournament.Id.Value);
             var events = await eventsCursor.ToListAsync();
             events.Should().NotBeNull();
             events.Should().NotBeEmpty();

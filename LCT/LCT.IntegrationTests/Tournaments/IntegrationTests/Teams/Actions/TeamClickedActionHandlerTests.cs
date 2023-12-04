@@ -12,8 +12,8 @@ using FluentAssertions;
 using LCT.Domain.Aggregates.TournamentAggregate.Types;
 using System.Linq;
 using LCT.Application.Common.Interfaces;
-using LCT.Domain.Common.Interfaces;
 using Moq;
+using LCT.Infrastructure.Persistance.EventsStorage;
 
 namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.Actions
 {
@@ -83,7 +83,8 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.Teams.Actions
         private async Task<List<TeamClickedAction>> GetClicksForTournament(Guid tournamentId)
         {
             var persistanceClient = _scope.ServiceProvider.GetRequiredService<IMongoClient>();
-            var resultCursor = await persistanceClient.GetDatabase("Lct_test").GetCollection<TeamClickedAction>(nameof(TeamClickedAction))
+            var mongoSettings = _scope.ServiceProvider.GetRequiredService<MongoSettings>();
+            var resultCursor = await persistanceClient.GetDatabase(mongoSettings.DatabaseName).GetCollection<TeamClickedAction>(nameof(TeamClickedAction))
                 .FindAsync(a => a.GroupKey == tournamentId);
 
             return await resultCursor.ToListAsync();

@@ -49,7 +49,7 @@ namespace LCT.IntegrationTests.Tournaments.IntegrationTests.TournamentCreation
             await CreateTournamenCommandHander(command);
             var action = () => CreateTournamenCommandHander(command);
 
-            await action.Should().ThrowAsync<MongoWriteException>();
+            await action.Should().ThrowAsync<MongoServerException>();
         }
 
         [Test]
