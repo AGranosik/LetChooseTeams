@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using LCT.Api;
+using Microsoft.Extensions.Configuration;
 using NUnit.DFM.Interfaces;
 
 namespace NUnit.DFM.Builders
@@ -13,6 +14,7 @@ namespace NUnit.DFM.Builders
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile(jsonFileName, true, true)
                 .AddEnvironmentVariables()
+                .AddUserSecrets<Program>()
                 .Build();
         }
     }

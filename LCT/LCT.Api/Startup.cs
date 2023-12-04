@@ -6,7 +6,6 @@ using LCT.Infrastructure.ClientCommunication.Hubs;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 namespace LCT.Api
 {

@@ -7,7 +7,7 @@ using NUnit.Framework;
 namespace LCT.IntegrationTests.Core
 {
     [TestFixture]
-    public class EventNumbering
+    public class EventVersioning
     {
         private Tournament _tournament; // tested on Tournament which uses Aggreate base cclass
 
