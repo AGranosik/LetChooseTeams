@@ -284,6 +284,9 @@ TO DO:
 
 Azure chapter
 mongo:
-	[] setup db
-	[] store credential in safe way
-	[] script for creation mongo db on azure
+	[X] setup db
+	[X] store credential in safe way
+	[] change mongo version to 6.0
+	?[] script for creation mongo db on azure
+	
+[] aks vs app service vs containarized app
