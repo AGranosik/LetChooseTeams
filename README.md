@@ -289,4 +289,7 @@ mongo:
 	[] change mongo version to 6.0
 	?[] script for creation mongo db on azure
 	
-[] aks vs app service vs containarized app
+[X] aks vs app service vs containarized app\
+[] setup redis & elastic & kibana
+[] push to docker hub
+[] setup aks & get access to swagger
