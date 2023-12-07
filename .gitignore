@@ -349,3 +349,9 @@ MigrationBackup/
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
 /docker-compose.yml.bak
+
+
+# Azure
+aks-ssh
+aks-ssh.pub
+formatted_key.pub
