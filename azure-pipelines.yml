@@ -25,9 +25,10 @@ stages:
     - task: Docker@2
       displayName: Build and Push
       inputs:
-        command: buildAndPush
-        repository: $(DOCKER_IMAGE)
-        dockerfile: $(DOCKERFILE)
+        containerRegistry: 'dockerHub'
+        repository: 'lct'
+        command: 'buildAndPush'
+        Dockerfile: '$(Build.SourcesDirectory)/LCT/Dockerfile'
         tags: |
           $(TAG)
           latest
