@@ -10,8 +10,6 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
-  DOCKER_IMAGE: 'kenik/lct'
-  DOCKERFILE: '$(Build.SourcesDirectory)/LCT/Dockerfile'
 
 stages:
 - stage: Build
@@ -26,7 +24,7 @@ stages:
       displayName: Build and Push
       inputs:
         containerRegistry: 'dockerHub'
-        repository: 'lct'
+        repository: 'kenik/lct'
         command: 'buildAndPush'
         Dockerfile: '$(Build.SourcesDirectory)/LCT/Dockerfile'
         tags: |
