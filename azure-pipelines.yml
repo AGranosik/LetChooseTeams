@@ -10,6 +10,8 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
+  DOCKER_IMAGE: 'kenik/lct'
+  DOCKERFILE: '$(Build.SourcesDirectory)/LCT/Dockerfile'
 
 stages:
 - stage: Build
@@ -21,9 +23,11 @@ stages:
       vmImage: ubuntu-latest
     steps:
     - task: Docker@2
-      displayName: Build an image
+      displayName: Build and Push
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/LCT/Dockerfile'
+        command: buildAndPush
+        repository: $(DOCKER_IMAGE)
+        dockerfile: $(DOCKERFILE)
         tags: |
-          $(tag)
+          $(TAG)
+          latest
