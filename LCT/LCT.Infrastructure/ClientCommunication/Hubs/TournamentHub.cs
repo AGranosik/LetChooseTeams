@@ -42,7 +42,7 @@ namespace LCT.Infrastructure.ClientCommunication.Hubs
         }
 
         private MessageBrokerConnection GetMessageBrokerConnection()
-            => new(GetTournamentId(), Context.ConnectionId); 
+            => new(GetTournamentId(), Context.ConnectionId);
 
     }
 }
