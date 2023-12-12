@@ -23,7 +23,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
             _dbName = mongoSettings.DatabaseName;
             _database = _mongoClient.GetDatabase(_dbName);
             _uniqnessExecutor = uniqnessExecutor;
-            Configure();
+            Configure(); 
         }
 
         public async Task SaveEventAsync<TAggregateRoot>(DomainEvent[] domainEvents, int version = 0, CancellationToken cancellationToken = default(CancellationToken))
