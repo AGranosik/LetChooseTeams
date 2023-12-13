@@ -12,11 +12,23 @@ variables:
   tag: '$(Build.BuildId)'
 
 stages:
-- stage: Build
+- stage: Build 
+  displayName: hehe
+  jobs :
+  - job: Build
+    displayName: project build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+      - task: DotNetCoreCLI@2
+        inputs:
+          command: 'build'
+          projects: '$(Build.SourcesDirectory)/LCT'
+- stage: Release
   displayName: Build image
   jobs:
   - job: Build
-    displayName: Build
+    displayName: Image build
     pool:
       vmImage: ubuntu-latest
     steps:
@@ -26,7 +38,7 @@ stages:
         containerRegistry: 'dockerHub'
         repository: 'kenik/lct'
         command: 'buildAndPush'
-        Dockerfile: '$(Build.SourcesDirectory)/LCT/Dockerfile'
+        Dockerfile: '/Dockerfile'
         tags: |
           $(TAG)
           latest
