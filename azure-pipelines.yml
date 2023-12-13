@@ -13,7 +13,7 @@ variables:
 
 stages:
 - stage: Build 
-  displayName: hehe
+  displayName: Build project
   jobs :
   - job: Build
     displayName: project build
@@ -38,7 +38,7 @@ stages:
         containerRegistry: 'dockerHub'
         repository: 'kenik/lct'
         command: 'buildAndPush'
-        Dockerfile: '/Dockerfile'
+        Dockerfile: '$(Build.SourcesDirectory)/LCT/Dockerfile'
         tags: |
           $(TAG)
           latest
