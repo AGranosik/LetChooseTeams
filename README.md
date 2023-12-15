@@ -208,6 +208,9 @@ Domain class structure.
 
 K8s configuration
 
+* k8s namespace
+`kubectl create namespace lct-namespace`
+
 * Setup Deployment
 `kubectl apply -f .\deployment.yaml`
 
@@ -291,5 +294,7 @@ mongo:
 	
 [X] aks vs app service vs containarized app\
 [] setup redis & elastic & kibana
-[] push to docker hub
-[] setup aks & get access to swagger
+[X] push to docker hub
+[X] setup aks & get access to swagger
+[] env variables for Project from Azure
+[] 
