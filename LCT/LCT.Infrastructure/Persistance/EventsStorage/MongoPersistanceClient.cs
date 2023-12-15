@@ -15,7 +15,7 @@ namespace LCT.Infrastructure.Persistance.EventsStorage
     {
         private readonly IMongoClient _mongoClient;
         private readonly string _dbName;
-        private readonly IMongoDatabase _database;
+        private readonly IMongoDatabase _database; 
         private readonly IUniqnessIndexExecutor _uniqnessExecutor;
         public MongoPersistanceClient(IMongoClient mongoClient, MongoSettings mongoSettings, IUniqnessIndexExecutor uniqnessExecutor)
         {

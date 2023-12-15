@@ -16,7 +16,7 @@ spec:
       containers:
         - name: lct-api
           # image: localhost:7000/lct:latest
-          image: kenik/lct:latest
+          image: kenik/lct
           imagePullPolicy: Always
           livenessProbe:
             httpGet:

@@ -2,6 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: lct-api-service
+  namespace: lct-namespace
 spec:
   selector:
     app: lct-api-deployment
