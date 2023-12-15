@@ -16,7 +16,7 @@ spec:
       containers:
         - name: lct-api
           # image: localhost:7000/lct:latest
-          image: kenik/lct:1
+          image: kenik/lct:latest
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
@@ -37,7 +37,7 @@ spec:
           - name: ASPNETCORE_URLS
             value: http://+:80w
           - name: Mongo__ConnectionString
-            value: mongodb://172.17.0.1:27021
+            value: mongodb+srv://lctadmin:Dupa123!@lct-cluster.mongocluster.cosmos.azure.com/?tls=true&authMechanism=SCRAM-SHA-256&retrywrites=false&maxIdleTimeMS=120000
           - name: Mongo__DatabaseName
             value: Lct_Dev
           - name: ElasticConfiguration__Uri

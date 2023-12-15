@@ -297,4 +297,4 @@ mongo:
 [X] push to docker hub
 [X] setup aks & get access to swagger
 [] env variables for Project from Azure
-[] 
+[] variables in pipeles
