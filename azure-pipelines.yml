@@ -42,3 +42,10 @@ stages:
         tags: |
           $(TAG)
           latest
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'lct-aks-cluster'
+        namespace: 'lct-namespace'
+        command: 'apply'
+        arguments: '-f $(Build.SourcesDirectory)/deployment.yaml'
