@@ -55,4 +55,11 @@ stages:
         kubernetesServiceEndpoint: 'lct-aks-cluster'
         namespace: 'lct-namespace'
         command: 'set'
-        arguments: 'image deployment/lct-api -n lct-namespace'
+        arguments: 'image deployment/lct-api lct-api=kenik/lct -n lct-namespace'
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'lct-aks-cluster'
+        namespace: 'lct-namespace'
+        command: 'rollout'
+        arguments: 'restart deployment/lct-api'
