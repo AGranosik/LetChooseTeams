@@ -19,7 +19,7 @@ namespace LCT.Api.Controllers.v1
         }
 
         [HttpGet]
-        [SwaggerOperation(Summary = "Get single tournament .")]
+        [SwaggerOperation(Summary = "Get single tournament.")]
         [SwaggerResponse(200, "", typeof(TournamentDto))]
         [SwaggerResponse(400, "Some error occured. Check logs with provided requestId.", typeof(ErrorResponseModel))]
         public async Task<IActionResult> Get(Guid Id, CancellationToken cancellationToken)
