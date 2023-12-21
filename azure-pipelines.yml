@@ -51,21 +51,21 @@ stages:
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'lct-aks-cluster'
+        kubernetesServiceEndpoint: 'lct-k8s'
         namespace: '$(namespace)'
         command: 'apply'
         arguments: '-f $(Build.SourcesDirectory)/deployment.yaml'
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'lct-aks-cluster'
+        kubernetesServiceEndpoint: 'lct-k8s'
         namespace: '$(namespace)'
         command: 'set'
         arguments: 'image deployment/$(deploymentName) $(deploymentName)=$(imageName) -n $(namespace)'
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
-        kubernetesServiceEndpoint: 'lct-aks-cluster'
+        kubernetesServiceEndpoint: 'lct-k8s'
         namespace: '$(namespace)'
         command: 'rollout'
         arguments: 'restart deployment/$(deploymentName)'
