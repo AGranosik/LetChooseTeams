@@ -33,7 +33,7 @@ stages:
 - stage: Release
   displayName: Build image
   jobs:
-  - job: Build
+  - job: Build2
     displayName: Image build
     pool:
       vmImage: ubuntu-latest
