@@ -23,13 +23,6 @@ stages:
     displayName: project build
     pool:
       vmImage: ubuntu-latest
-    steps:
-      - task: AzureKeyVault@2
-        inputs:
-          azureSubscription: 'Free(526e617c-4cc8-4299-a7ee-ef1c637e45a0)'
-          KeyVaultName: 'lct-kvvv'
-          SecretsFilter: '*'
-          RunAsPreJob: true
 - stage: Release
   displayName: Build image
   jobs:
@@ -38,11 +31,17 @@ stages:
     pool:
       vmImage: ubuntu-latest
     steps:
+    - task: AzureKeyVault@2
+      inputs:
+        azureSubscription: 'Free(526e617c-4cc8-4299-a7ee-ef1c637e45a0)'
+        KeyVaultName: 'lct-kvvv'
+        SecretsFilter: '*'
+        RunAsPreJob: true
     - task: Docker@2
       displayName: Build and Push
       inputs:
         containerRegistry: 'dockerHub'
-        repository: $(imageName)
+        repository: '$(imageName)'
         command: 'buildAndPush'
         Dockerfile: '$(Build.SourcesDirectory)/LCT/Dockerfile'
         tags: |
