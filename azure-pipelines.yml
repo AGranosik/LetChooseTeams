@@ -26,7 +26,7 @@ stages:
     steps:
       - task: AzureKeyVault@2
         inputs:
-          azureSubscription: 'Free(526e617c-4cc8-4299-a7ee-ef1c637e45a0)'
+          azureSubscription: 'Free(1)(526e617c-4cc8-4299-a7ee-ef1c637e45a0)'
           KeyVaultName: 'lct-kv4'
           SecretsFilter: '*'
           RunAsPreJob: true
