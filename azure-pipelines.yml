@@ -12,8 +12,8 @@ resources:
 variables:
   tag: '$(Build.BuildId)'
   # namespace: 'lct-namespace'
-  imageName: 'kenik/lct'
-  deploymentName: 'lct-api'
+  # imageName: 'kenik/lct'
+  # deploymentName: 'lct-api'
 
 stages:
 - stage: Build 
@@ -30,49 +30,42 @@ stages:
           KeyVaultName: 'lct-kvvv'
           SecretsFilter: '*'
           RunAsPreJob: true
-      - task: CmdLine@2
-        inputs:
-          script: 'echo $(namespace) > secret.txt'
-#       - task: DotNetCoreCLI@2
-#         inputs:
-#           command: 'build'
-#           projects: '$(Build.SourcesDirectory)/LCT'
-# - stage: Release
-#   displayName: Build image
-#   jobs:
-#   - job: Build
-#     displayName: Image build
-#     pool:
-#       vmImage: ubuntu-latest
-#     steps:
-#     - task: Docker@2
-#       displayName: Build and Push
-#       inputs:
-#         containerRegistry: 'dockerHub'
-#         repository: '$(imageName)'
-#         command: 'buildAndPush'
-#         Dockerfile: '$(Build.SourcesDirectory)/LCT/Dockerfile'
-#         tags: |
-#           $(TAG)
-#           latest
-#     - task: Kubernetes@1
-#       inputs:
-#         connectionType: 'Kubernetes Service Connection'
-#         kubernetesServiceEndpoint: 'lct-aks-cluster'
-#         namespace: '$(namespace)'
-#         command: 'apply'
-#         arguments: '-f $(Build.SourcesDirectory)/deployment.yaml'
-#     - task: Kubernetes@1
-#       inputs:
-#         connectionType: 'Kubernetes Service Connection'
-#         kubernetesServiceEndpoint: 'lct-aks-cluster'
-#         namespace: '$(namespace)'
-#         command: 'set'
-#         arguments: 'image deployment/$(deploymentName) $(deploymentName)=$(imageName) -n $(namespace)'
-#     - task: Kubernetes@1
-#       inputs:
-#         connectionType: 'Kubernetes Service Connection'
-#         kubernetesServiceEndpoint: 'lct-aks-cluster'
-#         namespace: '$(namespace)'
-#         command: 'rollout'
-#         arguments: 'restart deployment/$(deploymentName)'
+- stage: Release
+  displayName: Build image
+  jobs:
+  - job: Build
+    displayName: Image build
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - task: Docker@2
+      displayName: Build and Push
+      inputs:
+        containerRegistry: 'dockerHub'
+        repository: '$(imageName)'
+        command: 'buildAndPush'
+        Dockerfile: '$(Build.SourcesDirectory)/LCT/Dockerfile'
+        tags: |
+          $(TAG)
+          latest
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'lct-aks-cluster'
+        namespace: '$(namespace)'
+        command: 'apply'
+        arguments: '-f $(Build.SourcesDirectory)/deployment.yaml'
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'lct-aks-cluster'
+        namespace: '$(namespace)'
+        command: 'set'
+        arguments: 'image deployment/$(deploymentName) $(deploymentName)=$(imageName) -n $(namespace)'
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'lct-aks-cluster'
+        namespace: '$(namespace)'
+        command: 'rollout'
+        arguments: 'restart deployment/$(deploymentName)'
