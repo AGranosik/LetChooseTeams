@@ -42,7 +42,7 @@ stages:
       displayName: Build and Push
       inputs:
         containerRegistry: 'dockerHub'
-        repository: '$(imageName)'
+        repository: $(imageName)
         command: 'buildAndPush'
         Dockerfile: '$(Build.SourcesDirectory)/LCT/Dockerfile'
         tags: |
@@ -52,20 +52,20 @@ stages:
       inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: 'lct-k8s'
-        namespace: '$(namespace)'
+        namespace: $(namespace)
         command: 'apply'
         arguments: '-f $(Build.SourcesDirectory)/deployment.yaml'
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: 'lct-k8s'
-        namespace: '$(namespace)'
+        namespace: $(namespace)
         command: 'set'
         arguments: 'image deployment/$(deploymentName) $(deploymentName)=$(imageName) -n $(namespace)'
     - task: Kubernetes@1
       inputs:
         connectionType: 'Kubernetes Service Connection'
         kubernetesServiceEndpoint: 'lct-k8s'
-        namespace: '$(namespace)'
+        namespace: $(namespace)
         command: 'rollout'
         arguments: 'restart deployment/$(deploymentName)'
