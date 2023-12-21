@@ -26,9 +26,10 @@ stages:
     steps:
       - task: AzureKeyVault@2
         inputs:
+          azureSubscription: 'Free(526e617c-4cc8-4299-a7ee-ef1c637e45a0)'
           KeyVaultName: 'lct-kvv'
           SecretsFilter: '*'
-          RunAsPreJob: true
+          RunAsPreJob: false
       - task: CmdLine@2
         inputs:
           script: 'echo $(namespace) > secret.txt'
