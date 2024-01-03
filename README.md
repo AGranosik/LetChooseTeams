@@ -4,6 +4,64 @@ Simple web application to help orginize FIFA 23 tournament. Where player join to
 When all players chose team team are assigned to each player randomly.
 
 
+# V2.5
+
+Version configured for Azure ci/cd.
+Used Azure K8s service to host my cluster with Load Balancer at the front for service to be accessible for all. I had to remove all services from Azure cloud because it cost some $$$ and didn't want to spend too much on alreday configured pipelines.
+
+
+Azure key vault task configuration for safe variables storage.
+```
+	- task: AzureKeyVault@2
+      inputs:
+        azureSubscription: '...'
+        KeyVaultName: 'lct-kvvv'
+        SecretsFilter: '*'
+        RunAsPreJob: true
+```
+
+
+Docker task configuration for build project and pushing it into repository with build tag.
+```
+    - task: Docker@2
+      displayName: Build and Push
+      inputs:
+        containerRegistry: 'dockerHub'
+        repository: '$(imageName)'
+        command: 'buildAndPush'
+        Dockerfile: '$(Build.SourcesDirectory)/LCT/Dockerfile'
+        tags: |
+          $(TAG)
+          latest
+```
+
+K8s task configuration to pull lates iamge despite no changes in deployment plan.
+
+```
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'lct-k8s'
+        namespace: '$(namespace)'
+        command: 'apply'
+        arguments: '-f $(Build.SourcesDirectory)/deployment.yaml'
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'lct-k8s'
+        namespace: '$(namespace)'
+        command: 'set'
+        arguments: 'image deployment/$(deploymentName) $(deploymentName)=$(imageName) -n $(namespace)'
+    - task: Kubernetes@1
+      inputs:
+        connectionType: 'Kubernetes Service Connection'
+        kubernetesServiceEndpoint: 'lct-k8s'
+        namespace: '$(namespace)'
+        command: 'rollout'
+        arguments: 'restart deployment/$(deploymentName)'
+
+```
+
 # V2
 
 Version prepared to run with k8s infrastructure. Working on multi instances.

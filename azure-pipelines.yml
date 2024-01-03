@@ -11,9 +11,6 @@ resources:
 
 variables:
   tag: '$(Build.BuildId)'
-  # namespace: 'lct-namespace'
-  # imageName: 'kenik/lct'
-  # deploymentName: 'lct-api'
 
 stages:
 - stage: Build 
@@ -24,7 +21,7 @@ stages:
     pool:
       vmImage: ubuntu-latest
 - stage: Release
-  displayName: Build image
+  displayName: deploy to aks
   jobs:
   - job: Build2
     displayName: Image build
@@ -33,7 +30,7 @@ stages:
     steps:
     - task: AzureKeyVault@2
       inputs:
-        azureSubscription: 'Free(526e617c-4cc8-4299-a7ee-ef1c637e45a0)'
+        azureSubscription: '...'
         KeyVaultName: 'lct-kvvv'
         SecretsFilter: '*'
         RunAsPreJob: true
