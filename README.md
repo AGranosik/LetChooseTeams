@@ -295,64 +295,14 @@ Frontent communicate with Backend via http requests.
 WebSockets added for better responsivness & User experience
 
 
-TO DO: 
-[X] docker
-[X] k8s for localhost
-[X] k6 tests
-[X] check if code does not need refactor in some places
-[X] k6 tests
-[-] environment for k6 tests
-[X] websockets
-[X] websockets should be in infra layer
-[X] Cancellation token
-[X] can easly remove actions from service -> refactor if need to
-[X] Redis
-[X] poprawka działania fe z be
-[X] publish fallbacks
-[X] test for redis meesage beroker
-[X] redis shouldnt block requests
-[X] check logs
-[X] update to .net core 7
-[X] udpate packages
-[X] work on mobile
-[X] swagger documentation
-[X] return request id
-[X] documentation should return request id model
-[X] routing fe -> remove play names from params and store in store 
-[X] generation qr code -> fe?
-[X] update k8s
-[X] k6 tests
-[X] load scalling
-[X] health chcecks
-[X] api versioning - concept
-[X] api versioning -> simple implementation
-[X] need 3 isntances of mongo? -- some local files
-[X] documentation
-[X] logs message template
-[X] ConfigureAwait(false) -> read and implement probably not for web apps
-[X] redis failure fallbacks
-[X] multiple user with fewer request (more real example)
-[X] k6 tests on single pod [localhost]
-[X] save k6 results for comparision with k8s pods
-[X] cancellation tokens & compare tests
-[X] k6 tests on single pod
-[] hpa with memory utilization & stabilizationWindowSeconds & update documetation
-[X] k6 on k8s
-[] azure
-[] azure monitoring
-?[] setup env for k6 tests
-
-
-Azure chapter
-mongo:
-	[X] setup db
-	[X] store credential in safe way
-	[] change mongo version to 6.0
-	?[] script for creation mongo db on azure
+RoadMap:
+	[] requests over time -> group by requestiId over time
+	[] pod's load -> hostname, requestId over time 
+	[] avarege requests time
+	[] split errors by validations, bussiness logic & service errors -> validations& bussiness - warnings, service -> error.
+	Let measure places to optimise where many validatiosn error occurs or someone may had access to not owned data.
+	[] number of pods over time -> responsivess to heavy load 
+		Alerts
+			[] 5% requests taking more time than average
+			[] database connection lost/websockets not working
 	
-[X] aks vs app service vs containarized app\
-[] setup redis & elastic & kibana
-[X] push to docker hub
-[X] setup aks & get access to swagger
-[] env variables for Project from Azure
-[X] variables in pipeles
