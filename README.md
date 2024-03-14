@@ -296,8 +296,8 @@ WebSockets added for better responsivness & User experience
 
 
 RoadMap:
-	[] requests over time -> group by requestiId over time
-	[] pod's load -> hostname, requestId over time 
+	[X] requests over time -> group by requestiId over time
+	[X] pod's load -> hostname, requestId over time 
 	[] avarege requests time
 	[] split errors by validations, bussiness logic & service errors -> validations& bussiness - warnings, service -> error.
 	Let measure places to optimise where many validatiosn error occurs or someone may had access to not owned data.
