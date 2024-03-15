@@ -15,8 +15,8 @@ spec:
     spec:
       containers:
         - name: lct-api
-          # image: localhost:7000/lct:latest
-          image: kenik/lct
+          image: localhost:7000/lct:latest
+          # image: kenik/lct
           imagePullPolicy: Always
           livenessProbe:
             httpGet:
@@ -46,14 +46,3 @@ spec:
             value: 172.17.0.1:6379
           - name: Redis__Password
             value: "123456"
-          volumeMounts:
-          - name: lct-kvvv-volume
-            mountPath: /mnt/secrets-store
-            readOnly: true
-      volumes:
-          - name: lct-kvvv-volume
-            csi:
-              driver: secrets-store.csi.k8s.io
-              readOnly: true
-              volumeAttributes:
-                secretProviderClass: "lct-kvvv"
