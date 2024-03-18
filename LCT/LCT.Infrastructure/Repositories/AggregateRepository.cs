@@ -2,6 +2,7 @@
 using LCT.Domain.Common.BaseTypes;
 using LCT.Domain.Common.Exceptions;
 using LCT.Domain.Common.Interfaces;
+using LCT.Infrastructure.Common.Exceptions;
 using MediatR;
 using Serilog;
 

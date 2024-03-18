@@ -300,7 +300,8 @@ RoadMap:
 	[X] pod's load -> hostname, requestId over time 
 	[] avarege requests time
 	[] split errors by validations, bussiness logic & service errors -> validations& bussiness - warnings, service -> error.
-	Let measure places to optimise where many validatiosn error occurs or someone may had access to not owned data.
+	Let measure places to optimise where many validatiosn error occurs or someone may have been trying to access not owned data.
+	[] Add cancellation tokens
 	[] number of pods over time -> responsivess to heavy load 
 		Alerts
 			[] 5% requests taking more time than average

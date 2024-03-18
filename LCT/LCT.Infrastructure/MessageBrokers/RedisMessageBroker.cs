@@ -17,14 +17,6 @@ namespace LCT.Infrastructure.MessageBrokers
         private Dictionary<string, List<string>> _groupConnectionsDicitonary = new();
         private readonly IHubContext<TournamentHub> _hubContext;
         private List<UnsentMessage> _unsentMessages = new();
-        //private List<UnsentMessage> ThreadSafeUnsendMessages {
-        //    get {
-        //        lock (_unsentMessages)
-        //        {
-        //            return _unsentMessages;
-        //        }
-        //    }
-        //}
         private readonly IRedisConnection _redisConnection;
         private JsonSerializerSettings _serializeSettings = new()
         {
