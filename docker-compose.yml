@@ -21,6 +21,9 @@ services:
             - "5601:5601"
         networks:
             - mongors-network
+        environment:
+            - XPACK_MONITORING_ENABLED=true
+            - xpack.encryptedSavedObjects.encryptionKey="SKX6eFLDhz4AoxoI1Liz8jQXoUz6BY7y5Fh6HwsXgUE="
         depends_on:
             - elasticsearch
     mongosetup:
