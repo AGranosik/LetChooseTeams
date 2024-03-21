@@ -22,8 +22,9 @@ services:
         networks:
             - mongors-network
         environment:
-            - XPACK_MONITORING_ENABLED=true
-            - xpack.encryptedSavedObjects.encryptionKey="SKX6eFLDhz4AoxoI1Liz8jQXoUz6BY7y5Fh6HwsXgUE="
+            XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: "a454989cedc03123102a5d7b6cd0d11d"
+            XPACK_REPORTING_ENCRYPTIONKEY: "2f9a939c253958d38710db1b59f09348"
+            XPACK_SECURITY_ENCRYPTIONKEY: "ef1435c75010e03cd74ebc6a281f3e5b"
         depends_on:
             - elasticsearch
     mongosetup:
