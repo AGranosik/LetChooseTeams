@@ -306,4 +306,6 @@ RoadMap:
 		Alerts
 			[] 5% requests taking more time than average
 			[] database connection lost/websockets not working
+		Observability
+			[] k8s cpus, ram etc.
 	
