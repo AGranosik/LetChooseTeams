@@ -308,4 +308,5 @@ RoadMap:
 			[] database connection lost/websockets not working
 		Observability
 			[] k8s cpus, ram etc.
+	[] get rid of exceptions
 	
