@@ -309,4 +309,5 @@ RoadMap:
 		Observability
 			[] k8s cpus, ram etc.
 	[] get rid of exceptions
+	[] Opentelemtry
 	

@@ -45,4 +45,4 @@ spec:
           - name: Redis__ConnectionString
             value: 172.17.0.1:6379
           - name: Redis__Password
-            value: "123456"
+            value: "123456" 
