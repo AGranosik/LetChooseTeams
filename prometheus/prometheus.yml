@@ -1,0 +1,7 @@
+global:
+  scrape_interval:     15s # Częstotliwość zbierania danych
+
+scrape_configs:
+  - job_name: 'elasticsearch'
+    static_configs:
+      - targets: ['elasticsearch:9200']
