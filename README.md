@@ -309,6 +309,5 @@ RoadMap:
 		Observability
 			[] k8s cpus, ram etc.
 	[] get rid of exceptions
-	[] Opentelemtry
-	[] integration tests
+	[] APM? - sectors/modules of app monitoring, check when one module is overloaded so it may indicate to extract it into next microservice
 	

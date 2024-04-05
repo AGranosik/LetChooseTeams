@@ -26,6 +26,7 @@ namespace LCT.Api
             {
                 c.EnableAnnotations();
             });
+
             services.AddInfrastructure()
                 .AddApplication();
 
@@ -88,7 +89,6 @@ namespace LCT.Api
                 .ReadFrom.Configuration(_configuration)
                 .CreateLogger();
         }
-
         private ElasticsearchSinkOptions ConfigureElasticSink(string environment)
         {
             return new ElasticsearchSinkOptions(new Uri (_configuration["ElasticConfiguration:Uri"]))
