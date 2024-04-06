@@ -25,7 +25,9 @@ services:
             XPACK_ENCRYPTEDSAVEDOBJECTS_ENCRYPTIONKEY: "a454989cedc03123102a5d7b6cd0d11d"
             XPACK_REPORTING_ENCRYPTIONKEY: "2f9a939c253958d38710db1b59f09348"
             XPACK_SECURITY_ENCRYPTIONKEY: "ef1435c75010e03cd74ebc6a281f3e5b"
-            XPACK_FLEET_AGENTS_FLEET_SERVER_HOSTS: "[\"http://fleet-server:8220\"]"
+            XPACK.SECURITY.ENABLED: "true"
+            XPACK.FLEET.AGENTS.ELASTICSEARCH.HOST: "http://elasticsearch:9200"
+            XPACK.FLEET.AGENTS.KIBANA.HOST: "http://kibana:5601"
         depends_on:
             - elasticsearch
     apm-server:
@@ -114,17 +116,6 @@ services:
           - ./prometheus:/etc/prometheus
         command:
           - '--config.file=/etc/prometheus/prometheus.yml' 
-    fleet-server:
-      image: "docker.elastic.co/beats/elastic-agent:${stackVersion:-8.0.0-SNAPSHOT}"
-      networks:
-        - mongors-network  
-      environment:
-        - "FLEET_SERVER_ENABLE=1"
-        - "FLEET_SERVER_INSECURE_HTTP=1"
-        - "KIBANA_FLEET_SETUP=1"
-        - "KIBANA_FLEET_HOST=http://kibana:5601"
-        - "FLEET_SERVER_HOST=0.0.0.0"
-        - "FLEET_SERVER_PORT=8220"
 volumes:
     esdata:
         driver: local
