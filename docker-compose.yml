@@ -26,21 +26,17 @@ services:
             - XPACK_REPORTING_ENCRYPTIONKEY=2f9a939c253958d38710db1b59f09348
             - XPACK_SECURITY_ENCRYPTIONKEY=ef1435c75010e03cd74ebc6a281f3e5b
             - xpack.security.enabled=true
-            - xpack.fleet.allowUnsafeWithoutSecurit=true
-            - XPACK.FLEET.AGENTS.ELASTICSEARCH.HOST=http://elasticsearch:9200
-            - XPACK.FLEET.AGENTS.KIBANA.HOST=http://kibana:5601
-            - ELASTICSEARCH_HOSTS=http://elasticsearch:9200
         depends_on:
             - elasticsearch
     apm-server:
-      image: docker.elastic.co/apm/apm-server:8.13.1
-      environment:
-        OUTPUT_ELASTICSEARCH_ENABLED: "true"
-        ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
-      ports:
-        - "8200:8200"
-      networks:
-        - mongors-network
+        image: docker.elastic.co/apm/apm-server:8.10.3
+        environment:
+          OUTPUT_ELASTICSEARCH_ENABLED: "true"
+          ELASTICSEARCH_HOSTS: "http://elasticsearch:9200"
+        ports:
+          - "8200:8200"
+        networks:
+          - mongors-network
     mongosetup:
         container_name: mongosetup
         image: mongo:7.0
